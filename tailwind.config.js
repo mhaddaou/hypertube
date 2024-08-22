@@ -6,9 +6,9 @@ module.exports = {
       colors: {
         "color-primary": "#FB9722",
         "color-secondary": "#1B0303",
-        "color-gray": "#333",
+        "color-gray": "#A7B5BE",
         "color-white": "#fff",
-        background: "#000000",
+        background: "#0D0C0F",
       },
       container: {
         center: true,
