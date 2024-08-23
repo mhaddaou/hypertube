@@ -25,6 +25,15 @@ module.exports = {
         inter: ["Roboto", "sans-serif"],
         "lexend-Deca": ["Lexend Deca", "sans-serif"],
       },
+      keyframes: {
+        slide: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-320px)' },
+        },
+      },
+      animation: {
+        'slide': 'slide 1.45s ease',
+      },
     },
   },
   plugins: [],
