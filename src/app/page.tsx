@@ -1,12 +1,165 @@
+"use client";
+
 import Image from "next/image";
-import styles from "./page.module.css";
-
-
+import { HeroSectionData } from "@/lib/Data/HeroSection";
+import ImageScroller from "./components/sub/ImageScroller";
+import { useEffect, useRef, useState } from "react";
+import { useAppSelector } from "@/lib/hooks";
+import GetStars from "./components/sub/GetStars";
 
 export default function Home() {
+  const [active, setActive] = useState(false);
+  const image = useAppSelector((state) => state.background);
+  const dataHero = useAppSelector((state) => state.heroData);
+  const starsRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const genrsRef = useRef<HTMLDivElement>(null);
+  const descRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!active) {
+      setTimeout(() => {
+        if (
+          starsRef.current &&
+          titleRef.current &&
+          genrsRef.current &&
+          descRef.current
+        ) {
+          starsRef.current.classList.remove("animate-fade-right");
+          titleRef.current.classList.remove("animate-fade-down");
+          genrsRef.current.classList.remove("animate-fade-right");
+          descRef.current.classList.remove("animate-fade-up");
+        }
+        setActive(true);
+      }, 1200);
+    }
+    if (image.animation === false) {
+      if (
+        starsRef.current &&
+        titleRef.current &&
+        genrsRef.current &&
+        descRef.current
+      ) {
+        starsRef.current.classList.add("animate-fade-right");
+        genrsRef.current.classList.add("animate-fade-right");
+        titleRef.current.classList.add("animate-fade-down");
+        descRef.current.classList.add("animate-fade-up");
+      }
+      setTimeout(() => {
+        if (
+          starsRef.current &&
+          titleRef.current &&
+          genrsRef.current &&
+          descRef.current
+        ) {
+          starsRef.current.classList.remove("animate-fade-right");
+          titleRef.current.classList.remove("animate-fade-down");
+          genrsRef.current.classList.remove("animate-fade-right");
+          descRef.current.classList.remove("animate-fade-up");
+        }
+      }, 1200);
+    }
+  }, [image.animation]);
+
+  const [genrs, setGenrs] = useState<string[]>(HeroSectionData[0].genres);
+
   return (
-    <div>
-      
-    </div>
+    <main className=" bg-background w-screen min-h-screen relative">
+      <div className="absolute w-screen h-screen  flex justify-center items-center">
+        <div className="bg-white">
+          <Image
+            src={image.oldImage}
+            alt="Background Image "
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+      </div>
+      <div className="w-screen h-screen absolute ">
+        <div className=" w-full h-full flex justify-center items-center">
+          <div
+            className={` absolute  ${
+              image.animation
+                ? "w-screen h-screen transition-all duration-700 ease-out"
+                : "w-0 h-0 "
+            }  `}
+          >
+            <Image
+              src={image.image} // Adjust the path accordingly
+              alt="Background Image "
+              style={{ objectFit: "cover" }}
+              fill // Makes the image fill its parent element
+              // onLoadingComplete={handleImageLoad} // Optional: for handling image load events
+              priority // Optional: to load the image early
+            />
+          </div>
+        </div>
+      </div>
+      <div className=" h-fit flex justify-center items-center ">
+        <div className="bg-black/50 absolute z-10 top-0 h-full w-full">
+          <div className="w-full h-full">
+            <div className="w-full h-[65%]  pl-[5%] ">
+              <div className="h-full w-[60%] flex flex-col justify-end">
+                <h1
+                  ref={titleRef}
+                  className="font-lemonada text-white text-[80px] animate-fade-down max-w-2xl"
+                >
+                  {dataHero.title}
+                </h1>
+                <div ref={starsRef} className={` animate-fade-right `}>
+                  <GetStars rating={dataHero.rating} />
+                </div>
+                <div
+                  ref={genrsRef}
+                  className="flex pt-8 animate-fade-right font-marck-script text-3xl text-white gap-5 capitalize "
+                >
+                  {dataHero.genres.map((item, index, arr) => {
+                    return (
+                      <p
+                        key={index}
+                        className={`pr-4 ${
+                          index !== arr.length - 1
+                            ? "border-color-primary border-r-[2px]"
+                            : ""
+                        }`}
+                      >
+                        {item}
+                      </p>
+                    );
+                  })}
+                </div>
+                <div className="flex gap-5 font-lemonada text-white/70 text-sm pt-8">
+                  <p className="border-r-[2px] pr-4 border-white/70">2021</p>
+                  <p className="border-r-[2px] pr-4 border-white/70">
+                    1 hour 55 minutes
+                  </p>
+                  <p>Sci-fi</p>
+                </div>
+                <div ref={descRef} className="animate-fade-up">
+                  <p className="font-lemonada text-white w-[80%] pt-8 ">
+                    {dataHero.description}
+                  </p>
+                  <div className="pt-8">
+                    <button className="text-white bg-color-primary px-7 py-4 font-poppins text-xl flex items-center gap-2 rounded-md">
+                      <Image
+                        src="/images/icons/display.svg"
+                        alt="display"
+                        width={17}
+                        height={40}
+                      />
+                      Watch now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="w-full h-[35%]   ">
+              <div className=" w-full h-full flex items-center gap-7 ">
+                <ImageScroller images={HeroSectionData} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
