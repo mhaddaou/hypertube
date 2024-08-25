@@ -13,6 +13,8 @@ const ImageScroller = ({ images }: { images: HeroFilms[] }) => {
   const [selectedImageId, setSelectedImageId] = useState(2);
   const dispatch = useAppDispatch();
   const handleImageClick = (id: number) => {
+    if(id === selectedImageId)
+      return ;
     setSelectedImageId(id);
     const img = imageList.find((item) => id === item.id)?.image;
     const data = imageList.filter((item) => item.id === id);
@@ -29,6 +31,10 @@ const ImageScroller = ({ images }: { images: HeroFilms[] }) => {
     }
 
     const updatedList = [...imageList];
+
+
+    // animation for cards films
+  if(id !== updatedList[0].id){
     const removedImage = updatedList.shift(); // Remove the first image
     if (removedImage) updatedList.push(removedImage);
 
@@ -40,6 +46,7 @@ const ImageScroller = ({ images }: { images: HeroFilms[] }) => {
         setImageList(updatedList);
       }, 1300);
     }
+  }
   };
 
   return (
@@ -48,10 +55,10 @@ const ImageScroller = ({ images }: { images: HeroFilms[] }) => {
         {imageList.map((item, index) => (
           <div
             key={item.id}
-            className={`relative w-[50px] h-[150px] md:w-[300px] min-w-[300px] max-w-[300px]  md:h-[400px]  inline-block   cursor-pointer ${
+            className={`relative w-[50px] h-[150px] md:w-[300px] min-w-[300px] max-w-[300px]  md:h-[400px]  inline-block    ${
               item.id === selectedImageId
                 ? "scale-110 z-50 transition-all duration-500 ease-in"
-                : ""
+                : "cursor-pointer"
             }`}
             onClick={() => handleImageClick(item.id)}
           >
