@@ -11,6 +11,7 @@ module.exports = {
         "color-gray": "#A7B5BE",
         "color-white": "#fff",
         background: "#0D0C0F",
+        "search" : '#131313'
       },
       container: {
         center: true,
