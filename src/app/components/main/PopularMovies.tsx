@@ -1,65 +1,152 @@
+"use client";
+import React, { useState, useRef, useEffect } from "react";
+import { LayoutGrid } from "../ui/layout-grid";
 import Image from "next/image";
 
-export default function PopularMovies() {
-    return (
-        <section id="PopularMovie" className="w-screen h-screen relative ">
-            <div >
-                <Image src="/images/images/backgroundPopular.jpg" alt="img" 
-                fill
-                style={{objectFit: 'cover'}}
-                />
-                <div className="w-full h-full bg-black/75 absolute z-10 ">
-                    <div className="relative w-full h-full text-white pt-20 container">
-                        <div className="w-full flex justify-between items-center">
-                        <div className="w-fit">
-                        <h1 className="font-lemonada font-bold text-[40px] capitalize">
-                        Popular Movies
-                        </h1>
-                        <div className="w-[52%] h-1 bg-color-primary rounded-full">
+export function PopularMovies() {
+  return (
+    <div className=" relative w-full  min-h-screen  flex items-center  ">
+      <Image
+        src="/images/images/backgroundPopular.jpg"
+        fill
+        style={{ objectFit: "cover" }}
+        alt="bg"
+      />
+      <div className="w-full h-full bg-black/75 absolute"></div>
 
-                        </div>
-                        </div>
-                        <div >
-                            <button className="bg-color-primary flex items-center gap-4 px-4 py-1.5 rounded-md font-poppins text-black">View More 
-                                <Image src='images/icons/arrowLeftCircle.svg' alt="icon" width={25} height={10}/>
-                            </button>
-                        </div>
-                        </div>
-                        <div className="w-full pt-16">
-                            <div className="flex gap-5">
-                            <div className="w-[68%] h-[395px] border border-color-primary rounded-md relative">
-                                <Image src='/images/images/backgroundPopular.jpg'  alt="img" fill  style={{objectFit: 'cover'}} className="rounded-md"/>
+      <div className="w-full h-full relative flex flex-col gap-14 justify-center items-center container ">
+        <div className="w-full flex justify-between items-center">
+          <div className="w-fit">
+            <h1 className="font-lemonada font-bold text-[40px] capitalize text-white">
+              Popular Movies
+            </h1>
+            <div className="w-[52%] h-1 bg-color-primary rounded-full"></div>
+          </div>
+          <div>
+            <button className="bg-color-primary flex items-center gap-4 px-4 py-1.5 rounded-md font-poppins text-black">
+              View More
+              <Image
+                src="images/icons/arrowLeftCircle.svg"
+                alt="icon"
+                width={25}
+                height={10}
+              />
+            </button>
+          </div>
+        </div>
 
-                            </div>
-                            <div className="w-[33%] h-[395px] border border-color-primary relative rounded-md">
-                                <Image src='/images/images/1917.jpg'  alt="img" fill   className="rounded-md"/>
-
-                            </div>
-
-                            </div>
-                            <div className="w-full  flex gap-6 pt-5">
-                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md relative">
-                                    <Image src='/images/images/spiderman.jpg' alt="back" fill className="rounded-md"/>
-                                </div>
-                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md relative">
-                                <Image src='/images/images/batman.jpg' alt="back" fill className="rounded-md"/>
-
-                                </div>
-                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md relative">
-                                    <Image src='/images/images/spiderman.jpg' alt="back" fill className="rounded-md"/>
-
-                                </div>
-
-                            </div>
-                            
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-        </section>
-    )
+        <LayoutGrid cards={cards} />
+      </div>
+    </div>
+  );
 }
+
+const SkeletonOne = () => {
+  return (
+    <div className="text-white">
+      <p className="font-bold md:text-4xl text-xl ">
+      The Menu
+      </p>
+      <p className="font-normal text-base "></p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200 font-lexend-Deca">
+      A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
+      </p>
+      <div className="flex gap-5 mb-4">
+        <div className="flex items-center gap-2 border-r w-fit pr-4">
+
+        <Image src='images/icons/star.svg' alt=" ic" width={20} height={10}/>  <span>3.6</span>
+        </div>
+        <div className="flex items-center gap-2">
+      Horror <div className="w-1 h-1 bg-white rounded-full"></div> Comedy
+        </div>
+      </div>
+      <button className="bg-color-primary text-slate-100 px-4 rounded-md py-2 flex items-center gap-2"><Image
+                          src="/images/icons/display.svg"
+                          alt="display"
+                          width={12}
+                          height={40}
+                        />
+                        <span className="-mt-1">
+                            watch now
+                            </span>
+                        </button>
+    </div>
+  );
+};
+
+const SkeletonTwo = () => {
+  return (
+    <div>
+      <p className="font-bold md:text-4xl text-xl text-white">
+      The Menu
+      </p>
+      <p className="font-normal text-base text-white"></p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
+      A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
+      </p>
+    </div>
+  );
+};
+const SkeletonThree = () => {
+  return (
+    <div>
+      <p className="font-bold md:text-4xl text-xl text-white">
+      The Menu
+      </p>
+      <p className="font-normal text-base text-white"></p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
+      </p>
+    </div>
+  );
+};
+const SkeletonFour = () => {
+  return (
+    <div>
+      <p className="font-bold md:text-4xl text-xl text-white">
+      The Menu
+      </p>
+      <p className="font-normal text-base text-white"></p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
+      A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
+      </p>
+    </div>
+  );
+};
+
+const cards = [
+  {
+    id: 1,
+    content: <SkeletonOne />,
+    className: "md:col-span-2",
+    thumbnail:
+      "https://m.media-amazon.com/images/M/MV5BM2Q3ZTU1NjMtNjYwZS00MGI4LThjYjMtOTIwYjBhOTBmMGE3XkEyXkFqcGdeQXVyNjM0MTI4Mw@@._V1_FMjpg_UX1123_.jpg",
+  },
+  {
+    id: 2,
+    content: <SkeletonTwo />,
+    className: "col-span-1",
+    thumbnail:
+      "https://m.media-amazon.com/images/M/MV5BYzkxZjg2NDQtMGVjMy00NWZkLTk0ZDEtZWE3NDYwYjAyMTg1XkEyXkFqcGc@._V1_FMjpg_UY2048_.jpg",
+  },
+  {
+    id: 3,
+    content: <SkeletonThree />,
+    className: "col-span-1",
+    thumbnail:
+      "https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTgzOF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_FMjpg_UY2048_.jpg",
+  },
+  {
+    id: 4,
+    content: <SkeletonFour />,
+    className: "md:col-span-1",
+    thumbnail:
+      "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UY2048_.jpg",
+  },
+  {
+    id: 5,
+    content: <SkeletonFour />,
+    className: "md:col-span-1",
+    thumbnail:
+      "https://m.media-amazon.com/images/M/MV5BNTc0YmQxMjEtODI5MC00NjFiLTlkMWUtOGQ5NjFmYWUyZGJhXkEyXkFqcGc@._V1_FMjpg_UY4096_.jpg",
+  },
+];
