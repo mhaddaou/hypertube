@@ -52,12 +52,13 @@ const SkeletonOne = () => {
       A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
       </p>
       <div className="flex gap-5 mb-4">
-        <div className="flex items-center gap-2 border-r w-fit pr-4">
-
-        <Image src='images/icons/star.svg' alt=" ic" width={20} height={10}/>  <span>3.6</span>
-        </div>
         <div className="flex items-center gap-2">
-      Horror <div className="w-1 h-1 bg-white rounded-full"></div> Comedy
+
+        <Image src='images/icons/star.svg' alt=" ic" width={20} height={10}/>  <span className="mr-2">3.6</span>
+          <div className="w-[1.5px] h-[19px] bg-[#B6AFAF]"></div>
+        </div>
+        <div className="flex items-center gap-2 text-[#B6AFAF]">
+      Horror <div className="w-1.5 h-1.5 bg-[#B6AFAF] rounded-full "></div> Comedy
         </div>
       </div>
       <button className="bg-color-primary text-slate-100 px-4 rounded-md py-2 flex items-center gap-2"><Image
