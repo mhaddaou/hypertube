@@ -10,7 +10,11 @@ export default function Home() {
 
   return (
     
-    <main className="bg-background ">
+    <main className="">
+      {/* <div class="scrollbar scrollbar-thumb-sky-700 scrollbar-track-sky-300 h-32 overflow-y-scroll">
+    <div class="h-64 bg-slate-400"></div>
+</div> */}
+ 
       <HeroSection/>
       <PopularMovies/>
      

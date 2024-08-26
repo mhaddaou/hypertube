@@ -38,9 +38,17 @@ export default function PopularMovies() {
 
                             </div>
                             <div className="w-full  flex gap-6 pt-5">
-                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md"></div>
-                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md"></div>
-                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md"></div>
+                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md relative">
+                                    <Image src='/images/images/spiderman.jpg' alt="back" fill className="rounded-md"/>
+                                </div>
+                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md relative">
+                                <Image src='/images/images/batman.jpg' alt="back" fill className="rounded-md"/>
+
+                                </div>
+                                <div className="w-[33%] h-[395px] border border-color-primary rounded-md relative">
+                                    <Image src='/images/images/spiderman.jpg' alt="back" fill className="rounded-md"/>
+
+                                </div>
 
                             </div>
                             
