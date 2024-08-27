@@ -43,74 +43,135 @@ export function PopularMovies() {
 
 const SkeletonOne = () => {
   return (
-    <div className="text-white">
-      <p className="font-bold md:text-4xl text-xl ">
-      The Menu
-      </p>
+    <div className="text-white ">
+      <p className="font-bold md:text-4xl text-xl font-lemonada">The Menu</p>
       <p className="font-normal text-base "></p>
       <p className="font-normal text-base my-4 max-w-lg text-neutral-200 font-lexend-Deca">
-      A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
+        A young couple travels to a remote island to eat at an exclusive
+        restaurant where the chef has prepared a lavish menu, with some shocking
+        surprises.
       </p>
       <div className="flex gap-5 mb-4">
         <div className="flex items-center gap-2">
-
-        <Image src='images/icons/star.svg' alt=" ic" width={20} height={10}/>  <span className="mr-2">3.6</span>
+          <Image src="images/icons/star.svg" alt=" ic" width={20} height={10} />{" "}
+          <span className="mr-2">3.6</span>
           <div className="w-[1.5px] h-[19px] bg-[#B6AFAF]"></div>
         </div>
         <div className="flex items-center gap-2 text-[#B6AFAF]">
-      Horror <div className="w-1.5 h-1.5 bg-[#B6AFAF] rounded-full "></div> Comedy
+          Horror <div className="w-1.5 h-1.5 bg-[#B6AFAF] rounded-full "></div>{" "}
+          Comedy
         </div>
       </div>
-      <button className="bg-color-primary text-slate-100 px-4 rounded-md py-2 flex items-center gap-2"><Image
-                          src="/images/icons/display.svg"
-                          alt="display"
-                          width={12}
-                          height={40}
-                        />
-                        <span className="-mt-1">
-                            watch now
-                            </span>
-                        </button>
+      <button className="bg-color-primary text-slate-100 px-4 rounded-md py-2 flex items-center gap-2">
+        <Image
+          src="/images/icons/display.svg"
+          alt="display"
+          width={12}
+          height={40}
+        />
+        <span className="-mt-1">watch now</span>
+      </button>
     </div>
   );
 };
 
 const SkeletonTwo = () => {
   return (
-    <div>
-      <p className="font-bold md:text-4xl text-xl text-white">
-      The Menu
-      </p>
-      <p className="font-normal text-base text-white"></p>
-      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
-      A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
-      </p>
+    <div className="text-white ">
+    <p className="font-bold md:text-4xl text-xl font-lemonada">The Menu</p>
+    <p className="font-normal text-base "></p>
+    <p className="font-normal text-base my-4 max-w-lg text-neutral-200 font-lexend-Deca">
+      A young couple travels to a remote island to eat at an exclusive
+      restaurant where the chef has prepared a lavish menu, with some shocking
+      surprises.
+    </p>
+    <div className="flex gap-5 mb-4">
+      <div className="flex items-center gap-2">
+        <Image src="images/icons/star.svg" alt=" ic" width={20} height={10} />{" "}
+        <span className="mr-2">3.6</span>
+        <div className="w-[1.5px] h-[19px] bg-[#B6AFAF]"></div>
+      </div>
+      <div className="flex items-center gap-2 text-[#B6AFAF]">
+        Horror <div className="w-1.5 h-1.5 bg-[#B6AFAF] rounded-full "></div>{" "}
+        Comedy
+      </div>
     </div>
+    <button className="bg-color-primary text-slate-100 px-4 rounded-md py-2 flex items-center gap-2">
+      <Image
+        src="/images/icons/display.svg"
+        alt="display"
+        width={12}
+        height={40}
+      />
+      <span className="-mt-1">watch now</span>
+    </button>
+  </div>
   );
 };
 const SkeletonThree = () => {
   return (
-    <div>
-      <p className="font-bold md:text-4xl text-xl text-white">
-      The Menu
+    <div className="text-white ">
+      <p className="font-bold md:text-4xl text-xl font-lemonada">The Menu</p>
+      <p className="font-normal text-base "></p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200 font-lexend-Deca">
+        A young couple travels to a remote island to eat at an exclusive
+        restaurant where the chef has prepared a lavish menu, with some shocking
+        surprises.
       </p>
-      <p className="font-normal text-base text-white"></p>
-      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
-      </p>
+      <div className="flex gap-5 mb-4">
+        <div className="flex items-center gap-2">
+          <Image src="images/icons/star.svg" alt=" ic" width={20} height={10} />{" "}
+          <span className="mr-2">3.6</span>
+          <div className="w-[1.5px] h-[19px] bg-[#B6AFAF]"></div>
+        </div>
+        <div className="flex items-center gap-2 text-[#B6AFAF]">
+          Horror <div className="w-1.5 h-1.5 bg-[#B6AFAF] rounded-full "></div>{" "}
+          Comedy
+        </div>
+      </div>
+      <button className="bg-color-primary text-slate-100 px-4 rounded-md py-2 flex items-center gap-2">
+        <Image
+          src="/images/icons/display.svg"
+          alt="display"
+          width={12}
+          height={40}
+        />
+        <span className="-mt-1">watch now</span>
+      </button>
     </div>
   );
 };
 const SkeletonFour = () => {
   return (
-    <div>
-      <p className="font-bold md:text-4xl text-xl text-white">
-      The Menu
-      </p>
-      <p className="font-normal text-base text-white"></p>
-      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
-      A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.
-      </p>
+    <div className="text-white ">
+    <p className="font-bold md:text-4xl text-xl font-lemonada">The Menu</p>
+    <p className="font-normal text-base "></p>
+    <p className="font-normal text-base my-4 max-w-lg text-neutral-200 font-lexend-Deca">
+      A young couple travels to a remote island to eat at an exclusive
+      restaurant where the chef has prepared a lavish menu, with some shocking
+      surprises.
+    </p>
+    <div className="flex gap-5 mb-4">
+      <div className="flex items-center gap-2">
+        <Image src="images/icons/star.svg" alt=" ic" width={20} height={10} />{" "}
+        <span className="mr-2">3.6</span>
+        <div className="w-[1.5px] h-[19px] bg-[#B6AFAF]"></div>
+      </div>
+      <div className="flex items-center gap-2 text-[#B6AFAF]">
+        Horror <div className="w-1.5 h-1.5 bg-[#B6AFAF] rounded-full "></div>{" "}
+        Comedy
+      </div>
     </div>
+    <button className="bg-color-primary text-slate-100 px-4 rounded-md py-2 flex items-center gap-2">
+      <Image
+        src="/images/icons/display.svg"
+        alt="display"
+        width={12}
+        height={40}
+      />
+      <span className="-mt-1">watch now</span>
+    </button>
+  </div>
   );
 };
 
