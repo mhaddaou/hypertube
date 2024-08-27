@@ -25,16 +25,16 @@ export default function Search (){
 
     return (
         <div className="w-screen h-screen bg-black pt-24">
-            <div className="container w-full h-full text-white   ">
+            <div className="container w-full h-full text-white">
             <div className="text-white font-lexend-Deca font-medium text-xl">Filter Option</div>
             <div className="flex w-full pt-10 gap-7">
                 <div className="w-[360px] h-full bg-black space-y-7">
-                    <div className="min-h-[386px] bg-search rounded-md py-5 ">
+                    <div className="bg-search rounded-md py-5">
                         <div className="w-[90%] mx-auto">
                         <div className=" ">
                             <p className="font-lexend-Deca font-medium text-lg">Editor Picks</p>
                         </div>
-                        <div className="w-[90%] border-[1.5px] rounded-md border-[#353535]  mx-auto  px-5 mt-4 flex   gap-4">
+                        <div className="w-[90%] border-[1.5px] rounded-md border-[#353535]  mx-auto  px-5 mt-4 flex gap-4">
                             <input type="text" className="bg-inherit outline-none py-3 flex-1  text-sm placeholder:text-sm placeholder:text-[#353535] placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300" placeholder="Search Title" />
                             <button onClick={() => {}}>
                             <Image src='/images/icons/search.svg' alt="search icon" width={30} height={10} className="pt-1"/>
@@ -70,12 +70,12 @@ export default function Search (){
                       </div>
                     </div>
                      <div className="w-[360px] h-full bg-black">
-                       <div className="min-h-[386px] bg-search rounded-md py-5">
+                       <div className="bg-search rounded-md py-5">
                        <div className="w-[90%] mx-auto">
                        <p className="font-lexend-Deca font-medium text-lg">By Category</p>
-                       <div className="mt-4 flex flex-wrap space-y-2">
-                       {["Action", "Comedy", "Drama", "Horror", "Romance", "Sci-Fi", "Thriller", "RealityTV", "Anime", "Documentary", "Sports", "Western", "Biography", "Adventure", "War", "Mystery"].map((category) => (
-                             <label key={category} className="w-1/2 block text-white font-lexend-Deca font-light">
+											 <div className="mt-4 flex flex-wrap ">
+                       {["Action", "Comedy", "Drama", "Horror", "Romance", "Sci-Fi", "Thriller", "RealityTV", "Anime", "Documentary", "Sports", "Western", "Biography", "Adventure", "War", "Mystery"].map((category, index) => (
+                             <label key={category} className={`w-1/2 font-lexend-Deca font-light flex items-center ${(!index || index == 1)  ? ' ' : 'pt-3'}`}>
                              <input
                              type="checkbox"
                              className="appearance-none h-4 w-4 border-[1.5px] border-[#353535] bg-[#131313] rounded-sm mr-2 checked:bg-[#131313] checked:border-[#FB9722] checked:ring-1 checked:ring-[#FB9722] checked:after:content-['✔'] checked:after:text-[#FB9722] checked:after:block checked:after:text-center checked:after:text-[10px]"/> 
@@ -89,7 +89,18 @@ export default function Search (){
                 </div>
 
                 <div className="flex-1">
-                    
+                   <p className="font-lexend-Deca font-medium text-sm bg-[#131313] px-5 py-3 rounded-md">Movies</p> 
+                   <div className="flex bg-[#131313] mt-5 h-full rounded-md">
+                     <div className="ml-8 h-[200px] w-1/6 bg-red-500 mt-4"></div>
+                     <div className="h-[200px] w-3/6 bg-red-400 mt-4 flex flex-col justify-between">
+                      <p className="font-lexend-Deca font-medium text-lg">Movie Title</p>
+                      <div className="">Movie details</div>
+                      <p className="font-lexend-Deca font-light text-sm">Movie description</p>
+                      <div className="">Movie genre</div>
+                     </div>
+                     <div className="h-[200px] w-1/6 bg-red-300 mt-4"></div>
+                     <div className="mr-8 h-[200px] w-1/6 bg-red-200 mt-4"></div>
+                   </div>
                 </div>
 
             </div>
