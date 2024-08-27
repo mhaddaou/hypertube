@@ -7,8 +7,13 @@ const {
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   darkMode: "class",
+  images:{
+    domains: ['m.media-amazon.com'],
+  },
   theme: {
+    
     extend: {
+      
       colors: {
         "color-primary": "#FB9722",
         "color-secondary": "#1B0303",
