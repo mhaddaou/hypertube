@@ -1,6 +1,8 @@
 "use client"
+import { FC } from "react";
 import Image from "next/image";
 import { useState } from "react";
+import { IoIosEye } from "react-icons/io";
 export default function Search (){
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
     const [clickedItems, setClickedItems] = useState<{ [key: string]: string | null }>({});
@@ -22,6 +24,57 @@ export default function Search (){
           Rating: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
           'Order By': ['Name', 'Date', 'Popularity', 'Rating'],
     };
+
+interface MovieCardProps {
+  title: string;
+  year: number;
+  country: string;
+  duration: string;
+  viewers: string;
+  genre: string;
+  rating: number;
+  description: string;
+  imageUrl: string;
+}
+
+const MovieCard: FC<MovieCardProps> = ({
+  title,
+  year,
+  country,
+  duration,
+  viewers,
+  genre,
+  rating,
+  description,
+  imageUrl,
+}) => {
+  return (
+      <div className="flex-1">
+        <p className="font-lexend-Deca font-medium text-sm bg-[#131313] px-5 py-3 rounded-md">Movies</p> 
+        <div className="flex bg-[#131313] mt-5 h-full rounded-md">
+          <div className="ml-8 h-[200px] w-1/6 mt-4">
+            <img src={imageUrl} width={200} height={200} alt="movie thumbnail" className="w-full h-full object-cover rounded-lg"></img>
+          </div>
+          <div className="h-[200px] w-3/6 mt-4 flex flex-col justify-between pl-8">
+            <p className="font-lexend-Deca font-medium text-lg">{title}</p>
+            <div className="text-[#B7AEAE] flex items-center space-x-8">
+              <p>{year}</p>
+              <p>{country}</p>
+              <p>{duration}</p>
+              <div className="flex items-center gap-1">
+                <IoIosEye />
+                <p className="ml-18">{viewers} viewers</p>
+              </div>
+            </div>
+            <p className="font-lexend-Deca font-light text-sm text-[#B7AEAE]">{description}</p>
+            <div className="text-[#FB9722]">{genre}</div>
+          </div>
+          <div className="h-[200px] w-1/6 mt-4"></div>
+          <div className="mr-8 h-[200px] w-1/6 mt-4"></div>
+        </div>
+      </div>
+  );
+};
 
     return (
         <div className="w-screen h-screen bg-black pt-24">
@@ -88,20 +141,7 @@ export default function Search (){
                      </div>
                 </div>
 
-                <div className="flex-1">
-                   <p className="font-lexend-Deca font-medium text-sm bg-[#131313] px-5 py-3 rounded-md">Movies</p> 
-                   <div className="flex bg-[#131313] mt-5 h-full rounded-md">
-                     <div className="ml-8 h-[200px] w-1/6 bg-red-500 mt-4"></div>
-                     <div className="h-[200px] w-3/6 bg-red-400 mt-4 flex flex-col justify-between">
-                      <p className="font-lexend-Deca font-medium text-lg">Movie Title</p>
-                      <div className="">Movie details</div>
-                      <p className="font-lexend-Deca font-light text-sm">Movie description</p>
-                      <div className="">Movie genre</div>
-                     </div>
-                     <div className="h-[200px] w-1/6 bg-red-300 mt-4"></div>
-                     <div className="mr-8 h-[200px] w-1/6 bg-red-200 mt-4"></div>
-                   </div>
-                </div>
+            <MovieCard title="Spiderman" year={2021} description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries" genre="Action" rating={4.5} viewers="10k" country="USA" duration="2h 30m" imageUrl="/images/images/spiderman.jpg" />
 
             </div>
             </div>
