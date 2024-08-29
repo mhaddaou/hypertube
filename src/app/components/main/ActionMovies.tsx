@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 import { motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
@@ -18,7 +18,7 @@ interface Action {
   type: ActionTypes;
 }
 
-export default function ActionMovies() {
+function ActionMovies() {
   const [selected, setSelected] = useState(0);
   const items = Array.from({ length: 4 });
 
@@ -120,16 +120,17 @@ export default function ActionMovies() {
                     <img
                       alt="img"
                       className="w-full h-full rounded-3xl border-[2px] border-color-primary object-cover "
-                        src={`${item.img}`}
-/>
+                      src={`${item.img}`}
+                    />
                   </div>
                   <div className="flex flex-col gap-3">
                     <p className="px-1 font-lemonada font-bold text-lg">
-                        {item.title}                    </p>
+                      {item.title}{" "}
+                    </p>
                     <p className="font-lemonada text-[#B2B5BB] flex gap-5 text-sm">
                       <span>{item.year}</span>
-                      <span>{item.time.split(' ')[0] }</span>
-                      <span>{item.time.split(' ')[1] }</span>
+                      <span>{item.time.split(" ")[0]}</span>
+                      <span>{item.time.split(" ")[1]}</span>
                       <span></span>
                     </p>
 
@@ -152,3 +153,5 @@ export default function ActionMovies() {
     </section>
   );
 }
+
+export default React.memo(ActionMovies);
