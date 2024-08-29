@@ -84,7 +84,6 @@ function HeroSection() {
               alt="Background Image "
               style={{ objectFit: "cover" }}
               fill // Makes the image fill its parent element
-              // onLoadingComplete={handleImageLoad} // Optional: for handling image load events
               priority // Optional: to load the image early
             />
           </div>
@@ -94,10 +93,10 @@ function HeroSection() {
         <div className="bg-black/50 absolute z-10 top-0 h-full w-full">
           <div className="w-full h-full">
             <div className="w-full h-[65%]  pl-[5%] ">
-              <div className="h-full w-[60%] flex flex-col justify-end">
+              <div className="h-full w-[90%]  md:w-[60%] flex flex-col justify-end">
                 <h1
                   ref={titleRef}
-                  className="font-lemonada text-white text-[80px] animate-fade-down max-w-2xl"
+                  className="font-lemonada  text-white text-[55px] lg:text-[80px] animate-fade-down  lg:max-w-2xl "
                 >
                   {dataHero.title}
                 </h1>
@@ -106,7 +105,7 @@ function HeroSection() {
                 </div>
                 <div
                   ref={genrsRef}
-                  className="flex pt-8 animate-fade-right font-marck-script text-3xl text-white gap-5 capitalize "
+                  className="flex pt-8 animate-fade-right font-marck-script text-xl lg:text-3xl text-white gap-5 capitalize "
                 >
                   {dataHero.genres.map((item, index, arr) => {
                     return (
@@ -131,14 +130,15 @@ function HeroSection() {
                   <p>Sci-fi</p>
                 </div>
                 <div ref={descRef} className="animate-fade-up">
-                  <p className="font-lemonada text-white w-[80%] pt-8 ">
+                  <p className="font-lemonada text-white w-[95%] text-justify lg:text-start lg:w-[80%] pt-8  text-sm">
                     {dataHero.description}
                   </p>
                   <div className="pt-8">
-                    <button className="text-white bg-color-primary px-7 py-4 font-poppins text-xl flex items-center gap-2 rounded-md">
+                    <button className="text-white bg-color-primary px-5 py-2.5 lg:px-7 lg:py-4 font-poppins text-sm lg:text-xl flex items-center gap-2 rounded-md">
                       <Image
                         src="/images/icons/display.svg"
                         alt="display"
+                        className="w-3 lg:w-5"
                         width={17}
                         height={40}
                       />
