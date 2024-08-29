@@ -1,10 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 
-export default function Header() {
+function Header() {
   return (
     <div className="  fixed top-0 z-50 w-screen">
-      <div className="container flex items-center justify-between text-color-gray font-poppins capitalize py-4 relative z-20 ">
+      <div className=" flex items-center justify-between text-color-gray font-poppins capitalize py-4 relative z-20 ">
+        {/* log */}
+        <div>
         <Link href='/'>
           <Image
             src="/images/icons/logo.svg"
@@ -13,7 +16,9 @@ export default function Header() {
             height={100}
           />
         </Link>
-        <div>
+
+        </div>
+        <div className="">
           <div className="w-64 border-[1.5px] py-1.5 pr-1 pl-5  border-white/20 rounded-md flex items-center gap-2">
             <Image
               src="/images/icons/searchHeader.svg"
@@ -28,19 +33,7 @@ export default function Header() {
             />
           </div>
         </div>
-        <div>
-          <ul className="flex gap-10">
-            <li>
-              <Link href="/">home</Link>
-            </li>
-            <li>
-              <Link href="/">movies</Link>
-            </li>
-            <li>
-              <Link href="/">Series</Link>
-            </li>
-          </ul>
-        </div>
+       
         <div className="flex gap-16 ">
           <div>
             <button className=" border-[1px] rounded-md px-3.5 py-[5px]">
@@ -57,3 +50,5 @@ export default function Header() {
     </div>
   );
 }
+
+export default  React.memo(Header);

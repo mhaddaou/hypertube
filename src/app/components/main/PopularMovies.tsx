@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { LayoutGrid } from "../ui/layout-grid";
+import  LayoutGrid  from "../ui/layout-grid";
 import Image from "next/image";
 
-export function PopularMovies() {
+ function PopularMovies() {
   return (
     <div className=" relative w-full  min-h-screen  flex items-center  ">
       <Image
@@ -212,3 +212,6 @@ const cards = [
       "https://m.media-amazon.com/images/M/MV5BNTc0YmQxMjEtODI5MC00NjFiLTlkMWUtOGQ5NjFmYWUyZGJhXkEyXkFqcGc@._V1_FMjpg_UY4096_.jpg",
   },
 ];
+
+
+export default React.memo(PopularMovies);
