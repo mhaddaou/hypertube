@@ -63,10 +63,6 @@ export default function Search() {
 		}));
 	};
 
-  const handleFavorite = () => {
-    console.log('favorite')
-  }
-
   const handleWatchNow = () => {
     console.log('watch now')
   }
@@ -105,6 +101,10 @@ export default function Search() {
     favorite,
     index
 	}) => {
+    const [isFavorite, setIsFavorite] = useState(favorite);
+    const handleFavorite = () => {
+      setIsFavorite((prev) => !prev);
+    }
 		return (
         <div className={`pl-3 h-[200px] pt-4 pb-4 flex gap-10 w-full ${index && "border-t border-[#898989]"}`}>
           <div className="w-[20%]">
@@ -127,7 +127,7 @@ export default function Search() {
 										<span>{year}</span><span>{country}</span><span>{duration}</span>
 									</div>
 									<div>
-									<div className="flex items-center gap-1">
+									<div className="flex items-center gap-2">
 										<IoIosEye />
 										<p className="ml-18">{viewers} viewers</p>
 									</div>
@@ -151,11 +151,11 @@ export default function Search() {
                 {description.length > 250 ? `${description.substring(0, 250)}...` : description}
               </div>
               <div
-                className={`p-2 rounded-md h-fit cursor-pointer ${favorite ? "bg-color-primary" : "border border-[#B7AEAE]"}`}
+                className={`p-2 rounded-md h-fit cursor-pointer ${isFavorite ? "bg-color-primary" : "border border-[#B7AEAE]"}`}
                 onClick={() => handleFavorite()}
               >
                 <Image
-                  src={favorite ? "/images/icons/bookmarkFill.svg" : "/images/icons/bookmark.svg"}
+                  src={isFavorite ? "/images/icons/bookmarkFill.svg" : "/images/icons/bookmark.svg"}
                   width={18}
                   height={18}
                   alt="bookmark"
