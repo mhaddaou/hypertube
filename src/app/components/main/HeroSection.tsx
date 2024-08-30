@@ -80,18 +80,17 @@ function HeroSection() {
             }  `}
           >
             <Image
-              src={image.image} // Adjust the path accordingly
+              src={image.image} 
               alt="Background Image "
               style={{ objectFit: "cover" }}
-              fill // Makes the image fill its parent element
-              priority // Optional: to load the image early
-            />
+              fill 
+              priority/>
           </div>
         </div>
       </div>
       <div className=" h-fit flex justify-center items-center ">
         <div className="bg-black/50 absolute z-10 top-0 h-full w-full">
-          <div className="w-full h-full">
+          <div className="w-full h-full flex flex-col md:gap-6">
             <div className="w-full h-[65%]  pl-[5%] ">
               <div className="h-full w-[90%]  md:w-[60%] flex flex-col justify-end">
                 <h1
