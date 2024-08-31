@@ -2,6 +2,7 @@ const { transform } = require('typescript');
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
+const { useState } = require('react');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -46,7 +47,11 @@ module.exports = {
       keyframes: {
         slide: {
           '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-320px)' },
+          '100%': { transform: `translateX(-320px)` },
+        },
+        slide1: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: `translateX(-220px)` },
         },
         slide2: {
           "0%" : {transform: 'translateX(-300px)'},
@@ -63,6 +68,7 @@ module.exports = {
       },
       animation: {
         'slide': 'slide 1.45s ease',
+        'slide1': 'slide1 1.45s ease',
         'fade-right': 'slide2 1.45s ease',
         'fade-down': 'down 1.45s ease',
         'fade-up': 'up 1.45s ease',
@@ -77,7 +83,7 @@ module.exports = {
 };
 
 
-function addVariablesForColors({ addBase, theme }: any) {
+function addVariablesForColors({ addBase, theme }) {
   let allColors = flattenColorPalette(theme("colors"));
   let newVars = Object.fromEntries(
     Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
@@ -87,6 +93,8 @@ function addVariablesForColors({ addBase, theme }: any) {
     ":root": newVars,
   });
 }
+
+
 
 
 

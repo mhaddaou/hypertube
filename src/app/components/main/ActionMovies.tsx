@@ -55,14 +55,14 @@ function ActionMovies() {
       />
 
       <div className="w-full  relative pt-10 container">
-        <div className="w-full flex justify-between items-center">
+        <div className="w-full flex justify-between items-center ">
           <div className="w-fit">
-            <h1 className="font-lemonada font-bold text-[40px] capitalize text-white">
+            <h1 className="font-lemonada font-bold   lg:text-[40px] capitalize text-white">
               Action Movies
             </h1>
             <div className="w-[47%] h-1 bg-color-primary rounded-full"></div>
           </div>
-          <div className="flex items-center gap-3 ">
+          <div className="flex items-center gap-2 lg:gap-3 pt-1.5 ">
             <div className="">
               <button
                 type="button"
@@ -74,17 +74,18 @@ function ActionMovies() {
                   src={`/images/icons/${
                     state.selected == 0 ? "switchWhite" : "switchLeftOrange"
                   }.svg`}
+                  className="max-w-5 lg:max-w-none"
                   alt="icon"
                   width={23}
                   height={10}
                 />
               </button>
             </div>
-            <div className="flex gap-3 -mt-1.5">
+            <div className="flex gap-1 lg:gap-3 -mt-1.5">
               {items.map((_, index) => {
                 return (
                   <div
-                    className={`w-2.5 h-2.5 rounded-full ${
+                    className={`lg:w-2.5 lg:h-2.5 w-2 h-2  rounded-full ${
                       state.selected === index ? "bg-color-primary" : "bg-white"
                     }`}
                   ></div>
@@ -104,6 +105,7 @@ function ActionMovies() {
                       : "switchOrange"
                   }.svg`}
                   alt="icon"
+                  className="max-w-5 lg:max-w-none"
                   width={23}
                   height={10}
                 />
@@ -112,14 +114,14 @@ function ActionMovies() {
           </div>
         </div>
         <div className="pt-16">
-          <div className="flex w-full gap-5 justify-center">
+          <div className="flex flex-col md:flex-row flex-wrap w-full gap-5 items-center justify-center">
             {data.map((item) => {
               return (
-                <div className=" w-[244px] flex flex-col gap-7">
+                <div className=" w-[90%] md:w-[45%] lg:w-[244px]  flex flex-col gap-7">
                   <div className=" h-[271px] w-full   relative">
                     <img
                       alt="img"
-                      className="w-full h-full rounded-3xl border-[2px] border-color-primary object-cover "
+                      className="w-full h-full rounded-lg lg:rounded-3xl border-[2px] border-color-primary object-cover "
                       src={`${item.img}`}
                     />
                   </div>

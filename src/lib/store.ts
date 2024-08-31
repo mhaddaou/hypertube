@@ -3,6 +3,7 @@ import BackgroundSlice from "./features/background/background";
 import HeroDataSlice from "./features/HeroData/HeroData";
 import ActionSlice from "./features/ActionData/ActionData";
 import StateImageCoverSlice  from "./features/StateImageCover/StateImageCover";
+import WatchedMoviesSlice from "./features/WatchedMovies/WatchedMoviesSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -10,7 +11,8 @@ export const makeStore = () => {
       background: BackgroundSlice,
       heroData: HeroDataSlice,
       actionData: ActionSlice,
-      selectedImage : StateImageCoverSlice
+      selectedImage : StateImageCoverSlice,
+      watchedMovies : WatchedMoviesSlice
     },
   });
 };

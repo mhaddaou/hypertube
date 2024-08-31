@@ -4,7 +4,7 @@ import React from "react";
 
 function FooterCover() {
   return (
-    <div className="w-full bg-[#0D0C0F]  flex justify-center items-center py-52">
+    <div className="w-screen bg-[#0D0C0F]  lg:flex justify-center items-center py-52 hidden ">
       <div className="w-full h-[350px] bg-[##db930e] container rounded-xl relative">
         <div className="w-full h-full relative ">
           <div className="w-full h-full bg-black/60 absolute z-10"></div>
@@ -17,9 +17,9 @@ function FooterCover() {
             className="rounded-2xl"
           />
           <div className="w-full h-full relative z-20 flex">
-            <div className="w-full  h-full relative">
-              <div className="absolute left-20 -top-20  w-full h-full flex text-white items-center  gap-10">
-                <div className="relative min-w-[289px] h-[329px]">
+            <div className="w-full  h-full relative ">
+              <div className="absolute left-20 -top-20  w-[66vw] max-w-3xl  h-full flex text-white items-center  gap-10">
+                <div className="relative min-w-[289px] h-[329px] ">
                   <Image
                     draggable="false"
                     src="https://m.media-amazon.com/images/M/MV5BNGM1ZjY5MGQtMGNmNy00ZjVmLTkyNTYtMTQwOGEyMTU4NzgxXkEyXkFqcGc@._V1_FMjpg_UX1080_.jpg"
