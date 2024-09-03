@@ -1,19 +1,24 @@
 import Image from "next/image";
 import { HeroSectionData } from "@/lib/Data/HeroSection";
 import React, { useEffect, useRef, useState } from "react";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import GetStars from "../sub/GetStars";
 import ImageScroller from "../sub/ImageScroller";
+import { fetchHeroData } from "@/lib/features/Hero/hero";
+import { changeHeroData } from "@/lib/features/HeroData/HeroData";
 
 function HeroSection() {
   const [active, setActive] = useState(false);
   const image = useAppSelector((state) => state.background);
   const dataHero = useAppSelector((state) => state.heroData);
+  const dispatch  = useAppDispatch();
+  const data = useAppSelector((state) => state.data)
   const starsRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const genrsRef = useRef<HTMLDivElement>(null);
   const descRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    console.log(dataHero, 'inside useEffect')
     if (!active) {
       setTimeout(() => {
         if (
@@ -60,13 +65,14 @@ function HeroSection() {
 
   return (
     <section className=" bg-background w-screen min-h-screen relative">
-      <div className="absolute w-screen h-screen  flex justify-center items-center">
-        <div className="bg-white">
+      <div className="absolute w-screen h-screen  flex justify-center items-center ">
+        <div className="">
           <Image
             src={image.oldImage}
             alt="Background Image "
             fill
             style={{ objectFit: "cover" }}
+            unoptimized
           />
         </div>
       </div>
@@ -82,20 +88,21 @@ function HeroSection() {
             <Image
               src={image.image} 
               alt="Background Image "
+              unoptimized
               style={{ objectFit: "cover" }}
               fill 
               priority/>
           </div>
         </div>
       </div>
-      <div className=" h-fit flex justify-center items-center ">
+      <div className=" h-fit flex justify-center  items-center ">
         <div className="bg-black/50 absolute z-10 top-0 h-full w-full">
-          <div className="w-full h-full flex flex-col md:gap-6">
+          <div className="w-full h-full flex flex-col md:gap-6 ">
             <div className="w-full h-[65%]  pl-[5%] ">
-              <div className="h-full w-[90%]  md:w-[60%] flex flex-col justify-end">
+              <div className="h-full w-[90%]  md:w-[60%] flex flex-col justify-center">
                 <h1
                   ref={titleRef}
-                  className="font-lemonada  text-white text-[55px] lg:text-[80px] animate-fade-down  lg:max-w-2xl "
+                  className="font-lemonada  text-white text-[44px] lg:text-[60px] animate-fade-down  lg:max-w-2xl "
                 >
                   {dataHero.title}
                 </h1>
@@ -106,7 +113,7 @@ function HeroSection() {
                   ref={genrsRef}
                   className="flex pt-8 animate-fade-right font-marck-script text-xl lg:text-3xl text-white gap-5 capitalize "
                 >
-                  {dataHero.genres.map((item, index, arr) => {
+                  {dataHero.genres?.map((item, index, arr) => {
                     return (
                       <p
                         key={index}
@@ -122,15 +129,11 @@ function HeroSection() {
                   })}
                 </div>
                 <div className="flex gap-5 font-lemonada text-white/70 text-sm pt-8">
-                  <p className="border-r-[2px] pr-4 border-white/70">2021</p>
-                  <p className="border-r-[2px] pr-4 border-white/70">
-                    1 hour 55 minutes
-                  </p>
-                  <p>Sci-fi</p>
+                  <p className=" pr-4 border-white/70">{dataHero.year}</p>
                 </div>
-                <div ref={descRef} className="animate-fade-up">
-                  <p className="font-lemonada text-white w-[95%] text-justify lg:text-start lg:w-[80%] pt-8  text-sm">
-                    {dataHero.description}
+                <div ref={descRef} className="animate-fade-up overflow-hidden text-ellipsis">
+                  <p className="font-lemonada line-clamp-3 text-white w-[95%] text-justify lg:text-start lg:w-[80%] pt-8  text-sm">
+                    {dataHero.summary}
                   </p>
                   <div className="pt-8">
                     <button className="text-white bg-color-primary px-5 py-2.5 lg:px-7 lg:py-4 font-poppins text-sm lg:text-xl flex items-center gap-2 rounded-md">
@@ -149,7 +152,7 @@ function HeroSection() {
             </div>
             <div className="w-full h-[35%]   ">
               <div className=" w-full h-full flex items-center gap-7 ">
-                <ImageScroller images={HeroSectionData} />
+                <ImageScroller movies={data.data?.movies} />
               </div>
             </div>
           </div>

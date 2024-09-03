@@ -84,7 +84,7 @@ function ActionMovies() {
             <div className="flex gap-1 lg:gap-3 -mt-1.5">
               {items.map((_, index) => {
                 return (
-                  <div
+                  <div key={index}
                     className={`lg:w-2.5 lg:h-2.5 w-2 h-2  rounded-full ${
                       state.selected === index ? "bg-color-primary" : "bg-white"
                     }`}
@@ -115,9 +115,9 @@ function ActionMovies() {
         </div>
         <div className="pt-16">
           <div className="flex flex-col md:flex-row flex-wrap w-full gap-5 items-center justify-center">
-            {data.map((item) => {
+            {data.map((item, index) => {
               return (
-                <div className=" w-[90%] md:w-[45%] lg:w-[244px]  flex flex-col gap-7">
+                <div key={index}  className=" w-[90%] md:w-[45%] lg:w-[244px]  flex flex-col gap-7">
                   <div className=" h-[271px] w-full   relative">
                     <img
                       alt="img"

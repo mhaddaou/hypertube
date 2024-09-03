@@ -4,6 +4,7 @@ import HeroDataSlice from "./features/HeroData/HeroData";
 import ActionSlice from "./features/ActionData/ActionData";
 import StateImageCoverSlice  from "./features/StateImageCover/StateImageCover";
 import WatchedMoviesSlice from "./features/WatchedMovies/WatchedMoviesSlice";
+import heroDataSlice1 from './features/Hero/hero'
 
 export const makeStore = () => {
   return configureStore({
@@ -12,7 +13,8 @@ export const makeStore = () => {
       heroData: HeroDataSlice,
       actionData: ActionSlice,
       selectedImage : StateImageCoverSlice,
-      watchedMovies : WatchedMoviesSlice
+      watchedMovies : WatchedMoviesSlice,
+      data : heroDataSlice1,
     },
   });
 };

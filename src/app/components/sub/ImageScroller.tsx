@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { HeroFilms } from "@/app/Types/Interfaces/Interfaces";
 import { useAppDispatch } from "@/lib/hooks";
@@ -7,15 +7,20 @@ import {
   animation,
 } from "@/lib/features/background/background";
 import { changeHeroData } from "@/lib/features/HeroData/HeroData";
+import { Movies } from "@/lib/features/Hero/hero";
 
-const ImageScroller = ({ images }: { images: HeroFilms[] }) => {
-  const [imageList, setImageList] = useState(images);
-  const [selectedImageId, setSelectedImageId] = useState(2);
+const ImageScroller = ({ movies }: { movies: Movies[] }) => {
+  const [imageList, setImageList] = useState<Movies[]>(movies);
+  const [selectedImageId, setSelectedImageId] = useState(54329);
   const dispatch = useAppDispatch();
+  useEffect(() =>{
+    console.log(selectedImageId)
+    setImageList(movies);
+  },[movies])
   const handleImageClick = (id: number) => {
     if (id === selectedImageId) return;
     setSelectedImageId(id);
-    const img = imageList.find((item) => id === item.id)?.image;
+    const img = imageList.find((item) => id === item.id)?.large_cover_image;
     const data = imageList.filter((item) => item.id === id);
     dispatch(changeHeroData(data[0]));
     dispatch(changeBackgroundImage(img));
@@ -57,9 +62,9 @@ const ImageScroller = ({ images }: { images: HeroFilms[] }) => {
   };
 
   return (
-    <div className=" whitespace-nowrap relative ">
+    <div className=" whitespace-nowrap relative animate-fade-left">
       <div className="flex transition-transform imageList  relative gap-5 z-50">
-        {imageList.map((item, index) => (
+        {imageList?.map((item, index) => (
           <div
             key={item.id}
             className={`relative w-[200px] h-[300px] md:w-[300px] md:min-w-[300px] max-w-[300px]  md:h-[400px]  inline-block    ${
@@ -77,11 +82,12 @@ const ImageScroller = ({ images }: { images: HeroFilms[] }) => {
               } z-10 rounded-xl`}
             ></div>
             <Image
-              src={item.image}
+              src={item.large_cover_image}
               alt={`Image ${index}`}
               className="rounded-xl "
               sizes="150px"
               style={{ objectFit: "cover" }}
+              unoptimized
               fill
               priority
             />

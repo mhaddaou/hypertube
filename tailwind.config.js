@@ -64,6 +64,10 @@ module.exports = {
         up:{
           "0%" : {transform: 'translateY(400px)'},
           '100%': {transform: 'translateY(0)'}
+        },
+        left:{
+          "0%": {transform: 'translateX(1500px)'},
+          '100%': {transform: 'translateX(0)'}
         }
       },
       animation: {
@@ -72,7 +76,7 @@ module.exports = {
         'fade-right': 'slide2 1.45s ease',
         'fade-down': 'down 1.45s ease',
         'fade-up': 'up 1.45s ease',
-
+        'fade-left': 'left 3.45s ease',
       },
       
     },
