@@ -8,17 +8,21 @@ import PopularMovies  from "./components/main/PopularMovies";
 import WatchedMovies from "./components/main/WatchedMovies";
 import { fetchHeroData } from "@/lib/features/Hero/hero";
 import { useEffect } from "react";
+import { fetchActionMovies } from "@/lib/features/ActionMoviesData/ActionMoviesData";
 
 
 export default function Home() {
   
   const dispatch = useAppDispatch();
   useEffect(() => {
+
     dispatch(fetchHeroData());
+    dispatch(fetchActionMovies());
   }, [dispatch])
   return (
     
     <main className="bg-black">
+      
       <HeroSection/>
       <PopularMovies/>
       <ActionMovies/>

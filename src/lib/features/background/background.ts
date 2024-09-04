@@ -6,9 +6,9 @@ interface BackgroundState {
 }
 
 const initialState: BackgroundState = {
-  image : 'https://img.yts.mx/assets/images/movies/national_theatre_live_prima_facie_2022/large-cover.jpg',
+  image : 'https://yts.mx/assets/images/movies/den_of_thieves_2018/large-cover.jpg',
   animation : true,
-  oldImage : 'https://img.yts.mx/assets/images/movies/national_theatre_live_prima_facie_2022/large-cover.jpg',
+  oldImage : 'https://yts.mx/assets/images/movies/den_of_thieves_2018/large-cover.jpg',
 };
 
 export const BackgroundSlice = createSlice({

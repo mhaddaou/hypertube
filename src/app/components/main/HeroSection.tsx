@@ -4,8 +4,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import GetStars from "../sub/GetStars";
 import ImageScroller from "../sub/ImageScroller";
+import dynamic from "next/dynamic";
 import { fetchHeroData } from "@/lib/features/Hero/hero";
 import { changeHeroData } from "@/lib/features/HeroData/HeroData";
+
+const ImageScrollerr = dynamic(() => import("../sub/ImageScroller"), {ssr : false})
 
 function HeroSection() {
   const [active, setActive] = useState(false);
@@ -18,7 +21,6 @@ function HeroSection() {
   const genrsRef = useRef<HTMLDivElement>(null);
   const descRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    console.log(dataHero, 'inside useEffect')
     if (!active) {
       setTimeout(() => {
         if (
@@ -72,8 +74,11 @@ function HeroSection() {
             alt="Background Image "
             fill
             style={{ objectFit: "cover" }}
+            quality={100}
+
             unoptimized
           />
+          
         </div>
       </div>
       <div className="w-screen h-screen absolute ">
@@ -90,7 +95,8 @@ function HeroSection() {
               alt="Background Image "
               unoptimized
               style={{ objectFit: "cover" }}
-              fill 
+              fill
+              quality={100}
               priority/>
           </div>
         </div>
@@ -100,14 +106,17 @@ function HeroSection() {
           <div className="w-full h-full flex flex-col md:gap-6 ">
             <div className="w-full h-[65%]  pl-[5%] ">
               <div className="h-full w-[90%]  md:w-[60%] flex flex-col justify-center">
+                <div className="">
                 <h1
                   ref={titleRef}
                   className="font-lemonada  text-white text-[44px] lg:text-[60px] animate-fade-down  lg:max-w-2xl "
                 >
                   {dataHero.title}
                 </h1>
-                <div ref={starsRef} className={` animate-fade-right `}>
-                  <GetStars rating={dataHero.rating} />
+                </div>
+                <div ref={starsRef} className={` animate-fade-right flex items-center`}>
+          <Image src="images/icons/star.svg" alt=" ic" width={35} height={10} />{" "}
+          <span className="ml- text-5xl text-white font-praise pt-2">{dataHero.rating.toFixed(1)}</span>
                 </div>
                 <div
                   ref={genrsRef}
@@ -152,7 +161,7 @@ function HeroSection() {
             </div>
             <div className="w-full h-[35%]   ">
               <div className=" w-full h-full flex items-center gap-7 ">
-                <ImageScroller movies={data.data?.movies} />
+                <ImageScrollerr movies={data.data?.movies} />
               </div>
             </div>
           </div>

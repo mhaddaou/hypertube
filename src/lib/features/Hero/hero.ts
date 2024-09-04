@@ -29,11 +29,13 @@ interface TypeMovies{
     data : Data,
     loading : boolean,
     error : string
+    mv: Movies[]
 }
 
 
 const initialState : TypeMovies = {
     data : {limit:0,movies: []},
+    mv : [],
     loading : false,
     error: ''
 }
@@ -41,7 +43,6 @@ const initialState : TypeMovies = {
 
 export const fetchHeroData = createAsyncThunk('heroData/fetchHeroData1', async () => {
     const res = await axios.get('http://127.0.0.1:8000/movies/top');
-    console.log(res.data)
     return res.data;
 })
 
@@ -58,7 +59,11 @@ const heroDataSlice1 = createSlice({
         })
         .addCase(fetchHeroData.fulfilled, (state, action) => {
             const {limit, movies} = action.payload.data;
-            state.data = action.payload.data,
+            state.data.movies = action.payload.data.movies.slice(0,10),
+            state.mv = action.payload.data.movies.slice(10,);
+            const vr = state.mv[0];
+            state.mv[0] = state.mv[2];
+            state.mv[2] = vr;
             state.loading = false;
         })
         .addCase(fetchHeroData.rejected, (state, action) => {

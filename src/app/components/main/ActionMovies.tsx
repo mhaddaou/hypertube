@@ -22,8 +22,9 @@ function ActionMovies() {
   const [selected, setSelected] = useState(0);
   const items = Array.from({ length: 4 });
 
+
   const dispatchR = useAppDispatch();
-  const data = useAppSelector((state) => state.actionData);
+  const data = useAppSelector((state) => state.actionMovies);
 
   const reducer = (state: State, action: Action) => {
     switch (action.type) {
@@ -84,7 +85,8 @@ function ActionMovies() {
             <div className="flex gap-1 lg:gap-3 -mt-1.5">
               {items.map((_, index) => {
                 return (
-                  <div key={index}
+                  <div
+                    key={index}
                     className={`lg:w-2.5 lg:h-2.5 w-2 h-2  rounded-full ${
                       state.selected === index ? "bg-color-primary" : "bg-white"
                     }`}
@@ -114,25 +116,31 @@ function ActionMovies() {
           </div>
         </div>
         <div className="pt-16">
-          <div className="flex flex-col md:flex-row flex-wrap w-full gap-5 items-center justify-center">
-            {data.map((item, index) => {
+          <div className="flex flex-col md:flex-row flex-wrap w-full gap-5  items-stretch justify-center">
+            {data.data.map((item, index) => {
               return (
-                <div key={index}  className=" w-[90%] md:w-[45%] lg:w-[244px]  flex flex-col gap-7">
+                <div
+                  key={index}
+                  className=" w-[90%]  md:w-[45%] lg:w-[244px]   flex flex-col justify-between  gap-7"
+                >
                   <div className=" h-[271px] w-full   relative">
                     <img
                       alt="img"
                       className="w-full h-full rounded-lg lg:rounded-3xl border-[2px] border-color-primary object-cover "
-                      src={`${item.img}`}
+                      src={`${item.large_cover_image}`}
                     />
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <p className="px-1 font-lemonada font-bold text-lg">
+                  <div className="flex flex-col gap-3 justify-between">
+                    <div className="text-ellipsis">
+                    <p className="px-1 line-clamp-2 font-lemonada font-bold text-lg">
                       {item.title}{" "}
                     </p>
+
+                    </div>
                     <p className="font-lemonada text-[#B2B5BB] flex gap-5 text-sm">
                       <span>{item.year}</span>
-                      <span>{item.time.split(" ")[0]}</span>
-                      <span>{item.time.split(" ")[1]}</span>
+                      {/* <span>{item.time.split(" ")[0]}</span> */}
+                      {/* <span>{item.time.split(" ")[1]}</span> */}
                       <span></span>
                     </p>
 
@@ -143,7 +151,7 @@ function ActionMovies() {
                         width={23}
                         height={10}
                       />
-                      {item.rating}
+                      {item.rating.toFixed(1)}
                     </div>
                   </div>
                 </div>

@@ -11,12 +11,11 @@ import { Movies } from "@/lib/features/Hero/hero";
 
 const ImageScroller = ({ movies }: { movies: Movies[] }) => {
   const [imageList, setImageList] = useState<Movies[]>(movies);
-  const [selectedImageId, setSelectedImageId] = useState(54329);
+  const [selectedImageId, setSelectedImageId] = useState(7548);
   const dispatch = useAppDispatch();
-  useEffect(() =>{
-    console.log(selectedImageId)
+  useEffect(() => {
     setImageList(movies);
-  },[movies])
+  }, [movies]);
   const handleImageClick = (id: number) => {
     if (id === selectedImageId) return;
     setSelectedImageId(id);
