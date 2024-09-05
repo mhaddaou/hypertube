@@ -30,14 +30,18 @@ interface TypeMovies{
     loading : boolean,
     error : string
     mv: Movies[]
+    moviesCover : Movies[],
+    index : number,
 }
 
 
 const initialState : TypeMovies = {
     data : {limit:0,movies: []},
     mv : [],
+    moviesCover : [],
     loading : false,
-    error: ''
+    error: '',
+    index : 1,
 }
 
 
@@ -51,6 +55,12 @@ const heroDataSlice1 = createSlice({
     name : 'heroData',
     initialState,
     reducers:{
+        incrementIndex : (state) =>{
+            state.index = state.index + 1;
+        },
+        decrementIndex : (state) =>{
+            state.index = state.index - 1;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -60,7 +70,8 @@ const heroDataSlice1 = createSlice({
         .addCase(fetchHeroData.fulfilled, (state, action) => {
             const {limit, movies} = action.payload.data;
             state.data.movies = action.payload.data.movies.slice(0,10),
-            state.mv = action.payload.data.movies.slice(10,);
+            state.mv = action.payload.data.movies.slice(10,15);
+            state.moviesCover  = action.payload.data.movies.slice(15,28);
             const vr = state.mv[0];
             state.mv[0] = state.mv[2];
             state.mv[2] = vr;

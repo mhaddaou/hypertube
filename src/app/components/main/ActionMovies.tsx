@@ -1,13 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import {
+  fetchActionMovies,
+  incrementPages,
+  decrementPages,
+  isSelected,
+} from "@/lib/features/ActionMoviesData/ActionMoviesData";
+import CardsActionMovies from "../sub/CardActionMovies";
+import dynamic from "next/dynamic";
+const CardsMovies = dynamic(() => import("../sub/CardActionMovies"), {
+  ssr: false,
+});
 
 enum ActionTypes {
-  inc = "INCREMENT",
-  dec = "DECREMENT",
+  inc = "Inc",
+  dec = "Dec",
 }
 
 interface State {
@@ -20,8 +31,10 @@ interface Action {
 
 function ActionMovies() {
   const [selected, setSelected] = useState(0);
+  const [lastSelected, setLastSelected] = useState<ActionTypes>(
+    ActionTypes.inc
+  );
   const items = Array.from({ length: 4 });
-
 
   const dispatchR = useAppDispatch();
   const data = useAppSelector((state) => state.actionMovies);
@@ -45,9 +58,50 @@ function ActionMovies() {
     }
   };
   const [state, dispatch] = useReducer(reducer, { selected: 0 });
+  const selectedRef = useRef<HTMLDivElement>(null);
+  const handlNext = () => {
+    dispatchR(isSelected());
+    selectedRef.current?.classList.remove(
+      `animate-fade-actionMovies${lastSelected}`
+    );
+    setLastSelected(ActionTypes.inc);
+    dispatchR(incrementPages());
+  };
+  const handlPrevious = () => {
+    selectedRef.current?.classList.remove(
+      `animate-fade-actionMovies${lastSelected}`
+    );
+    setLastSelected(ActionTypes.dec);
+    dispatchR(isSelected());
+    dispatchR(decrementPages());
+  };
+
+  useEffect(() => {
+    dispatchR(
+      fetchActionMovies({ page_size: data.page_size, page: data.page })
+    );
+  }, [data.page_size, data.page]);
+
+  useEffect(() => {
+    if (selectedRef.current) {
+      setTimeout(() => {
+        console.log(lastSelected, "setTimeout");
+        selectedRef.current?.classList.add(
+          `${
+            lastSelected == ActionTypes.inc
+              ? "animate-fade-actionMoviesInc"
+              : "animate-fade-actionMoviesDec"
+          }`
+        );
+      }, 150);
+    }
+  }, [data.selected]);
 
   return (
-    <section id="ActionMovies" className="w-full relative  text-white pb-5 ">
+    <section
+      id="ActionMovies"
+      className="w-full relative  text-white pb-5 min-h-[60vh]"
+    >
       <Image
         src="/images/images/backgroundAction.jpeg"
         className="object-cover pt-52"
@@ -55,7 +109,7 @@ function ActionMovies() {
         alt="background"
       />
 
-      <div className="w-full  relative pt-10 container">
+      <div className="w-full  relative pt-10 container ">
         <div className="w-full flex justify-between items-center ">
           <div className="w-fit">
             <h1 className="font-lemonada font-bold   lg:text-[40px] capitalize text-white">
@@ -67,13 +121,13 @@ function ActionMovies() {
             <div className="">
               <button
                 type="button"
-                onClick={() => dispatch({ type: ActionTypes.dec })}
-                disabled={!state.selected}
+                onClick={handlPrevious}
+                disabled={data.page <= 1}
                 title="previous"
               >
                 <Image
                   src={`/images/icons/${
-                    state.selected == 0 ? "switchWhite" : "switchLeftOrange"
+                    data.page <= 1 ? "switchWhite" : "switchLeftOrange"
                   }.svg`}
                   className="max-w-5 lg:max-w-none"
                   alt="icon"
@@ -82,13 +136,13 @@ function ActionMovies() {
                 />
               </button>
             </div>
-            <div className="flex gap-1 lg:gap-3 -mt-1.5">
+            <div className="flex gap-1 lg:gap-3 -mt-1.5 ">
               {items.map((_, index) => {
                 return (
                   <div
                     key={index}
-                    className={`lg:w-2.5 lg:h-2.5 w-2 h-2  rounded-full ${
-                      state.selected === index ? "bg-color-primary" : "bg-white"
+                    className={`lg:w-2.5 lg:h-2.5 w-2 h-2  rounded-full transition-all duration-500 ease-in ${
+                      data.page -1 === index ? "bg-color-primary" : "bg-white"
                     }`}
                   ></div>
                 );
@@ -96,18 +150,18 @@ function ActionMovies() {
             </div>
             <div>
               <button
-                onClick={() => dispatch({ type: ActionTypes.inc })}
-                disabled={state.selected == items.length - 1}
+                onClick={handlNext}
+                disabled={data.page >= 4}
                 title="Next"
               >
                 <Image
                   src={`/images/icons/${
-                    state.selected == items.length - 1
+                    data.page >= 4 
                       ? "switchRightWhite"
                       : "switchOrange"
                   }.svg`}
                   alt="icon"
-                  className="max-w-5 lg:max-w-none"
+                  className="max-w-5 lg:max-w-none "
                   width={23}
                   height={10}
                 />
@@ -115,49 +169,8 @@ function ActionMovies() {
             </div>
           </div>
         </div>
-        <div className="pt-16">
-          <div className="flex flex-col md:flex-row flex-wrap w-full gap-5  items-stretch justify-center">
-            {data.data.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className=" w-[90%]  md:w-[45%] lg:w-[244px]   flex flex-col justify-between  gap-7"
-                >
-                  <div className=" h-[271px] w-full   relative">
-                    <img
-                      alt="img"
-                      className="w-full h-full rounded-lg lg:rounded-3xl border-[2px] border-color-primary object-cover "
-                      src={`${item.large_cover_image}`}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-3 justify-between">
-                    <div className="text-ellipsis">
-                    <p className="px-1 line-clamp-2 font-lemonada font-bold text-lg">
-                      {item.title}{" "}
-                    </p>
-
-                    </div>
-                    <p className="font-lemonada text-[#B2B5BB] flex gap-5 text-sm">
-                      <span>{item.year}</span>
-                      {/* <span>{item.time.split(" ")[0]}</span> */}
-                      {/* <span>{item.time.split(" ")[1]}</span> */}
-                      <span></span>
-                    </p>
-
-                    <div className="flex items-center gap-3 bg-[#4F361A] w-fit pr-3 rounded-full font-lemonada ">
-                      <Image
-                        src="/images/icons/starDoble.svg"
-                        alt=""
-                        width={23}
-                        height={10}
-                      />
-                      {item.rating.toFixed(1)}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        <div className="pt-16 animate-fade-actionMoviesInc" ref={selectedRef}>
+          <CardsMovies data={data} />
         </div>
       </div>
     </section>

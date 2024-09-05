@@ -1,15 +1,25 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useEffect } from "react";
+import { useAppSelector } from "@/lib/hooks";
 
 function FooterCover() {
+  const data = useAppSelector((state) => state.data.moviesCover)
+  const index = useAppSelector((state) => state.data.index)
+  useEffect(() =>{
+    console.log(data[0]?.large_cover_image, 'this is the image')
+  })
   return (
     <div className="w-screen bg-[#0D0C0F]  lg:flex justify-center items-center py-52 hidden ">
       <div className="w-full h-[350px] bg-[##db930e] container rounded-xl relative">
         <div className="w-full h-full relative ">
-          <div className="w-full h-full bg-black/60 absolute z-10"></div>
+          <div className="w-full h-full bg-black/60 absolute z-10 ">
+            <div className="w-full h-full relative bg-red-500">
+
+            </div>
+          </div>
           <Image
-            src="https://m.media-amazon.com/images/M/MV5BNGM1ZjY5MGQtMGNmNy00ZjVmLTkyNTYtMTQwOGEyMTU4NzgxXkEyXkFqcGc@._V1_FMjpg_UX1080_.jpg"
+            src={data[index]?.large_cover_image}
             alt=""
             style={{ objectFit: "cover" }}
             fill
@@ -18,11 +28,11 @@ function FooterCover() {
           />
           <div className="w-full h-full relative z-20 flex">
             <div className="w-full  h-full relative ">
-              <div className="absolute left-20 -top-20  w-[66vw] max-w-3xl  h-full flex text-white items-center  gap-10">
+              <div className="absolute left-20 -top-20  w-[66vw] max-w-3xl  h-full flex text-white items-center  gap-10 ">
                 <div className="relative min-w-[289px] h-[329px] ">
                   <Image
                     draggable="false"
-                    src="https://m.media-amazon.com/images/M/MV5BNGM1ZjY5MGQtMGNmNy00ZjVmLTkyNTYtMTQwOGEyMTU4NzgxXkEyXkFqcGc@._V1_FMjpg_UX1080_.jpg"
+                    src={data[index]?.large_cover_image}
                     alt=""
                     style={{ objectFit: "cover" }}
                     fill
@@ -33,7 +43,7 @@ function FooterCover() {
                 <div className="flex h-full flex-col gap-5 pt-10  justify-center ">
                   <div className="flex items-center gap-4 ">
                     <p className="text-white font-lemonada text-xl font-bold">
-                      Non Negotiable
+                      {data[index]?.title}
                     </p>
                     <Image
                       src="/images/icons/rating4.svg"
@@ -42,11 +52,9 @@ function FooterCover() {
                       height={100}
                     />
                   </div>
-                  <div className=" w-[80%]">
-                    <p className="text-[#BABFC9] font-lemonada text-sm font-semibold">
-                      Alan Binder is a skillful hostage negotiator, the best in
-                      Mexico, who will soon face the most crucial case of his
-                      career ...
+                  <div className=" w-[80%] text-ellipsis">
+                    <p className="text-[#BABFC9] line-clamp-3 font-lemonada text-sm font-semibold">
+                      {data[index]?.summary}
                     </p>
                   </div>
                   <div>

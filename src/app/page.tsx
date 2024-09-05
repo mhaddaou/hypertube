@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
 
     dispatch(fetchHeroData());
-    dispatch(fetchActionMovies());
+    dispatch(fetchActionMovies({page_size: 10, page: 1}));
   }, [dispatch])
   return (
     
