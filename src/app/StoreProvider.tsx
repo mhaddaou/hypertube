@@ -11,12 +11,13 @@ export default function StoreProvider({
   children: React.ReactNode;
 }) {
 
+
   useEffect(() => {
     // AOS.init({
     //   duration: 1000, // Animation duration in milliseconds
     //   once: true, // Whether animation should happen only once or every time you scroll
     // });
-    AOS.init();
+
   }, []);
   return <Provider store={makeStore()}>{children}</Provider>;
 }

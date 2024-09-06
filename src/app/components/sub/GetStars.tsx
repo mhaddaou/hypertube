@@ -10,15 +10,17 @@ export default function ({ rating }: GetStarsProps) {
     <div className="flex gap-5">
       {elements.map((_, index) => {
         return index < rating ? (
-          <Image
+          <Image key={index}
             src="./images/icons/yellowStar.svg"
             width={35}
+            className="w-[25px] lg:w-[35px]"
             height={10}
             alt="star"
           />
         ) : (
-          <Image
+          <Image key={index}
             src="./images/icons/whiteStar.svg"
+            className="w-[25px] lg:w-[35px]"
             width={35}
             height={10}
             alt="star"
