@@ -41,7 +41,7 @@ const initialState : TypeMovies = {
     moviesCover : [],
     loading : false,
     error: '',
-    index : 1,
+    index : 0,
 }
 
 
@@ -57,6 +57,7 @@ const heroDataSlice1 = createSlice({
     reducers:{
         incrementIndex : (state) =>{
             state.index = state.index + 1;
+            console.log('im here and the index is ', state.index);
         },
         decrementIndex : (state) =>{
             state.index = state.index - 1;
@@ -85,3 +86,4 @@ const heroDataSlice1 = createSlice({
 })
 
 export default heroDataSlice1.reducer
+export const { incrementIndex, decrementIndex } = heroDataSlice1.actions

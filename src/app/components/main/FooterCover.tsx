@@ -1,11 +1,14 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import React, { useEffect } from "react";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { decrementIndex, incrementIndex } from "@/lib/features/Hero/hero";
 
 function FooterCover() {
   const data = useAppSelector((state) => state.data.moviesCover)
   const index = useAppSelector((state) => state.data.index)
+  const dispatch = useAppDispatch()
+
   useEffect(() =>{
     console.log(data[0]?.large_cover_image, 'this is the image')
   })
@@ -14,8 +17,15 @@ function FooterCover() {
       <div className="w-full h-[350px] bg-[##db930e] container rounded-xl relative">
         <div className="w-full h-full relative ">
           <div className="w-full h-full bg-black/60 absolute z-10 ">
-            <div className="w-full h-full relative bg-red-500">
+            <div className="w-full h-full relative flex">
 
+              <button type="button" title="prev" onClick={() => dispatch(decrementIndex())}>
+              <Image src='/images/icons/coverLeft.svg' className={`absolute ${index === 0 ? 'hidden' : 'block'} cursor-pointer z-50 -left-5 top-1/2 -translate-y-1/2`}  width={35} height={35} alt=""/>
+                </button>
+                <button type="button" title="next" onClick={() => dispatch(incrementIndex())}>
+              <Image src='/images/icons/coverRight.svg' className={`absolute ${index === 2 ? 'hidden' : 'block'} -right-5 top-1/2 -translate-y-1/2`} width={35} height={10} alt=""/> 
+
+                </button>
             </div>
           </div>
           <Image

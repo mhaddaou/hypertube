@@ -114,13 +114,13 @@ function HeroSection() {
                   {dataHero.title}
                 </h1>
                 </div>
-                <div ref={starsRef} className={` animate-fade-right flex items-center`}>
-          <Image src="images/icons/star.svg" alt=" ic" width={35} height={10} />{" "}
-          <span className="ml- text-5xl text-white font-praise pt-2">{dataHero.rating.toFixed(1)}</span>
+                <div ref={starsRef} className={` animate-fade-right flex items-center `}>
+          <Image src="images/icons/star.svg" alt=" ic" width={35} height={10} className="w-4 mr-2 md:w-" />{" "}
+          <span className="ml- text-xl md:text-5xl text-white font-praise md:pt-2">{dataHero.rating.toFixed(1)}</span>
                 </div>
                 <div
                   ref={genrsRef}
-                  className="flex pt-8 animate-fade-right font-marck-script text-xl lg:text-3xl text-white gap-5 capitalize "
+                  className="flex pt-2 md:pt-8 animate-fade-right flex-wrap font-marck-script text-sm md:text-xl lg:text-3xl text-white gap-3 md:gap-5 capitalize "
                 >
                   {dataHero.genres?.map((item, index, arr) => {
                     return (
@@ -137,11 +137,11 @@ function HeroSection() {
                     );
                   })}
                 </div>
-                <div className="flex gap-5 font-lemonada text-white/70 text-sm pt-8">
+                <div className="flex font-lemonada text-white/70 text-sm pt-1 md:pt-8">
                   <p className=" pr-4 border-white/70">{dataHero.year}</p>
                 </div>
                 <div ref={descRef} className="animate-fade-up overflow-hidden text-ellipsis">
-                  <p className="font-lemonada line-clamp-3 text-white w-[95%] text-justify lg:text-start lg:w-[80%] pt-8  text-sm">
+                  <p className="font-lemonada line-clamp-3 text-white w-[95%] text-justify lg:text-start lg:w-[80%] pt-8  text-xs md:text-base">
                     {dataHero.summary}
                   </p>
                   <div className="pt-8">

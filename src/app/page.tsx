@@ -21,7 +21,7 @@ export default function Home() {
   }, [dispatch])
   return (
     
-    <main className="bg-black">
+    <main className="bg-black overflow-x-hidden">
       
       <HeroSection/>
       <PopularMovies/>
