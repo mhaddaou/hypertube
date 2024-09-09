@@ -1,4 +1,4 @@
-const { transform } = require('typescript');
+const { transform } = require("typescript");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -11,7 +11,10 @@ module.exports = {
         "color-gray": "#A7B5BE",
         "color-white": "#fff",
         background: "#0D0C0F",
-        "search" : '#131313'
+        "seal-brown": "#131313",
+        "suva-grey": "#898989",
+        "pink-swan": "#B7AEAE",
+        "night-rider": "#353535",
       },
       container: {
         center: true,
@@ -22,7 +25,7 @@ module.exports = {
       },
       fontFamily: {
         "marck-script": ["Marck Script", "sans-serif"],
-        "lemonada": ["Lemonada", "sans-serif"],
+        lemonada: ["Lemonada", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
         praise: ["Praise", "sans-serif"],
         inter: ["Roboto", "sans-serif"],
@@ -30,33 +33,29 @@ module.exports = {
       },
       keyframes: {
         slide: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-320px)' },
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-320px)" },
         },
         slide2: {
-          "0%" : {transform: 'translateX(-300px)'},
-          '100%': {transform: 'translateX(0)'}
+          "0%": { transform: "translateX(-300px)" },
+          "100%": { transform: "translateX(0)" },
         },
-        down:{
-          "0%" : {transform: 'translateY(-300px)'},
-          '100%': {transform: 'translateY(0)'}
+        down: {
+          "0%": { transform: "translateY(-300px)" },
+          "100%": { transform: "translateY(0)" },
         },
-        up:{
-          "0%" : {transform: 'translateY(400px)'},
-          '100%': {transform: 'translateY(0)'}
-        }
+        up: {
+          "0%": { transform: "translateY(400px)" },
+          "100%": { transform: "translateY(0)" },
+        },
       },
       animation: {
-        'slide': 'slide 1.45s ease',
-        'fade-right': 'slide2 1.45s ease',
-        'fade-down': 'down 1.45s ease',
-        'fade-up': 'up 1.45s ease',
-
+        slide: "slide 1.45s ease",
+        "fade-right": "slide2 1.45s ease",
+        "fade-down": "down 1.45s ease",
+        "fade-up": "up 1.45s ease",
       },
-      
     },
   },
-  plugins: [
-    require('tailwind-scrollbar'),
-  ],
+  plugins: [require("tailwind-scrollbar")],
 };

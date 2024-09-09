@@ -109,92 +109,109 @@ export default function Search() {
       setIsFavorite((prev) => !prev);
     };
     return (
-      <div
-        className={`h-[300px] sm:h-[200px] pt-4 pb-4 flex gap-3 md:gap-10 w-full ${index && "border-t border-[#898989]"}`}
-      >
-        <div className="w-full sm:w-[20%]">
-          <Image
-            src={imageUrl}
-            width={200}
-            height={200}
-            alt="movie thumbnail"
-            className="w-full h-full object-cover rounded-lg"
-          />
-        </div>
-        <div className="flex flex-col justify-between w-full">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
-            <div className="gap-1 flex flex-col">
-              <div className="font-lexend-Deca font-medium text-[17px]">
-                {title}
+      <div className="flex flex-col gap-3 sm:block">
+        <div
+          className={`h-[300px] sm:h-[200px] pt-4 pb-1 sm:pb-4 flex gap-3 md:gap-10 w-full ${index && "border-t border-suva-grey"}`}
+        >
+          <div className="w-full sm:w-[20%]">
+            <Image
+              src={imageUrl}
+              width={200}
+              height={200}
+              alt="movie thumbnail"
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </div>
+          <div className="flex flex-col justify-between w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
+              <div className="gap-1 flex flex-col">
+                <div className="font-lexend-Deca font-medium text-[17px]">
+                  {title}
+                </div>
+                <div className="flex flex-col sm:flex-row text-suva-grey flex-wrap">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-5 text-sm flex-wrap">
+                    <span>{year}</span>
+                    <span>{country}</span>
+                    <span>{duration}</span>
+                  </div>
+                  <div className="flex items-center gap-2 pt-5 sm:pt-0">
+                    <IoIosEye />
+                    <p className="ml-18 text-sm">{viewers} viewers</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col sm:flex-row text-[#898989] flex-wrap">
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-5 text-sm flex-wrap">
-                  <span>{year}</span>
-                  <span>{country}</span>
-                  <span>{duration}</span>
-                </div>
-                <div className="flex items-center gap-2 pt-5 sm:pt-0">
-                  <IoIosEye />
-                  <p className="ml-18 text-sm">{viewers} viewers</p>
-                </div>
+              <div className="flex items-center gap-1 pt-5 pb-2">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Image
+                    key={i}
+                    src={
+                      i < rating / 2
+                        ? "/images/icons/yellowStar.svg"
+                        : "/images/icons/whiteStar.svg"
+                    }
+                    width={15}
+                    height={15}
+                    alt="star"
+                  />
+                ))}
               </div>
             </div>
-            <div className="flex items-center gap-1 pt-5 pb-2">
-              {Array.from({ length: 5 }, (_, i) => (
+            <div className="flex flex-wrap w-[98%] justify-between items-center">
+              <div className="hidden sm:block w-[70%] text-[10px] font-lexend-Deca text-pink-swan">
+                {description.length > 200
+                  ? `${description.substring(0, 200)}...`
+                  : description}
+              </div>
+              <div
+                className={`sm:my-0 my-2 p-2 rounded-md h-fit cursor-pointer ${isFavorite ? "bg-color-primary" : "border border-pink-swan"}`}
+                onClick={() => handleFavorite()}
+              >
                 <Image
-                  key={i}
                   src={
-                    i < rating / 2
-                      ? "/images/icons/yellowStar.svg"
-                      : "/images/icons/whiteStar.svg"
+                    isFavorite
+                      ? "/images/icons/bookmarkFill.svg"
+                      : "/images/icons/bookmark.svg"
                   }
-                  width={15}
-                  height={15}
-                  alt="star"
+                  width={20}
+                  height={20}
+                  alt="bookmark"
                 />
+              </div>
+              <div>
+                <button
+                  className="bg-color-primary px-4 py-2 rounded-md font-lexend-Deca text-sm"
+                  onClick={() => handleWatchNow()}
+                >
+                  Watch Now
+                </button>
+              </div>
+            </div>
+            <div className="sm:flex gap-2 flex-wrap hidden">
+              {genre.split(" ").map((g, index) => (
+                <div
+                  key={index}
+                  className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
+                >
+                  {g.trim()}
+                </div>
               ))}
             </div>
           </div>
-          <div className="flex flex-wrap w-[98%] justify-between items-center">
-            <div className="hidden sm:block w-[70%] text-[10px] font-lexend-Deca text-[#B7AEAE]">
-              {description.length > 200
-                ? `${description.substring(0, 200)}...`
-                : description}
-            </div>
+        </div>
+        <div className="sm:hidden w-full text-[10px] font-lexend-Deca text-pink-swan">
+          {description.length > 200
+            ? `${description.substring(0, 200)}...`
+            : description}
+        </div>
+        <div className="sm:hidden flex gap-2 flex-wrap mb-4">
+          {genre.split(" ").map((g, index) => (
             <div
-              className={`sm:my-0 my-2 p-2 rounded-md h-fit cursor-pointer ${isFavorite ? "bg-color-primary" : "border border-[#B7AEAE]"}`}
-              onClick={() => handleFavorite()}
+              key={index}
+              className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
             >
-              <Image
-                src={
-                  isFavorite
-                    ? "/images/icons/bookmarkFill.svg"
-                    : "/images/icons/bookmark.svg"
-                }
-                width={20}
-                height={20}
-                alt="bookmark"
-              />
+              {g.trim()}
             </div>
-            <div>
-              <button
-                className="bg-color-primary px-4 py-2 rounded-md font-lexend-Deca text-sm"
-                onClick={() => handleWatchNow()}
-              >
-                Watch Now
-              </button>
-            </div>
-          </div>
-          <div className="sm:flex gap-2 flex-wrap hidden">
-            {genre.split(" ").map((g, index) => (
-              <div
-                key={index}
-                className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
-              >
-                {g.trim()}
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     );
@@ -208,14 +225,14 @@ export default function Search() {
         </div>
         <div className="flex w-full pt-10 gap-7 flex-col lg:flex-row">
           <div className="w-full h-full gap-7 flex flex-col md:flex-row lg:flex-col lg:w-[25%]">
-            <div className="bg-search rounded-md py-5 sm:w-full w-[80%] mx-auto">
+            <div className="bg-seal-brown rounded-md py-5 sm:w-full w-[80%] mx-auto">
               <div className="w-[90%] mx-auto">
                 <h2 className="font-lexend-Deca font-medium">Editor Picks</h2>
-                <div className=" w-[95%] border-[1.5px] rounded-md border-[#353535] mt-4 flex">
+                <div className=" w-[95%] border-[1.5px] rounded-md border-night-rider mt-4 flex">
                   <div className="flex-1 h-full">
                     <input
                       type="text"
-                      className="bg-inherit h-full pl-3 w-full outline-none py-2 text-sm placeholder:text-xs placeholder:text-[#353535] placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300 "
+                      className="bg-inherit h-full pl-3 w-full outline-none py-2 text-sm placeholder:text-xs placeholder:text-night-rider placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300 "
                       placeholder="Search Title"
                     />
                   </div>
@@ -253,7 +270,7 @@ export default function Search() {
                             <div className="flex gap-5 flex-wrap mt-5">
                               {contentMapping[item].map((subItem, subIndex) => (
                                 <div
-                                  className={`rounded-md py-1 px-2 font-light text-xs cursor-pointer ${clickedItems[item] === subItem ? "bg-[#FB9722]" : "bg-[#353535]"}`}
+                                  className={`rounded-md py-1 px-2 font-light text-xs cursor-pointer ${clickedItems[item] === subItem ? "bg-primary" : "bg-night-rider"}`}
                                   key={subIndex}
                                   onClick={() => handleItemClick(item, subItem)}
                                 >
@@ -269,8 +286,8 @@ export default function Search() {
                 </div>
               </div>
             </div>
-            <div className="sm:w-full w-[80%] mx-auto h-full bg-search rounded-md py-7">
-              <div className="bg-search rounded-md">
+            <div className="sm:w-full w-[80%] mx-auto h-full bg-seal-brown rounded-md py-7">
+              <div className="bg-seal-brown rounded-md">
                 <div className="w-[90%] mx-auto">
                   <h2 className="font-lexend-Deca font-medium">By Category</h2>
                   <div className="mt-4 flex flex-wrap">
@@ -298,7 +315,7 @@ export default function Search() {
                       >
                         <input
                           type="checkbox"
-                          className="appearance-none h-4 w-4 border-[1.5px] border-[#353535] bg-[#131313] rounded-sm mr-2 checked:bg-[#131313] checked:border-[#FB9722] checked:ring-1 checked:ring-[#FB9722] checked:after:content-['✔'] checked:after:text-[#FB9722] checked:after:block checked:after:text-center checked:after:text-[10px]"
+                          className="appearance-none h-4 w-4 border-[1.5px] border-night-rider bg-seal-brown rounded-sm mr-2 checked:bg-seal-brown checked:border-primary checked:ring-1 checked:ring-primary checked:after:content-['✔'] checked:after:text-primary checked:after:block checked:after:text-center checked:after:text-[10px]"
                         />
                         {category}
                       </label>
@@ -309,10 +326,10 @@ export default function Search() {
             </div>
           </div>
           <div className="flex-1">
-            <h2 className="font-lexend-Deca font-medium bg-[#131313] px-5 py-3 rounded-md">
+            <h2 className="font-lexend-Deca font-medium bg-seal-brown px-5 py-3 rounded-md">
               Movies
             </h2>
-            <div className="flex bg-[#131313] mt-5 h-fit rounded-md flex-col">
+            <div className="flex bg-seal-brown mt-5 h-fit rounded-md flex-col">
               {movies.map((movie) => (
                 <MovieCard
                   key={movie.id}
