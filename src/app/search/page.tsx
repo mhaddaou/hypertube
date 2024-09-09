@@ -110,9 +110,9 @@ export default function Search() {
     };
     return (
       <div
-        className={`pl-3 h-[200px] pt-4 pb-4 flex gap-10 w-full ${index && "border-t border-[#898989]"}`}
+        className={`h-[300px] sm:h-[200px] pt-4 pb-4 flex gap-3 md:gap-10 w-full ${index && "border-t border-[#898989]"}`}
       >
-        <div className="w-[20%]">
+        <div className="w-full sm:w-[20%]">
           <Image
             src={imageUrl}
             width={200}
@@ -122,24 +122,24 @@ export default function Search() {
           />
         </div>
         <div className="flex flex-col justify-between w-full">
-          <div className="flex items-center justify-between w-[97%]">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
             <div className="gap-1 flex flex-col">
               <div className="font-lexend-Deca font-medium text-[17px]">
                 {title}
               </div>
-              <div className="flex gap-20 text-[#898989]">
-                <div className="flex gap-5 text-sm">
+              <div className="flex flex-col sm:flex-row text-[#898989] flex-wrap">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-5 text-sm flex-wrap">
                   <span>{year}</span>
                   <span>{country}</span>
                   <span>{duration}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 pt-5 sm:pt-0">
                   <IoIosEye />
                   <p className="ml-18 text-sm">{viewers} viewers</p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-1 pt-5">
+            <div className="flex items-center gap-1 pt-5 pb-2">
               {Array.from({ length: 5 }, (_, i) => (
                 <Image
                   key={i}
@@ -155,14 +155,14 @@ export default function Search() {
               ))}
             </div>
           </div>
-          <div className="flex w-[98%] justify-between items-center">
-            <div className="w-[70%] text-[10px] font-lexend-Deca text-[#B7AEAE]">
+          <div className="flex flex-wrap w-[98%] justify-between items-center">
+            <div className="hidden sm:block w-[70%] text-[10px] font-lexend-Deca text-[#B7AEAE]">
               {description.length > 200
                 ? `${description.substring(0, 200)}...`
                 : description}
             </div>
             <div
-              className={`p-2 rounded-md h-fit cursor-pointer ${isFavorite ? "bg-color-primary" : "border border-[#B7AEAE]"}`}
+              className={`sm:my-0 my-2 p-2 rounded-md h-fit cursor-pointer ${isFavorite ? "bg-color-primary" : "border border-[#B7AEAE]"}`}
               onClick={() => handleFavorite()}
             >
               <Image
@@ -171,8 +171,8 @@ export default function Search() {
                     ? "/images/icons/bookmarkFill.svg"
                     : "/images/icons/bookmark.svg"
                 }
-                width={18}
-                height={18}
+                width={20}
+                height={20}
                 alt="bookmark"
               />
             </div>
@@ -185,7 +185,7 @@ export default function Search() {
               </button>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="sm:flex gap-2 flex-wrap hidden">
             {genre.split(" ").map((g, index) => (
               <div
                 key={index}
@@ -201,14 +201,14 @@ export default function Search() {
   };
 
   return (
-    <div className="w-screen h-screen bg-black pt-24 flex items-start justify-center">
-      <div className="w-full max-w-[1200px] h-full text-white mx-auto px-4">
+    <div className="overflow-x-hidden w-screen h-screen bg-black pt-24 flex items-start justify-center">
+      <div className="w-full container h-full text-white mx-auto px-4">
         <div className="text-white font-lexend-Deca font-medium text-xl">
           Filter Options
         </div>
-        <div className="flex w-full pt-10 gap-7 flex-col md:flex-row">
-          <div className="w-full h-full gap-7 flex md:flex-col md:w-[25%]">
-            <div className="bg-search rounded-md py-5 w-full">
+        <div className="flex w-full pt-10 gap-7 flex-col lg:flex-row">
+          <div className="w-full h-full gap-7 flex flex-col md:flex-row lg:flex-col lg:w-[25%]">
+            <div className="bg-search rounded-md py-5 sm:w-full w-[80%] mx-auto">
               <div className="w-[90%] mx-auto">
                 <h2 className="font-lexend-Deca font-medium">Editor Picks</h2>
                 <div className=" w-[95%] border-[1.5px] rounded-md border-[#353535] mt-4 flex">
@@ -269,7 +269,7 @@ export default function Search() {
                 </div>
               </div>
             </div>
-            <div className="w-full h-full bg-search rounded-md py-7">
+            <div className="sm:w-full w-[80%] mx-auto h-full bg-search rounded-md py-7">
               <div className="bg-search rounded-md">
                 <div className="w-[90%] mx-auto">
                   <h2 className="font-lexend-Deca font-medium">By Category</h2>
