@@ -1,12 +1,22 @@
 import { configureStore } from "@reduxjs/toolkit";
 import BackgroundSlice from "./features/background/background";
 import HeroDataSlice from "./features/HeroData/HeroData";
+import ActionSlice from "./features/ActionData/ActionData";
+import StateImageCoverSlice  from "./features/StateImageCover/StateImageCover";
+import WatchedMoviesSlice from "./features/WatchedMovies/WatchedMoviesSlice";
+import heroDataSlice1 from './features/Hero/hero'
+import  ActionMoviesSlice  from "./features/ActionMoviesData/ActionMoviesData";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       background: BackgroundSlice,
       heroData: HeroDataSlice,
+      actionData: ActionSlice,
+      selectedImage : StateImageCoverSlice,
+      watchedMovies : WatchedMoviesSlice,
+      data : heroDataSlice1,
+      actionMovies : ActionMoviesSlice,
     },
   });
 };

@@ -2,12 +2,32 @@ import { HeroFilms } from "@/app/Types/Interfaces/Interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 
 import Image1 from "../../../../public/images/images/1.jpg"
+import { Movies } from "../Hero/hero";
+import { useAppSelector } from "@/lib/hooks";
 
 
-const initialState : HeroFilms = {id: 2,image: Image1,  selected: false, title:'spider man no way home',
- description: "Scelerisque sed ultricies tristique. Mi in vivamus aliquam varius eu felis. Id ultricies diam turpis mi tincidunt. Ut morbi sed urna tempor imperdiet eu scelerisque egestas. Interdum mi orci suspendisse in s...", 
- rating: 4, genres: ['crime', 'drama', 'mystery'],year: 2021, 
- time: 1.55, link: '/'}
+const initialState: Movies = {
+    "genres": [
+        "Action",
+        "Crime",
+        "Drama",
+        "Mystery",
+        "Thriller"
+    ],
+    "id": 7548,
+    "language": "en",
+    "large_cover_image": "https://yts.mx/assets/images/movies/den_of_thieves_2018/large-cover.jpg",
+    "medium_cover_image": "https://yts.mx/assets/images/movies/den_of_thieves_2018/medium-cover.jpg",
+    "rating": 7,
+    "small_cover_image": "https://yts.mx/assets/images/movies/den_of_thieves_2018/small-cover.jpg",
+    "summary": "A gritty L.A crime saga which follows the intersecting and often personally connected lives of an elite unit of the LA County Sheriff's Dept. and the state's most successful bank robbery crew as the outlaws plan an impossible heist on the Federal Reserve Bank of downtown Los Angeles.—STXfilms",
+    "synopsis": "A gritty L.A crime saga which follows the intersecting and often personally connected lives of an elite unit of the LA County Sheriff's Dept. and the state's most successful bank robbery crew as the outlaws plan an impossible heist on the Federal Reserve Bank of downtown Los Angeles.—STXfilms",
+    "title": "Den of Thieves",
+    "title_english": "Den of Thieves",
+    "title_long": "Den of Thieves (2018)",
+    "watched": false,
+    "year": 2018
+}
 
 export const HeroDataSlice = createSlice({
     name: "heroData",
@@ -15,15 +35,20 @@ export const HeroDataSlice = createSlice({
     reducers: {
         changeHeroData: (state, action) => {
             state.title = action.payload.title;
-            state.description = action.payload.description;
-            state.id = action.payload.id;
-            state.image = action.payload.image;
             state.genres = action.payload.genres;
-            state.link = action.payload.link;
+            state.id = action.payload.id;
+            state.language = action.payload.language;
+            state.large_cover_image = action.payload.large_cover_image;
+            state.medium_cover_image = action.payload.medium_cover_image;
             state.rating = action.payload.rating;
-            state.time = action.payload.time;
+            state.small_cover_image = action.payload.small_cover_image;
+            state.summary = action.payload.summary;
+            state.synopsis = action.payload.synopsis;
+            state.title_english = action.payload.title_english;
+            state.title_long = action.payload.title_long;
+            state.watched = action.payload.watched;
             state.year = action.payload.year;
-            state.selected = action.payload.selected;          
+
         }
     }
 
