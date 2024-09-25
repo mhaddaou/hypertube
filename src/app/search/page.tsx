@@ -1,59 +1,188 @@
 "use client";
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 import Image from "next/image";
-import { useState } from "react";
 import { IoIosEye } from "react-icons/io";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { fetchSearchedMovies } from "@/lib/features/Search/Search";
 
-const movies = [
-  {
-    id: 0,
-    title: "Test1",
-    year: 2018,
-    description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
-    genre: "Action Drama",
-    rating: 8,
-    viewers: "567k",
-    country: "ENGLAND",
-    duration: "1h 2m",
-    imageUrl: "/images/images/spiderman.jpg",
-    favorite: true,
-  },
-  {
-    id: 1,
-    title: "Test2",
-    year: 2008,
-    description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-    genre: "Fantasy Adventure Drama",
-    rating: 10,
-    viewers: "20k",
-    country: "USA",
-    duration: "1h 38m",
-    imageUrl: "/images/images/batman.jpg",
-    favorite: false,
-  },
-  {
-    id: 2,
-    title: "Test3",
-    year: 2000,
-    description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    genre: "Horror",
-    rating: 4,
-    viewers: "860",
-    country: "ITALY",
-    duration: "2h 25m",
-    imageUrl: "/images/images/1.jpg",
-    favorite: false,
-  },
-];
+interface Movie {
+  id: number;
+  title: string;
+  year: number;
+  summary: string;
+  genres: string[];
+  rating: number;
+  large_cover_image: string;
+}
+
+interface MovieCardProps {
+  title: string;
+  year: number;
+  country: string;
+  duration: string;
+  viewers: string;
+  genres: string[];
+  rating: number;
+  description: string;
+  imageUrl: string;
+  favorite: boolean;
+  index: number;
+}
+
+const MovieCard: FC<MovieCardProps> = ({
+  title,
+  year,
+  country,
+  duration,
+  viewers,
+  genres,
+  rating,
+  description,
+  imageUrl,
+  favorite,
+  index,
+}) => {
+
+  const [isFavorite, setIsFavorite] = useState(favorite);
+
+  const handleFavorite = () => {
+    setIsFavorite((prev) => !prev);
+  };
+
+  const handleWatchNow = () => {
+    console.log("watch now");
+  };
+
+  return (
+    <div className="flex flex-col gap-3 sm:block">
+      <div
+        className={`h-[300px] sm:h-[200px] pt-4 pb-1 sm:pb-4 flex gap-3 sm:gap-5 w-full ${index && "border-t border-suva-grey"}`}
+      >
+        <Image
+          src={imageUrl}
+          width={200}
+          height={200}
+          alt="movie thumbnail"
+          className="w-full sm:w-[20%] h-full object-cover rounded-lg"
+        />
+        <div className="flex flex-col justify-between w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
+            <div className="gap-1 flex flex-col">
+              <div className="font-lexend-Deca font-medium text-[17px]">
+                {title}
+              </div>
+              <div className="flex flex-col sm:flex-row text-suva-grey flex-wrap sm:gap-20">
+                <div className="pt-3 sm:pt-2 flex flex-col sm:flex-row gap-3 sm:gap-5 text-sm flex-wrap">
+                  <span>{year}</span>
+                  <span>{country}</span>
+                  <span>{duration}</span>
+                </div>
+                <div className="flex items-center gap-2 pt-5 sm:pt-2">
+                  <IoIosEye />
+                  <p className="ml-18 text-sm">{viewers} viewers</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 pt-5 pb-2">
+              {Array.from({ length: 5 }, (_, i) => (
+                <Image
+                  key={i}
+                  src={
+                    i < rating / 2
+                      ? "/images/icons/yellowStar.svg"
+                      : "/images/icons/whiteStar.svg"
+                  }
+                  width={15}
+                  height={15}
+                  alt="star"
+                />
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-wrap w-[98%] justify-between items-center">
+            <div className="hidden sm:block w-[70%] text-[10px] font-lexend-Deca text-pink-swan">
+              {
+                description
+                  ? (description.length > 200 ? `${description.substring(0, 200)}...` : description)
+                  : "( No summary available )"
+              }
+            </div>
+            <div
+              className={`sm:my-0 my-2 p-2 rounded-md h-fit cursor-pointer ${isFavorite ? "bg-color-primary" : "border border-pink-swan"}`}
+              onClick={() => handleFavorite()}
+            >
+              <Image
+                src={
+                  isFavorite
+                    ? "/images/icons/bookmarkFill.svg"
+                    : "/images/icons/bookmark.svg"
+                }
+                width={20}
+                height={20}
+                alt="bookmark"
+              />
+            </div>
+            <div>
+              <button
+                className="bg-color-primary px-4 py-2 rounded-md font-lexend-Deca text-sm"
+                onClick={() => handleWatchNow()}
+              >
+                Watch Now
+              </button>
+            </div>
+          </div>
+          <div className="sm:flex gap-2 flex-wrap hidden">
+            {genres.slice(0, 5).map((g, index) => (
+              <div
+                key={index}
+                className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
+              >
+                {g}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="sm:hidden w-full text-[10px] font-lexend-Deca text-pink-swan">
+        {
+          description
+            ? (description.length > 200 ? `${description.substring(0, 200)}...` : description)
+            : "(No summary available)"
+        }
+      </div>
+      <div className="sm:hidden flex gap-2 flex-wrap mb-4">
+        {genres.slice(0, 5).map((g, index) => (
+          <div
+            key={index}
+            className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
+          >
+            {g}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default function Search() {
+  const dispatch = useAppDispatch();
+  const movies: Movie[] = useAppSelector((state) => state.searchedMovies.items);
+  const status = useAppSelector((state) => state.searchedMovies.status);
+  const [query, setQuery] = useState('');
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [clickedItems, setClickedItems] = useState<{
     [key: string]: string | null;
   }>({});
+
+  useEffect(() => {
+    if (status === "idle" && query) {
+      dispatch(fetchSearchedMovies({ query_term: query, source: 'YTS' }));
+    }
+  }, [status, dispatch])
+
+  const handleSearch = () => {
+    dispatch(fetchSearchedMovies({ query_term: query, source: 'YTS' }));
+  };
 
   const handleToggle = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -66,10 +195,6 @@ export default function Search() {
     }));
   };
 
-  const handleWatchNow = () => {
-    console.log("watch now");
-  };
-
   const contentMapping: { [key: string]: string[] } = {
     Quality: ["480p", "720p", "1080p", "4k"],
     Year: ["1980s", "1990s", "2000s", "2010s", "2020s"],
@@ -77,148 +202,8 @@ export default function Search() {
     "Order By": ["Name", "Date", "Popularity", "Rating"],
   };
 
-  interface MovieCardProps {
-    title: string;
-    year: number;
-    country: string;
-    duration: string;
-    viewers: string;
-    genre: string;
-    rating: number;
-    description: string;
-    imageUrl: string;
-    favorite: boolean;
-    index: number;
-  }
-
-  const MovieCard: FC<MovieCardProps> = ({
-    title,
-    year,
-    country,
-    duration,
-    viewers,
-    genre,
-    rating,
-    description,
-    imageUrl,
-    favorite,
-    index,
-  }) => {
-    const [isFavorite, setIsFavorite] = useState(favorite);
-    const handleFavorite = () => {
-      setIsFavorite((prev) => !prev);
-    };
-    return (
-      <div className="flex flex-col gap-3 sm:block">
-        <div
-          className={`h-[300px] sm:h-[200px] pt-4 pb-1 sm:pb-4 flex gap-3 md:gap-10 w-full ${index && "border-t border-suva-grey"}`}
-        >
-          <div className="w-full sm:w-[20%]">
-            <Image
-              src={imageUrl}
-              width={200}
-              height={200}
-              alt="movie thumbnail"
-              className="w-full h-full object-cover rounded-lg"
-            />
-          </div>
-          <div className="flex flex-col justify-between w-full">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
-              <div className="gap-1 flex flex-col">
-                <div className="font-lexend-Deca font-medium text-[17px]">
-                  {title}
-                </div>
-                <div className="flex flex-col sm:flex-row text-suva-grey flex-wrap">
-                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-5 text-sm flex-wrap">
-                    <span>{year}</span>
-                    <span>{country}</span>
-                    <span>{duration}</span>
-                  </div>
-                  <div className="flex items-center gap-2 pt-5 sm:pt-0">
-                    <IoIosEye />
-                    <p className="ml-18 text-sm">{viewers} viewers</p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 pt-5 pb-2">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Image
-                    key={i}
-                    src={
-                      i < rating / 2
-                        ? "/images/icons/yellowStar.svg"
-                        : "/images/icons/whiteStar.svg"
-                    }
-                    width={15}
-                    height={15}
-                    alt="star"
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-wrap w-[98%] justify-between items-center">
-              <div className="hidden sm:block w-[70%] text-[10px] font-lexend-Deca text-pink-swan">
-                {description.length > 200
-                  ? `${description.substring(0, 200)}...`
-                  : description}
-              </div>
-              <div
-                className={`sm:my-0 my-2 p-2 rounded-md h-fit cursor-pointer ${isFavorite ? "bg-color-primary" : "border border-pink-swan"}`}
-                onClick={() => handleFavorite()}
-              >
-                <Image
-                  src={
-                    isFavorite
-                      ? "/images/icons/bookmarkFill.svg"
-                      : "/images/icons/bookmark.svg"
-                  }
-                  width={20}
-                  height={20}
-                  alt="bookmark"
-                />
-              </div>
-              <div>
-                <button
-                  className="bg-color-primary px-4 py-2 rounded-md font-lexend-Deca text-sm"
-                  onClick={() => handleWatchNow()}
-                >
-                  Watch Now
-                </button>
-              </div>
-            </div>
-            <div className="sm:flex gap-2 flex-wrap hidden">
-              {genre.split(" ").map((g, index) => (
-                <div
-                  key={index}
-                  className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
-                >
-                  {g.trim()}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="sm:hidden w-full text-[10px] font-lexend-Deca text-pink-swan">
-          {description.length > 200
-            ? `${description.substring(0, 200)}...`
-            : description}
-        </div>
-        <div className="sm:hidden flex gap-2 flex-wrap mb-4">
-          {genre.split(" ").map((g, index) => (
-            <div
-              key={index}
-              className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
-            >
-              {g.trim()}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="overflow-x-hidden w-screen h-screen bg-black pt-24 flex items-start justify-center">
+    <div className="overflow-x-hidden w-screen bg-black pt-24 pb-8 flex items-start justify-center">
       <div className="w-full container h-full text-white mx-auto px-4">
         <div className="text-white font-lexend-Deca font-medium text-xl">
           Filter Options
@@ -234,22 +219,23 @@ export default function Search() {
                       type="text"
                       className="bg-inherit h-full pl-3 w-full outline-none py-2 text-sm placeholder:text-xs placeholder:text-night-rider placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300 "
                       placeholder="Search Title"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                     />
                   </div>
-                  <div className="w-8 flex justify-center items-center">
-                    <button onClick={() => { }}>
-                      <Image
-                        src="/images/icons/search.svg"
-                        alt="search icon"
-                        width={25}
-                        height={25}
-                        className="pt-1"
-                      />
-                    </button>
-                  </div>
+                  <button onClick={handleSearch}>
+                    <Image
+                      src="/images/icons/search.svg"
+                      alt="search icon"
+                      width={25}
+                      height={25}
+                      className="pt-1 w-8 flex justify-center items-center"
+                    />
+                  </button>
                 </div>
                 <div>
-                  <ul className="space-y-7 mt-8 w-[80%] pl-2">
+                  <ul className="space-y-7 mt-8 w-full pl-2">
                     {["Quality", "Year", "Rating", "Order By"].map(
                       (item, index) => (
                         <li key={index} className="font-lexend-Deca text-xs">
@@ -329,24 +315,38 @@ export default function Search() {
             <h2 className="font-lexend-Deca font-medium bg-seal-brown px-5 py-3 rounded-md">
               Movies
             </h2>
-            <div className="flex bg-seal-brown mt-5 h-fit rounded-md flex-col">
-              {movies.map((movie) => (
-                <MovieCard
-                  key={movie.id}
-                  title={movie.title}
-                  year={movie.year}
-                  description={movie.description}
-                  genre={movie.genre}
-                  rating={movie.rating}
-                  viewers={movie.viewers}
-                  country={movie.country}
-                  duration={movie.duration}
-                  imageUrl={movie.imageUrl}
-                  favorite={movie.favorite}
-                  index={movie.id}
-                />
-              ))}
-            </div>
+            {
+              status === "loading" ? (
+                <div className="text-white font-lexend-Deca font-medium text-l p-5">
+                  Loading...
+                </div>
+              ) : (
+                <div className="flex bg-seal-brown mt-5 h-fit rounded-md flex-col">
+                  {movies && movies.length > 0 ? (
+                    movies.map((movie, index) => (
+                      <MovieCard
+                        key={movie.id}
+                        index={index}
+                        title={movie.title}
+                        year={movie.year}
+                        description={movie.summary}
+                        genres={movie.genres}
+                        rating={movie.rating}
+                        imageUrl={movie.large_cover_image}
+                        viewers="10k"
+                        country="USA"
+                        duration="1h 38m"
+                        favorite={false}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-white font-lexend-Deca font-medium text-xl p-5">
+                      No results found!
+                    </div>
+                  )}
+                </div>
+              )
+            }
           </div>
         </div>
       </div>
