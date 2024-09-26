@@ -29,6 +29,29 @@ interface MovieCardProps {
   index: number;
 }
 
+interface SearchParams {
+  query_term: string;
+  quality: string;
+  source: string;
+  sortBy: string;
+  orderBy: string;
+  genre: string;
+}
+
+const categories = [
+  "Action", "Comedy", "Drama", "Horror", "Romance", "SciFi", "Thriller", "RealityTV",
+  "Anime", "Documentary", "Sport", "Western", "Biography", "Adventure", "War",
+  "Mystery", "Crime", "Fantasy", "Animation", "History", "Family", "Musical",
+  "Music", "FilmNoir", "News", "GameShow", "TalkShow"
+];
+
+const contentMapping: { [key: string]: string[] } = {
+  Source: ["YTS"],
+  Quality: ["720p", "1080p", "2160p", "3D"],
+  "Sort By": ["Title", "Year", "Rating", "Peers", "Seeds", "DownloadCount", "LikeCount", "DateAdded"],
+  "Order By": ["Asc", "Desc"],
+};
+
 const MovieCard: FC<MovieCardProps> = ({
   title,
   year,
@@ -166,22 +189,46 @@ const MovieCard: FC<MovieCardProps> = ({
 
 export default function Search() {
   const dispatch = useAppDispatch();
-  const movies: Movie[] = useAppSelector((state) => state.searchedMovies.items);
+  const movies: Movie[] = useAppSelector((state) => {
+    const items = state.searchedMovies.items;
+    const uniqueIds = Array.from(new Set(items.map((movie: Movie) => movie.id)));
+    const uniqueMovies = uniqueIds.map(id => items.find((movie: Movie) => movie.id === id)).filter(movie => movie !== undefined) as Movie[];
+    return uniqueMovies;
+  });
   const status = useAppSelector((state) => state.searchedMovies.status);
-  const [query, setQuery] = useState('');
+  const [searchParams, setSearchParams] = useState<SearchParams>({
+    query_term: '',
+    quality: '',
+    source: 'YTS',
+    sortBy: '',
+    orderBy: '',
+    genre: ''
+  });
+  const updateSearchParams = (key: keyof SearchParams, value: string) => {
+    setSearchParams(prevState => ({
+      ...prevState,
+      [key]: key === "quality" ? "Q" + value : value
+    }));
+  };
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [clickedItems, setClickedItems] = useState<{
     [key: string]: string | null;
   }>({});
 
   useEffect(() => {
-    if (status === "idle" && query) {
-      dispatch(fetchSearchedMovies({ query_term: query, source: 'YTS' }));
+    if (status === "idle" && searchParams.query_term) {
+      const filteredParams = Object.fromEntries(
+        Object.entries(searchParams).filter(([_, value]) => value)
+      ) as SearchParams;
+      dispatch(fetchSearchedMovies(filteredParams));
     }
   }, [status, dispatch])
 
   const handleSearch = () => {
-    dispatch(fetchSearchedMovies({ query_term: query, source: 'YTS' }));
+    const filteredParams = Object.fromEntries(
+      Object.entries(searchParams).filter(([_, value]) => value)
+    ) as SearchParams;
+    dispatch(fetchSearchedMovies(filteredParams));
   };
 
   const handleToggle = (index: number) => {
@@ -193,13 +240,14 @@ export default function Search() {
       ...prev,
       [category]: prev[category] === subItem ? null : subItem,
     }));
+    updateSearchParams(category.toLowerCase().replace(/\s+/g, '_') as keyof SearchParams, subItem);
   };
 
-  const contentMapping: { [key: string]: string[] } = {
-    Quality: ["480p", "720p", "1080p", "4k"],
-    Year: ["1980s", "1990s", "2000s", "2010s", "2020s"],
-    Rating: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-    "Order By": ["Name", "Date", "Popularity", "Rating"],
+  const [checkedIndex, setCheckedIndex] = useState<number | null>(null);
+
+  const handleCheckboxChange = (index: number | null, category: string) => {
+    setCheckedIndex(index);
+    updateSearchParams('genre', category);
   };
 
   return (
@@ -219,8 +267,7 @@ export default function Search() {
                       type="text"
                       className="bg-inherit h-full pl-3 w-full outline-none py-2 text-sm placeholder:text-xs placeholder:text-night-rider placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300 "
                       placeholder="Search Title"
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
+                      onChange={(e) => updateSearchParams("query_term", e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                     />
                   </div>
@@ -236,7 +283,7 @@ export default function Search() {
                 </div>
                 <div>
                   <ul className="space-y-7 mt-8 w-full pl-2">
-                    {["Quality", "Year", "Rating", "Order By"].map(
+                    {["Source", "Quality", "Sort By", "Order By"].map(
                       (item, index) => (
                         <li key={index} className="font-lexend-Deca text-xs">
                           <div
@@ -256,7 +303,7 @@ export default function Search() {
                             <div className="flex gap-5 flex-wrap mt-5">
                               {contentMapping[item].map((subItem, subIndex) => (
                                 <div
-                                  className={`rounded-md py-1 px-2 font-light text-xs cursor-pointer ${clickedItems[item] === subItem ? "bg-primary" : "bg-night-rider"}`}
+                                  className={`rounded-md py-1 px-2 font-light text-xs cursor-pointer ${clickedItems[item] === subItem ? "bg-color-primary" : "bg-night-rider"}`}
                                   key={subIndex}
                                   onClick={() => handleItemClick(item, subItem)}
                                 >
@@ -277,34 +324,21 @@ export default function Search() {
                 <div className="w-[90%] mx-auto">
                   <h2 className="font-lexend-Deca font-medium">By Category</h2>
                   <div className="mt-4 flex flex-wrap">
-                    {[
-                      "Action",
-                      "Comedy",
-                      "Drama",
-                      "Horror",
-                      "Romance",
-                      "Sci-Fi",
-                      "Thriller",
-                      "RealityTV",
-                      "Anime",
-                      "Documentary",
-                      "Sports",
-                      "Western",
-                      "Biography",
-                      "Adventure",
-                      "War",
-                      "Mystery",
-                    ].map((category, index) => (
+                    {categories.map((category, index) => (
+
                       <label
                         key={category}
-                        className={`text-xs w-1/2 font-lexend-Deca font-light flex items-center ${!index || index == 1 ? " " : "pt-3"}`}
+                        className={`text-xs w-1/2 font-lexend-Deca font-light flex items-center ${!index || index === 1 ? " " : "pt-3"}`}
                       >
                         <input
                           type="checkbox"
-                          className="appearance-none h-4 w-4 border-[1.5px] border-night-rider bg-seal-brown rounded-sm mr-2 checked:bg-seal-brown checked:border-primary checked:ring-1 checked:ring-primary checked:after:content-['✔'] checked:after:text-primary checked:after:block checked:after:text-center checked:after:text-[10px]"
+                          className="appearance-none h-4 w-4 border-[1.5px] border-night-rider bg-seal-brown rounded-sm mr-2 checked:bg-seal-brown checked:border-color-primary checked:ring-1 checked:ring-color-primary checked:after:content-['✔'] checked:after:text-color-primary checked:after:block checked:after:text-center checked:after:text-[10px]"
+                          checked={checkedIndex === index}
+                          onChange={() => handleCheckboxChange(index, category)}
                         />
                         {category}
                       </label>
+
                     ))}
                   </div>
                 </div>

@@ -3,7 +3,10 @@ import axios from "axios";
 
 interface SearchParams {
   query_term: string;
+  quality: string;
   source: string;
+  sortBy: string;
+  orderBy: string;
 }
 
 export const fetchSearchedMovies = createAsyncThunk(
