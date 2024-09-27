@@ -7,7 +7,7 @@ import React, { useState } from "react";
 function Header() {
   const [isOpenModal, setIsOpenModal] = useState(false);
   return (
-    <div className="  fixed top-0 z-50 w-screen ">
+    <div className="bg-black fixed top-0 z-50 w-screen ">
       {isOpenModal && (
         <div className="w-full bg-black/90 absolute  z-30">
           <div className="w-[90%] mx-auto bg--500 flex justify-between py-8  items-center">

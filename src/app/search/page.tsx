@@ -1,7 +1,6 @@
 "use client";
 import { FC, useState, useEffect } from "react";
 import Image from "next/image";
-import { IoIosEye } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { fetchSearchedMovies } from "@/lib/features/Search/Search";
 
@@ -18,9 +17,6 @@ interface Movie {
 interface MovieCardProps {
   title: string;
   year: number;
-  country: string;
-  duration: string;
-  viewers: string;
   genres: string[];
   rating: number;
   description: string;
@@ -55,9 +51,6 @@ const contentMapping: { [key: string]: string[] } = {
 const MovieCard: FC<MovieCardProps> = ({
   title,
   year,
-  country,
-  duration,
-  viewers,
   genres,
   rating,
   description,
@@ -79,34 +72,22 @@ const MovieCard: FC<MovieCardProps> = ({
   return (
     <div className="flex flex-col gap-3 sm:block">
       <div
-        className={`h-[300px] sm:h-[200px] pt-4 pb-1 sm:pb-4 flex gap-3 sm:gap-5 w-full ${index && "border-t border-suva-grey"}`}
+        className={`pt-4 pb-1 sm:pb-4 flex gap-3 sm:gap-5 w-full ${index && "border-t border-suva-grey"}`}
       >
         <Image
           src={imageUrl}
           width={200}
           height={200}
           alt="movie thumbnail"
-          className="w-full sm:w-[20%] h-full object-cover rounded-lg"
+          className="aspect-auto sm:max-h-[200px] rounded-lg"
         />
-        <div className="flex flex-col justify-between w-full">
+        <div className="flex flex-col justify-center sm:justify-between w-full mt-6 sm:m-0">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
-            <div className="gap-1 flex flex-col">
-              <div className="font-lexend-Deca font-medium text-[17px]">
-                {title}
-              </div>
-              <div className="flex flex-col sm:flex-row text-suva-grey flex-wrap sm:gap-20">
-                <div className="pt-3 sm:pt-2 flex flex-col sm:flex-row gap-3 sm:gap-5 text-sm flex-wrap">
-                  <span>{year}</span>
-                  <span>{country}</span>
-                  <span>{duration}</span>
-                </div>
-                <div className="flex items-center gap-2 pt-5 sm:pt-2">
-                  <IoIosEye />
-                  <p className="ml-18 text-sm">{viewers} viewers</p>
-                </div>
-              </div>
+            <div className="text-center sm:pb-6 sm:mx-0 font-medium text-[17px]">
+              <span className="font-lexend-Deca">{title} </span>
+              <span className="text-suva-grey">{year}</span>
             </div>
-            <div className="flex items-center gap-1 pt-5 pb-2">
+            <div className="self-center flex items-center gap-1 pt-5 pb-2">
               {Array.from({ length: 5 }, (_, i) => (
                 <Image
                   key={i}
@@ -121,12 +102,22 @@ const MovieCard: FC<MovieCardProps> = ({
                 />
               ))}
             </div>
+            <div className="sm:hidden flex flex-col gap-2 flex-wrap my-3 w-fit items-center self-center">
+              {genres.slice(0, 3).map((g, index) => (
+                <div
+                  key={index}
+                  className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
+                >
+                  {g}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap w-[98%] justify-between items-center">
-            <div className="hidden sm:block w-[70%] text-[10px] font-lexend-Deca text-pink-swan">
+          <div className="flex flex-wrap w-[98%] justify-center gap-3 sm:justify-between items-center pb-7">
+            <div className="hidden sm:block w-[60%] text-[10px] font-lexend-Deca text-pink-swan">
               {
                 description
-                  ? (description.length > 200 ? `${description.substring(0, 200)}...` : description)
+                  ? (description.length > 300 ? `${description.substring(0, 300)}...` : description)
                   : "( No summary available )"
               }
             </div>
@@ -145,14 +136,12 @@ const MovieCard: FC<MovieCardProps> = ({
                 alt="bookmark"
               />
             </div>
-            <div>
-              <button
-                className="bg-color-primary px-4 py-2 rounded-md font-lexend-Deca text-sm"
-                onClick={() => handleWatchNow()}
-              >
-                Watch Now
-              </button>
-            </div>
+            <button
+              className="bg-color-primary px-4 py-2 rounded-md font-lexend-Deca text-sm"
+              onClick={handleWatchNow}
+            >
+              Watch Now
+            </button>
           </div>
           <div className="sm:flex gap-2 flex-wrap hidden">
             {genres.slice(0, 5).map((g, index) => (
@@ -166,22 +155,12 @@ const MovieCard: FC<MovieCardProps> = ({
           </div>
         </div>
       </div>
-      <div className="sm:hidden w-full text-[10px] font-lexend-Deca text-pink-swan">
+      <div className="sm:hidden w-full text-[10px] font-lexend-Deca text-pink-swan pb-3">
         {
           description
             ? (description.length > 200 ? `${description.substring(0, 200)}...` : description)
             : "(No summary available)"
         }
-      </div>
-      <div className="sm:hidden flex gap-2 flex-wrap mb-4">
-        {genres.slice(0, 5).map((g, index) => (
-          <div
-            key={index}
-            className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
-          >
-            {g}
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -191,6 +170,7 @@ export default function Search() {
   const dispatch = useAppDispatch();
   const movies: Movie[] = useAppSelector((state) => {
     const items = state.searchedMovies.items;
+    if (!items) return [];
     const uniqueIds = Array.from(new Set(items.map((movie: Movie) => movie.id)));
     const uniqueMovies = uniqueIds.map(id => items.find((movie: Movie) => movie.id === id)).filter(movie => movie !== undefined) as Movie[];
     return uniqueMovies;
@@ -246,8 +226,14 @@ export default function Search() {
   const [checkedIndex, setCheckedIndex] = useState<number | null>(null);
 
   const handleCheckboxChange = (index: number | null, category: string) => {
-    setCheckedIndex(index);
-    updateSearchParams('genre', category);
+    if (checkedIndex === index) {
+      setCheckedIndex(null);
+      updateSearchParams('genre', '');
+    }
+    else {
+      setCheckedIndex(index);
+      updateSearchParams('genre', category);
+    }
   };
 
   return (
@@ -258,14 +244,14 @@ export default function Search() {
         </div>
         <div className="flex w-full pt-10 gap-7 flex-col lg:flex-row">
           <div className="w-full h-full gap-7 flex flex-col md:flex-row lg:flex-col lg:w-[25%]">
-            <div className="bg-seal-brown rounded-md py-5 sm:w-full w-[80%] mx-auto">
+            <div className="max-h-[300px] bg-seal-brown rounded-md pt-3 pb-5 sm:w-full w-[80%] mx-auto overflow-y-auto">
               <div className="w-[90%] mx-auto">
                 <h2 className="font-lexend-Deca font-medium">Editor Picks</h2>
                 <div className=" w-[95%] border-[1.5px] rounded-md border-night-rider mt-4 flex">
                   <div className="flex-1 h-full">
                     <input
                       type="text"
-                      className="bg-inherit h-full pl-3 w-full outline-none py-2 text-sm placeholder:text-xs placeholder:text-night-rider placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300 "
+                      className="bg-inherit h-full pl-3 w-[97%] outline-none py-2 text-sm placeholder:text-xs placeholder:text-night-rider placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300 "
                       placeholder="Search Title"
                       onChange={(e) => updateSearchParams("query_term", e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -319,7 +305,7 @@ export default function Search() {
                 </div>
               </div>
             </div>
-            <div className="sm:w-full w-[80%] mx-auto h-full bg-seal-brown rounded-md py-7">
+            <div className="sm:w-full w-[80%] mx-auto bg-seal-brown rounded-md pt-4 md:max-h-[300px] md:overflow-y-auto overflow-y-visible lg:max-h-[500px] lg:overflow-y-visible">
               <div className="bg-seal-brown rounded-md">
                 <div className="w-[90%] mx-auto">
                   <h2 className="font-lexend-Deca font-medium">By Category</h2>
@@ -328,17 +314,16 @@ export default function Search() {
 
                       <label
                         key={category}
-                        className={`text-xs w-1/2 font-lexend-Deca font-light flex items-center ${!index || index === 1 ? " " : "pt-3"}`}
+                        className={"text-xs w-1/2 font-lexend-Deca font-light flex items-center pb-3"}
                       >
                         <input
                           type="checkbox"
-                          className="appearance-none h-4 w-4 border-[1.5px] border-night-rider bg-seal-brown rounded-sm mr-2 checked:bg-seal-brown checked:border-color-primary checked:ring-1 checked:ring-color-primary checked:after:content-['✔'] checked:after:text-color-primary checked:after:block checked:after:text-center checked:after:text-[10px]"
+                          className="appearance-none h-4 w-4 border-[1.5px] border-night-rider bg-seal-brown rounded-sm mr-2 pb-2 checked:bg-seal-brown checked:border-color-primary checked:ring-1 checked:ring-color-primary checked:after:content-['✔'] checked:after:text-color-primary checked:after:block checked:after:text-center checked:after:text-[10px]"
                           checked={checkedIndex === index}
                           onChange={() => handleCheckboxChange(index, category)}
                         />
                         {category}
                       </label>
-
                     ))}
                   </div>
                 </div>
@@ -367,9 +352,6 @@ export default function Search() {
                         genres={movie.genres}
                         rating={movie.rating}
                         imageUrl={movie.large_cover_image}
-                        viewers="10k"
-                        country="USA"
-                        duration="1h 38m"
                         favorite={false}
                       />
                     ))
