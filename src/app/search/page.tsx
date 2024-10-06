@@ -1,8 +1,11 @@
 "use client";
-import { FC, useState, useEffect } from "react";
-import Image from "next/image";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { fetchSearchedMovies } from "@/lib/features/Search/Search";
+import MovieCard from "../components/sub/SearchMovieCard";
+import EditorPicks from "../components/sub/EditorPicks";
+import ByCategory from "../components/sub/ByCategory";
+import MovieCardSkeleton from "../components/sub/MovieCardSkeleton";
 
 interface Movie {
   id: number;
@@ -14,17 +17,6 @@ interface Movie {
   large_cover_image: string;
 }
 
-interface MovieCardProps {
-  title: string;
-  year: number;
-  genres: string[];
-  rating: number;
-  description: string;
-  imageUrl: string;
-  favorite: boolean;
-  index: number;
-}
-
 interface SearchParams {
   query_term: string;
   quality: string;
@@ -32,139 +24,8 @@ interface SearchParams {
   sortBy: string;
   orderBy: string;
   genre: string;
+  page: number;
 }
-
-const categories = [
-  "Action", "Comedy", "Drama", "Horror", "Romance", "SciFi", "Thriller", "RealityTV",
-  "Anime", "Documentary", "Sport", "Western", "Biography", "Adventure", "War",
-  "Mystery", "Crime", "Fantasy", "Animation", "History", "Family", "Musical",
-  "Music", "FilmNoir", "News", "GameShow", "TalkShow"
-];
-
-const contentMapping: { [key: string]: string[] } = {
-  Source: ["YTS"],
-  Quality: ["720p", "1080p", "2160p", "3D"],
-  "Sort By": ["Title", "Year", "Rating", "Peers", "Seeds", "DownloadCount", "LikeCount", "DateAdded"],
-  "Order By": ["Asc", "Desc"],
-};
-
-const MovieCard: FC<MovieCardProps> = ({
-  title,
-  year,
-  genres,
-  rating,
-  description,
-  imageUrl,
-  favorite,
-  index,
-}) => {
-
-  const [isFavorite, setIsFavorite] = useState(favorite);
-
-  const handleFavorite = () => {
-    setIsFavorite((prev) => !prev);
-  };
-
-  const handleWatchNow = () => {
-    console.log("watch now");
-  };
-
-  return (
-    <div className="flex flex-col gap-3 sm:block">
-      <div
-        className={`pt-4 pb-1 sm:pb-4 flex gap-3 sm:gap-5 w-full ${index && "border-t border-suva-grey"}`}
-      >
-        <Image
-          src={imageUrl}
-          width={200}
-          height={200}
-          alt="movie thumbnail"
-          className="aspect-auto sm:max-h-[200px] rounded-lg"
-        />
-        <div className="flex flex-col justify-center sm:justify-between w-full mt-6 sm:m-0">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
-            <div className="text-center sm:pb-6 sm:mx-0 font-medium text-[17px]">
-              <span className="font-lexend-Deca">{title} </span>
-              <span className="text-suva-grey">{year}</span>
-            </div>
-            <div className="self-center flex items-center gap-1 pt-5 pb-2">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Image
-                  key={i}
-                  src={
-                    i < rating / 2
-                      ? "/images/icons/yellowStar.svg"
-                      : "/images/icons/whiteStar.svg"
-                  }
-                  width={15}
-                  height={15}
-                  alt="star"
-                />
-              ))}
-            </div>
-            <div className="sm:hidden flex flex-col gap-2 flex-wrap my-3 w-fit items-center self-center">
-              {genres.slice(0, 3).map((g, index) => (
-                <div
-                  key={index}
-                  className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
-                >
-                  {g}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-wrap w-[98%] justify-center gap-3 sm:justify-between items-center pb-7">
-            <div className="hidden sm:block w-[60%] text-[10px] font-lexend-Deca text-pink-swan">
-              {
-                description
-                  ? (description.length > 300 ? `${description.substring(0, 300)}...` : description)
-                  : "( No summary available )"
-              }
-            </div>
-            <div
-              className={`sm:my-0 my-2 p-2 rounded-md h-fit cursor-pointer ${isFavorite ? "bg-color-primary" : "border border-pink-swan"}`}
-              onClick={() => handleFavorite()}
-            >
-              <Image
-                src={
-                  isFavorite
-                    ? "/images/icons/bookmarkFill.svg"
-                    : "/images/icons/bookmark.svg"
-                }
-                width={20}
-                height={20}
-                alt="bookmark"
-              />
-            </div>
-            <button
-              className="bg-color-primary px-4 py-2 rounded-md font-lexend-Deca text-sm"
-              onClick={handleWatchNow}
-            >
-              Watch Now
-            </button>
-          </div>
-          <div className="sm:flex gap-2 flex-wrap hidden">
-            {genres.slice(0, 5).map((g, index) => (
-              <div
-                key={index}
-                className="text-xs font-medium border border-color-primary px-2 py-1.5 rounded-lg text-[13px] text-color-primary font-lexend-Deca uppercase"
-              >
-                {g}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="sm:hidden w-full text-[10px] font-lexend-Deca text-pink-swan pb-3">
-        {
-          description
-            ? (description.length > 200 ? `${description.substring(0, 200)}...` : description)
-            : "(No summary available)"
-        }
-      </div>
-    </div>
-  );
-};
 
 export default function Search() {
   const dispatch = useAppDispatch();
@@ -172,28 +33,39 @@ export default function Search() {
     const items = state.searchedMovies.items;
     if (!items) return [];
     const uniqueIds = Array.from(new Set(items.map((movie: Movie) => movie.id)));
-    const uniqueMovies = uniqueIds.map(id => items.find((movie: Movie) => movie.id === id)).filter(movie => movie !== undefined) as Movie[];
+    const uniqueMovies = uniqueIds.map(id => items.find((movie: Movie) => movie.id === id)).filter(movie => movie !== undefined) as unknown as Movie[];
     return uniqueMovies;
   });
   const status = useAppSelector((state) => state.searchedMovies.status);
+  const hasMore = useAppSelector((state) => state.searchedMovies.hasMore);
+
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const [searchParams, setSearchParams] = useState<SearchParams>({
     query_term: '',
     quality: '',
     source: 'YTS',
     sortBy: '',
     orderBy: '',
-    genre: ''
+    genre: '',
+    page: 1
   });
-  const updateSearchParams = (key: keyof SearchParams, value: string) => {
+
+  const updateSearchParams = (key: string | number, value: string | number) => {
     setSearchParams(prevState => ({
       ...prevState,
       [key]: key === "quality" ? "Q" + value : value
     }));
   };
+
+  useEffect(() => {
+    if (searchParams.query_term) {
+      updateSearchParams('page', 1);
+    }
+  }, [searchParams.query_term]);
+
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const [clickedItems, setClickedItems] = useState<{
-    [key: string]: string | null;
-  }>({});
+  const [clickedItems, setClickedItems] = useState<{ [key: string]: string | null; }>({});
 
   useEffect(() => {
     if (status === "idle" && searchParams.query_term) {
@@ -202,9 +74,10 @@ export default function Search() {
       ) as SearchParams;
       dispatch(fetchSearchedMovies(filteredParams));
     }
-  }, [status, dispatch])
+  }, [status, dispatch]);
 
   const handleSearch = () => {
+    updateSearchParams('page', 1);
     const filteredParams = Object.fromEntries(
       Object.entries(searchParams).filter(([_, value]) => value)
     ) as SearchParams;
@@ -229,12 +102,44 @@ export default function Search() {
     if (checkedIndex === index) {
       setCheckedIndex(null);
       updateSearchParams('genre', '');
-    }
-    else {
+    } else {
       setCheckedIndex(index);
       updateSearchParams('genre', category);
     }
   };
+
+  const getMore = useCallback(() => {
+    setLoadingMore(true);
+    const filteredParams = Object.fromEntries(
+      Object.entries(searchParams).filter(([_, value]) => value)
+    ) as SearchParams;
+    const newPage = filteredParams.page + 1;
+    updateSearchParams('page', newPage);
+
+    dispatch(fetchSearchedMovies({
+      ...filteredParams,
+      page: newPage
+    })).then(() => {
+      setLoadingMore(false);
+    });
+  }, [dispatch, searchParams]);
+
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const lastMovieRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (loadingMore) return;
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          getMore();
+        }
+      });
+
+      if (node) observerRef.current.observe(node);
+    },
+    [loadingMore, hasMore, getMore]
+  );
 
   return (
     <div className="overflow-x-hidden w-screen bg-black pt-24 pb-8 flex items-start justify-center">
@@ -243,118 +148,55 @@ export default function Search() {
           Filter Options
         </div>
         <div className="flex w-full pt-10 gap-7 flex-col lg:flex-row">
-          <div className="w-full h-full gap-7 flex flex-col md:flex-row lg:flex-col lg:w-[25%]">
-            <div className="max-h-[300px] bg-seal-brown rounded-md pt-3 pb-5 sm:w-full w-[80%] mx-auto overflow-y-auto">
-              <div className="w-[90%] mx-auto">
-                <h2 className="font-lexend-Deca font-medium">Editor Picks</h2>
-                <div className=" w-[95%] border-[1.5px] rounded-md border-night-rider mt-4 flex">
-                  <div className="flex-1 h-full">
-                    <input
-                      type="text"
-                      className="bg-inherit h-full pl-3 w-[97%] outline-none py-2 text-sm placeholder:text-xs placeholder:text-night-rider placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300 "
-                      placeholder="Search Title"
-                      onChange={(e) => updateSearchParams("query_term", e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    />
-                  </div>
-                  <button onClick={handleSearch}>
-                    <Image
-                      src="/images/icons/search.svg"
-                      alt="search icon"
-                      width={25}
-                      height={25}
-                      className="pt-1 w-8 flex justify-center items-center"
-                    />
-                  </button>
-                </div>
-                <div>
-                  <ul className="space-y-7 mt-8 w-full pl-2">
-                    {["Source", "Quality", "Sort By", "Order By"].map(
-                      (item, index) => (
-                        <li key={index} className="font-lexend-Deca text-xs">
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => handleToggle(index)}
-                          >
-                            <span className="mr-1">
-                              {expandedIndex === index ? "-" : "+"}
-                            </span>
-                            <span
-                              className={`${expandedIndex === index ? "text-color-primary" : "text-white"}`}
-                            >
-                              {item}
-                            </span>
-                          </div>
-                          {expandedIndex === index && (
-                            <div className="flex gap-5 flex-wrap mt-5">
-                              {contentMapping[item].map((subItem, subIndex) => (
-                                <div
-                                  className={`rounded-md py-1 px-2 font-light text-xs cursor-pointer ${clickedItems[item] === subItem ? "bg-color-primary" : "bg-night-rider"}`}
-                                  key={subIndex}
-                                  onClick={() => handleItemClick(item, subItem)}
-                                >
-                                  {subItem}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="sm:w-full w-[80%] mx-auto bg-seal-brown rounded-md pt-4 md:max-h-[300px] md:overflow-y-auto overflow-y-visible lg:max-h-[500px] lg:overflow-y-visible">
-              <div className="bg-seal-brown rounded-md">
-                <div className="w-[90%] mx-auto">
-                  <h2 className="font-lexend-Deca font-medium">By Category</h2>
-                  <div className="mt-4 flex flex-wrap">
-                    {categories.map((category, index) => (
-
-                      <label
-                        key={category}
-                        className={"text-xs w-1/2 font-lexend-Deca font-light flex items-center pb-3"}
-                      >
-                        <input
-                          type="checkbox"
-                          className="appearance-none h-4 w-4 border-[1.5px] border-night-rider bg-seal-brown rounded-sm mr-2 pb-2 checked:bg-seal-brown checked:border-color-primary checked:ring-1 checked:ring-color-primary checked:after:content-['✔'] checked:after:text-color-primary checked:after:block checked:after:text-center checked:after:text-[10px]"
-                          checked={checkedIndex === index}
-                          onChange={() => handleCheckboxChange(index, category)}
-                        />
-                        {category}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="w-full h-full gap-7 flex flex-col md:flex-row lg:flex-col lg:w-[25%] sticky top-4">
+            <EditorPicks
+              updateSearchParams={updateSearchParams}
+              handleSearch={handleSearch}
+              handleToggle={handleToggle}
+              handleItemClick={handleItemClick}
+              expandedIndex={expandedIndex}
+              clickedItems={clickedItems}
+            />
+            <ByCategory
+              checkedIndex={checkedIndex}
+              handleCheckboxChange={handleCheckboxChange}
+            />
           </div>
           <div className="flex-1">
             <h2 className="font-lexend-Deca font-medium bg-seal-brown px-5 py-3 rounded-md">
               Movies
             </h2>
             {
-              status === "loading" ? (
-                <div className="text-white font-lexend-Deca font-medium text-l p-5">
-                  Loading...
-                </div>
+              status === "loading" && !loadingMore ? (
+                Array.from({ length: 5 }).map((_, index) => (
+                  <MovieCardSkeleton key={index} index={index} />
+                ))
               ) : (
                 <div className="flex bg-seal-brown mt-5 h-fit rounded-md flex-col">
                   {movies && movies.length > 0 ? (
-                    movies.map((movie, index) => (
-                      <MovieCard
-                        key={movie.id}
-                        index={index}
-                        title={movie.title}
-                        year={movie.year}
-                        description={movie.summary}
-                        genres={movie.genres}
-                        rating={movie.rating}
-                        imageUrl={movie.large_cover_image}
-                        favorite={false}
-                      />
-                    ))
+                    movies.map((movie, index) => {
+                      return (
+                        <div ref={lastMovieRef} key={movie.id}>
+                          <MovieCard
+                            index={index}
+                            title={movie.title}
+                            year={movie.year}
+                            description={movie.summary}
+                            genres={movie.genres}
+                            rating={movie.rating}
+                            imageUrl={movie.large_cover_image}
+                            favorite={false}
+                          />
+                          {
+                            index === movies.length - 1 && loadingMore && (
+                              Array.from({ length: 5 }).map((_, index) => (
+                                <MovieCardSkeleton key={index} index={index + 1} />
+                              ))
+                            )
+                          }
+                        </div>
+                      );
+                    })
                   ) : (
                     <div className="text-white font-lexend-Deca font-medium text-xl p-5">
                       No results found!
