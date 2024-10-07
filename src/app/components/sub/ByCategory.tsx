@@ -16,7 +16,7 @@ const ByCategory: React.FC<ByCategoryProps> = ({
   handleCheckboxChange
 }) => {
   return (
-    <div className="sm:w-full w-[80%] mx-auto bg-seal-brown rounded-md pt-4 md:max-h-[300px] md:overflow-y-auto overflow-y-visible lg:max-h-[500px] lg:overflow-y-visible">
+    <div className="sm:w-full w-[80%] mx-auto bg-seal-brown rounded-md pt-4 md:max-h-[300px] md:overflow-y-auto overflow-y-visible lg:max-h-[500px] lg:overflow-y-visible custom-scollbar">
       <div className="bg-seal-brown rounded-md">
         <div className="w-[90%] mx-auto">
           <h2 className="font-lexend-Deca font-medium">By Category</h2>

@@ -28,7 +28,7 @@ const EditorPicks: FC<EditorPicksProps> = ({
 }) => {
 
   return (
-    <div className="max-h-[300px] bg-seal-brown rounded-md pt-3 pb-5 sm:w-full w-[80%] mx-auto overflow-y-auto">
+    <div className="max-h-[300px] bg-seal-brown rounded-md pt-3 pb-5 sm:w-full w-[80%] mx-auto overflow-y-auto overflow-x-hidden custom-scrollbar">
       <div className="w-[90%] mx-auto">
         <h2 className="font-lexend-Deca font-medium">Editor Picks</h2>
         <div className=" w-[95%] border-[1.5px] rounded-md border-night-rider mt-4 flex">

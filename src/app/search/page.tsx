@@ -172,7 +172,7 @@ export default function Search() {
                   <MovieCardSkeleton key={index} index={index} />
                 ))
               ) : (
-                <div className="flex bg-seal-brown mt-5 h-fit rounded-md flex-col">
+                <div className="flex bg-seal-brown mt-5 h-fit rounded-md flex-col max-h-[80vh] overflow-x-hidden overflow-y-auto custom-scrollbar">
                   {movies && movies.length > 0 ? (
                     movies.map((movie, index) => {
                       return (

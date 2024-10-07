@@ -7,6 +7,7 @@ import WatchedMoviesSlice from "./features/WatchedMovies/WatchedMoviesSlice";
 import heroDataSlice1 from "./features/Hero/hero";
 import ActionMoviesSlice from "./features/ActionMoviesData/ActionMoviesData";
 import SearchedMoviesSlice from "./features/Search/Search";
+import UserSlice from "./features/User/User";
 
 export const makeStore = () => {
   return configureStore({
@@ -19,6 +20,7 @@ export const makeStore = () => {
       data: heroDataSlice1,
       actionMovies: ActionMoviesSlice,
       searchedMovies: SearchedMoviesSlice,
+      userData: UserSlice,
     },
   });
 };
