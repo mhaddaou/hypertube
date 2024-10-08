@@ -1,7 +1,9 @@
 import { FC, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface MovieCardProps {
+  id: number;
   title: string;
   year: number;
   genres: string[];
@@ -13,6 +15,7 @@ interface MovieCardProps {
 }
 
 const MovieCard: FC<MovieCardProps> = ({
+  id,
   title,
   year,
   genres,
@@ -24,13 +27,14 @@ const MovieCard: FC<MovieCardProps> = ({
 }) => {
 
   const [isFavorite, setIsFavorite] = useState(favorite);
+  const router = useRouter();
 
   const handleFavorite = () => {
     setIsFavorite((prev) => !prev);
   };
 
   const handleWatchNow = () => {
-    console.log("watch now");
+    router.push(`/movies/${id}`);
   };
 
   return (

@@ -21,7 +21,7 @@ export interface Movie {
 }
 
 export const fetchSearchedMovies = createAsyncThunk(
-  "data/fetchSearchedMovies",
+  "search/fetchSearchedMovies",
   async (searchParams: SearchParams) => {
     const response = await axios.post(
       `http://127.0.0.1:8000/movies/search?page_size=10&page=${searchParams.page}`,

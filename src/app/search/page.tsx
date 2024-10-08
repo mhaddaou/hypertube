@@ -178,6 +178,7 @@ export default function Search() {
                       return (
                         <div ref={lastMovieRef} key={movie.id}>
                           <MovieCard
+                            id={movie.id}
                             index={index}
                             title={movie.title}
                             year={movie.year}

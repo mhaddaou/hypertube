@@ -8,6 +8,8 @@ import heroDataSlice1 from "./features/Hero/hero";
 import ActionMoviesSlice from "./features/ActionMoviesData/ActionMoviesData";
 import SearchedMoviesSlice from "./features/Search/Search";
 import UserSlice from "./features/User/User";
+import MovieSlice from "./features/Movie/Movie";
+import commentSlice from "./features/Comments/Comments";
 
 export const makeStore = () => {
   return configureStore({
@@ -21,6 +23,8 @@ export const makeStore = () => {
       actionMovies: ActionMoviesSlice,
       searchedMovies: SearchedMoviesSlice,
       userData: UserSlice,
+      movieData: MovieSlice,
+      comments: commentSlice,
     },
   });
 };
