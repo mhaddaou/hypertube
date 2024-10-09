@@ -3,10 +3,12 @@ import axios from "axios";
 
 interface commentData {
   comment_info: {
+    comment_id: string;
     comment: string;
     created_at: string;
   };
   user_info: {
+    user_id: string;
     username: string;
     profile_picture: string;
   };
@@ -18,7 +20,10 @@ export const fetchComments = createAsyncThunk(
     const response = await axios.get(
       `http://localhost:8000/comments/${id}/YTS?page_size=2&page=${page}`,
     );
-    return response.data.data.comments;
+    return {
+      comments: response.data.data.comments,
+      page_count: response.data.data.page_count,
+    };
   },
 );
 
@@ -60,17 +65,17 @@ const commentSlice = createSlice({
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const newComments = action.payload;
+        const newComments = action.payload.comments;
         if (action.meta.arg.page === 0) {
           state.comments = newComments;
         } else {
           state.comments = [...state.comments, ...newComments];
         }
-        if (!state.comments || state.comments.length === 0) {
+        if (!newComments || newComments.length === 0) {
           state.hasMore = false;
           return;
         }
-        if (action.payload.length < 2) {
+        if (action.meta.arg.page === action.payload.page_count - 1) {
           state.hasMore = false;
         } else {
           state.hasMore = true;

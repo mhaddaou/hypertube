@@ -11,6 +11,14 @@ export interface MovieDetails {
   large_screenshot_image1: string;
 }
 
+export interface MovieSuggestions {
+  id: number;
+  title: string;
+  genres: string[];
+  rating: number;
+  medium_cover_image: string;
+}
+
 export const fetchMovieData = createAsyncThunk(
   "movie/fetchMovieData",
   async (id: number) => {
@@ -23,6 +31,7 @@ const initialState = {
   status: "idle" as "idle" | "loading" | "succeeded" | "failed",
   error: null as string | null,
   movieData: null as MovieDetails | null,
+  movieSuggestions: [] as MovieSuggestions[],
 };
 
 const MovieSlice = createSlice({
@@ -37,6 +46,7 @@ const MovieSlice = createSlice({
       .addCase(fetchMovieData.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.movieData = action.payload.data.movie;
+        state.movieSuggestions = action.payload.movie_suggestions.data.movies;
       })
       .addCase(fetchMovieData.rejected, (state, action) => {
         state.status = "failed";

@@ -9,6 +9,7 @@ interface EditorPicksProps {
   handleItemClick: (index: string, subItem: string) => void;
   expandedIndex: number | null;
   clickedItems: ({ [key: string]: string | null });
+  query_term: string
 }
 
 const contentMapping: { [key: string]: string[] } = {
@@ -24,7 +25,8 @@ const EditorPicks: FC<EditorPicksProps> = ({
   handleToggle,
   handleItemClick,
   expandedIndex,
-  clickedItems
+  clickedItems,
+  query_term
 }) => {
 
   return (
@@ -36,7 +38,8 @@ const EditorPicks: FC<EditorPicksProps> = ({
             <input
               type="text"
               className="bg-inherit h-full pl-3 w-[97%] outline-none py-2 text-sm placeholder:text-xs placeholder:text-night-rider placeholder:font-medium placeholder:tracking-wide tracking-wider font-lexend-Deca text-slate-300 "
-              placeholder="Search Title"
+              placeholder="Search for a movie"
+              value={query_term}
               onChange={(e) => updateSearchParams("query_term", e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             />

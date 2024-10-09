@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { fetchComments, addComment } from "@/lib/features/Comments/Comments";
 import Image from "next/image";
@@ -18,7 +18,7 @@ const CommentSkeleton = ({ page }: { page: number }) => {
   )
 }
 
-const Comments: FC = () => {
+function Comments({ movieId }: { movieId: number; }) {
   const dispatch = useAppDispatch();
   const [page, setPage] = useState(0);
   const [comment, setComment] = useState("");
@@ -27,7 +27,7 @@ const Comments: FC = () => {
   const status = useAppSelector((state) => state.comments.status);
 
   useEffect(() => {
-    dispatch(fetchComments({ id: 2422, page: page }));
+    dispatch(fetchComments({ id: movieId, page: page }));
   }, [dispatch, page]);
 
   return (
@@ -42,8 +42,7 @@ const Comments: FC = () => {
             className="bg-black w-full rounded-lg pt-2 text-white custom-scrollbar text-xs font-albayan focus:outline-none"
             placeholder="Type your comment here..."
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
+            onChange={(e) => setComment(e.target.value)} />
         </div>
         <button className="text-white font-lemonada text-xs bg-color-primary px-5 py-3 w-fit rounded-lg self-end"
           onClick={() => {
@@ -56,34 +55,31 @@ const Comments: FC = () => {
           Comment
         </button>
       </div>
-      {
-        status === "loading" && page === 0 ?
-          Array.from({ length: 4 }).map((_, index) => <CommentSkeleton key={index} page={page} />) :
-          <div className={`flex flex-col gap-8 bg-black py-5 px-10`}>
-            {comments && comments.length > 0 && comments.map((comment, index) => (
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={comment.user_info.profile_picture}
-                    alt="user profile picture"
-                    width={50}
-                    height={50}
-                    key={index}
-                  />
-                  <p className="text-white font-lemonada text-sm">{comment.user_info.username}</p>
-                </div>
-                <p className="text-white font-albayan text-xs">{comment.comment_info.comment}</p>
+      {status === "loading" && page === 0 ?
+        Array.from({ length: 4 }).map((_, index) => <CommentSkeleton key={index} page={page} />) :
+        <div className={`flex flex-col gap-8 bg-black py-5 px-10`}>
+          {comments && comments.length > 0 && comments.map((comment, index) => (
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <Image
+                  src={comment.user_info.profile_picture}
+                  alt="user profile picture"
+                  width={50}
+                  height={50}
+                  key={index} />
+                <p className="text-white font-lemonada text-sm">{comment.user_info.username}</p>
               </div>
-            ))}
-            {status === "loading" && hasMore && Array.from({ length: 4 }).map((_, index) => <CommentSkeleton key={index} page={page} />)}
-            <button className={`text-white font-lemonada text-xs bg-black px-5 py-3 w-fit border border-white rounded-lg self-center ${!hasMore && "hidden"}`}
-              onClick={() => setPage((prev) => (prev + 1))}>
-              show more
-            </button>
-          </div>
-      }
+              <p className="text-white font-albayan text-xs">{comment.comment_info.comment}</p>
+            </div>
+          ))}
+          {status === "loading" && hasMore && Array.from({ length: 4 }).map((_, index) => <CommentSkeleton key={index} page={page} />)}
+          <button className={`text-white font-lemonada text-xs bg-black px-5 py-3 w-fit border border-white rounded-lg self-center ${!hasMore && "hidden"}`}
+            onClick={() => setPage((prev) => (prev + 1))}>
+            show more
+          </button>
+        </div>}
     </div>
-  )
+  );
 }
 
 export default Comments;
