@@ -1,0 +1,67 @@
+
+import { useState } from "react";
+import { BiSolidShow } from "react-icons/bi";
+import { BiSolidHide } from "react-icons/bi";
+
+export const InputSection = ({ name, type }: { name: string; type: string }) => {
+    return (
+      <div className="flex flex-col mb-5 w-full">
+        <label htmlFor={name} className="text-white font-medium mb-2	">{name}</label>
+        <input className="h-12 pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray" type={type} id={name} name={name} />
+      </div>
+    );
+  };
+  
+export const InputCheckBox = ({ label }: { label: string }) => {
+    return (
+      <div className="relative flex items-center pb-4 my-4">
+        <input
+          type="checkbox"
+          id="privacyPolicy"
+          name="privacyPolicy"
+          className="appearance-none w-5 h-5 border-2 rounded-full bg-transparent hover:cursor-pointer checked:bg-color-primary checked:border-0"
+        />
+        <label htmlFor="privacyPolicy" className="text-color-primary ml-2 cursor-pointer">{label}</label>
+      </div>
+    );
+  };
+  
+export const PasswordInputSection = ({ name }: { name: string }) => {
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  
+    const togglePasswordVisibility = () => {
+      setIsPasswordVisible(!isPasswordVisible);
+    };
+  
+    return (
+      <div className=" w-full mb-5">
+        <label htmlFor={name} className="text-white mb-2 font-medium w-full">{name}</label>
+        <div className="relative mb-5 ">
+          <input
+            className="h-12 pr-10 w-full pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray"
+            type={isPasswordVisible ? 'text' : 'password'}
+            id={name}
+            name={name}
+          />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute right-0 top-0 bottom-0 px-3 py-1 rounded"
+          >
+            {isPasswordVisible? <BiSolidHide className="text-gray-400" size="24px"/> : <BiSolidShow className="text-gray-400" size="24px"/> }
+          </button>
+        </div>
+      </div>
+    );
+  };
+  
+export const FormTitle = ({title}:{title:string})=>{
+    return (
+      <div className="flex justify-between items-center w-full font-bold my-14">
+        <div className="border-t-2 w-1/3 border-color-white"></div>
+        <p className=" text-color-primary font-bold">{title}</p>
+      </div>
+    )
+  
+}
+

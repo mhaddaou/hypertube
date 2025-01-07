@@ -17,4 +17,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+ 
+input:focus {
+    outline: none;
+}
+

@@ -20,6 +20,11 @@ module.exports = {
   },
   theme: {
     extend: {
+      borderRadius: {
+        '4xl': '2rem',
+        '5xl': '2.5rem',
+        '6xl': '6rem',
+      },
       colors: {
         "color-primary": "#FB9722",
         "color-secondary": "#1B0303",

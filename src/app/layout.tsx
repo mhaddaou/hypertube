@@ -21,9 +21,13 @@ export default function RootLayout({
     <html lang="en" className="overflow-x-hidden" >
       <StoreProvider>
       <body className="">
+        {/* <div className="h-5/6"> */}
       <Header/>
-        {children}
-        <Footer/>
+        <>
+          {children}
+        </>
+        {/* </div> */}
+      <Footer/>
       </body>
       </StoreProvider>
     </html>
