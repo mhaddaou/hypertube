@@ -11,7 +11,7 @@ export default function SessionLayout({children}:{children: React.ReactNode}) {
       <div className="w-1/2 flex justify-center items-center">
         {/* <img src="" alt="" /> */}
         <div className="flex flex-col items-center max-w-md">
-          <Image src='/images/icons/hypertube.svg' width={450} height={450} alt=""/>
+          <Image src='/images/icons/hypertube.svg' width={435} height={435} alt=""/>
           {children}
         </div>
       </div>

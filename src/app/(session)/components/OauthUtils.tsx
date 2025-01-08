@@ -36,12 +36,12 @@ export const OtherLink = ({text, link_title, href}:{text:string, link_title:stri
   )
 }
 
-export const OtherLinkDicorated = ({text, link_title, href}:{text:string, link_title:string, href:string}) => {
+export const OtherLinkDicorated = ({text, link_title, href}:{text?:string, link_title:string, href:string}) => {
   return (
 
   <div className="flex justify-between items-center w-full font-bold my-14">
     <div className="flex justify-between gap-4">
-      <h6 className="text-color-white">{text}</h6>
+      {text != "" ? <h6 className="text-color-white">{text}</h6> : <></>}
       <Link className="text-color-primary" href={href}>{link_title}</Link>
     </div>
 
