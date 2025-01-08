@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { Children, useState } from "react";
 import { BiSolidShow } from "react-icons/bi";
 import { BiSolidHide } from "react-icons/bi";
 import { PrimaryActionButton } from "./Buttons";
@@ -26,7 +26,28 @@ export const InputCheckBox = ({ label }: { label: string }) => {
       </div>
     );
   };
-  
+
+export const InputWithIcons = ({children, type, name}:{children:React.ReactNode, type:string, name:string}) => {
+  return (
+    <div className="flex flex-col w-full">
+      <label htmlFor={name}></label>
+      {/* <label htmlFor={name} className="text-white mb-2 font-medium w-full">{name}</label> */}
+      <div className="relative mb-5 ">
+        <input
+          className="h-12 pr-10 w-full pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray"
+          type={type}
+          id={name}
+          name={name}
+        />
+        <div className="absolute right-1 top-0 bottom-0 px-3 py-1 rounded flex flex-col justify-center" >
+          {children}
+          {/* <BiSolidHide className="text-gray-400" size="24px"/> */}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export const PasswordInputSection = ({ name }: { name: string }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   
