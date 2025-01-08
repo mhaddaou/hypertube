@@ -76,7 +76,7 @@ export const PasswordInputSection = ({ name }: { name: string }) => {
         </div>
       </div>
     );
-  };
+};
   
 export const FormTitle = ({title}:{title:string})=>{
     return (
