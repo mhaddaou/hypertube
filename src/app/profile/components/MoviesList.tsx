@@ -63,10 +63,11 @@ export default function ListMovies() {
     ]
 
     return(
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center w-full mb-12">
         <ListTypeMenu listType={listType} setListType={setListType}/>
-        <div className="flex flex-wrap w-full px-12">
-            {
+        {/* <div className="flex flex-wrap w-full px-12">  */}
+        <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6 md:gap-8 mx-4"> 
+        {
                 data.map((movie)=>{
                     console.log(movie);
                     return <MovieCard name={movie.name} image={movie.image}/>

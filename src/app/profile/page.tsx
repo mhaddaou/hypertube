@@ -1,6 +1,9 @@
 "use client"
+import { useState } from "react";
 import ListMovies from "./components/MoviesList";
 import ProfileInfo from "./components/ProfileInfo";
+
+
 
 export default function Profile(){
     return(

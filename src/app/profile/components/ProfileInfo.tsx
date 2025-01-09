@@ -1,4 +1,6 @@
 import Image from "next/image"
+import { useState } from "react"
+import { EditProfile } from "./EditProfileCard"
 
 interface ProfileInfoProps {
     name :string,
@@ -13,27 +15,32 @@ interface ButtonProps {
 
 const ProfileActionButton: React.FC<ButtonProps> = (props)=>{
     if (props.type == "primary")
-        return <button className="h-12 min-w-40 bg-color-primary text-color-white px-8 rounded-xl">{props.message}</button>
-    return <button className="h-12 min-w-40 bg-transparent border-2 border-color-primary text-color-white px-8 rounded-xl">{props.message}</button>
+        return <button className="h-12 min-w-40 bg-color-primary text-color-white px-8 rounded-xl" onClick={props.onclick}>{props.message}</button>
+    return <button className="h-12 min-w-40 bg-transparent border-2 border-color-primary text-color-white px-8 rounded-xl" onClick={props.onclick} >{props.message}</button>
 }
+
+
 
 export default function ProfilInfo(props:ProfileInfoProps) {
 
+    const [isEditProfile, setIsEditProfile] = useState(false);
+    const [isDeleteProfile, setIsDeleteProfile] = useState(false);
+
     const onClickPrimary = ()=>{
-        console.log("primary button clicked");
     }
     const onClickSecondary = ()=>{
-        console.log("Secondary button clicked");
+        setIsEditProfile(!isEditProfile);
     }
 
     return(
+        <>
         <div className="bg-profile-bg bg-cover bg-center w-full h-1/3 flex items-end font-lemonada">
             <div className="w-full relative">
                 <div className="h-40 w-full"></div>
                 <div className="bg-color-secondary h-40 w-full"></div>
                 <div className="absolute w-full h-full top-0 flex items-end">
                     <div className="h-full w-1/5 flex justify-end items-center">
-                        <img className="w-32 h-32 mr-4 rounded-full border-4 border-color-primary" src="https://st2.depositphotos.com/1023162/8272/i/450/depositphotos_82720548-Beautiful-mystic-woman-profile-with-long-hair-looking.-Black-and.jpg" alt="" />
+                        <img className="w-32 h-32 mr-4 rounded-full border-8 border-color-secondary" src="https://st2.depositphotos.com/1023162/8272/i/450/depositphotos_82720548-Beautiful-mystic-woman-profile-with-long-hair-looking.-Black-and.jpg" alt="" />
                     </div>
                     <div className="h-40 w-4/5 flex justify-between items-center px-12">
                         <div className="font-medium	text-lg">
@@ -48,6 +55,8 @@ export default function ProfilInfo(props:ProfileInfoProps) {
                 </div>
             </div>
         </div>
+        {isEditProfile ? <EditProfile /> : <></>}
+        </>
     )
 }
 
