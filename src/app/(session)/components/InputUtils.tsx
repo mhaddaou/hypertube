@@ -1,14 +1,23 @@
 
-import { Children, useState } from "react";
+import { Children, useContext, useState } from "react";
 import { BiSolidShow } from "react-icons/bi";
 import { BiSolidHide } from "react-icons/bi";
 import { PrimaryActionButton } from "./Buttons";
+import { RegesterFormContext } from "../register/page";
 
 export const InputSection = ({ name, type }: { name: string; type: string }) => {
+
+  const setRegesterForm = useContext(RegesterFormContext)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (setRegesterForm) {
+          setRegesterForm(prev => ({ ...prev, [name]: e.target.value }));
+      }
+  }
+
     return (
       <div className="flex flex-col mb-5 w-full">
         <label htmlFor={name} className="text-white font-medium mb-2	">{name}</label>
-        <input className="h-12 pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray" type={type} id={name} name={name} />
+        <input className="h-12 pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray" type={type} id={name} name={name} onChange={handleChange}/>
       </div>
     );
   };
@@ -50,7 +59,14 @@ export const InputWithIcons = ({children, type, name}:{children:React.ReactNode,
 
 export const PasswordInputSection = ({ name }: { name: string }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  
+
+    const setRegesterForm = useContext(RegesterFormContext)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (setRegesterForm) {
+            setRegesterForm(prev => ({ ...prev, [name]: e.target.value }));
+        }
+    }
+
     const togglePasswordVisibility = () => {
       setIsPasswordVisible(!isPasswordVisible);
     };
@@ -61,6 +77,7 @@ export const PasswordInputSection = ({ name }: { name: string }) => {
         {/* <label htmlFor={name} className="text-white mb-2 font-medium w-full">{name}</label> */}
         <div className="relative mb-5 ">
           <input
+            onChange={handleChange}
             className="h-12 pr-10 w-full pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray"
             type={isPasswordVisible ? 'text' : 'password'}
             id={name}

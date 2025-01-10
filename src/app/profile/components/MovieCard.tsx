@@ -16,7 +16,7 @@ export default function MovieCard({name, image}:MovieInfosProps){
         setBookmark(!bookmark);
     }
     return(
-        <div className="flex flex-col justify-between w-60 2xl:w-64 gap-4 bg-black">
+        <div className="flex flex-col justify-between w-60 2xl:w-64 gap-4">
             <div className="relative">
                 <img className="rounded-xl h-64 2xl:h-72 w-60 2xl:w-64" src={image} alt="" />
                 {bookmark? <FaBookmark  onClick={handleBookmark} className="absolute m-5 right-0 bottom-0 text-color-primary cursor-pointer" /> : <FaBookmark  onClick={handleBookmark} className="absolute m-5 right-0 bottom-0 text-color-gray cursor-pointer" />}

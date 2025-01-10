@@ -36,7 +36,8 @@ module.exports = {
         '6xl': '6rem',
       },
       colors: {
-        "color-primary": "#FB9722",
+        // "color-primary": "#FB9722",
+        "color-primary": "#CF0026",
         "color-secondary": "#1B0303",
         "color-gray": "#A7B5BE",
         "color-dark-gray":"#4B5563",

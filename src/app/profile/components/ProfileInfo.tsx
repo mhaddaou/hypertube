@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { useState } from "react"
 import { EditProfile } from "./EditProfileCard"
+import DeleteProfileCard from "./DeleteProfileCard"
 
 interface ProfileInfoProps {
     name :string,
@@ -27,9 +28,16 @@ export default function ProfilInfo(props:ProfileInfoProps) {
     const [isDeleteProfile, setIsDeleteProfile] = useState(false);
 
     const onClickPrimary = ()=>{
+        setIsDeleteProfile(true);
     }
     const onClickSecondary = ()=>{
-        setIsEditProfile(!isEditProfile);
+        setIsEditProfile(true);
+    }
+    const closeEditProfile = ()=>{
+        setIsEditProfile(false);
+    }
+    const closeDeleteProfile = ()=>{
+        setIsDeleteProfile(false);
     }
 
     return(
@@ -55,7 +63,8 @@ export default function ProfilInfo(props:ProfileInfoProps) {
                 </div>
             </div>
         </div>
-        {isEditProfile ? <EditProfile /> : <></>}
+        {isEditProfile ? <EditProfile closeEditProfile={closeEditProfile} /> : <></>}
+        {isDeleteProfile ? <DeleteProfileCard closeDeleteProfile={closeDeleteProfile} /> : <></>}
         </>
     )
 }

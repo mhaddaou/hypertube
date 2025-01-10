@@ -1,6 +1,17 @@
+"use client"
 import { MdModeEditOutline } from "react-icons/md"
+import { PopUpModal } from "./Modale"
+import { Dispatch, SetStateAction, createContext, useContext, useState } from "react"
 
 const ProfileFormInput = ({name, d}:{name:string, d:string}) => {
+
+    const setProfileData = useContext(ProfileContext)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (setProfileData) {
+            setProfileData(prev => ({ ...prev, [name]: e.target.value }));
+        }
+    }
+
     return(
         <div className="flex flex-col my-6">
             <div className="flex items-center">
@@ -8,7 +19,7 @@ const ProfileFormInput = ({name, d}:{name:string, d:string}) => {
                 <label className="text-color-dark-gray mx-2" htmlFor="">{name}</label>
                 <span className="border-1 border-color-dark-gray w-full"></span>
             </div>
-            <input className="h-12 w-full ml-2" type="text" defaultValue={d}  />
+            <input className="h-12 w-full ml-2" type="text" defaultValue={d} onChange={handleChange} />
             {/* <span className="border-2 border-color-gray w-full"></span> */}
         </div>
     )
@@ -37,22 +48,35 @@ const ProfileCardInfo = () =>{
     )
 }
 
-export const EditProfile = () => {
+interface ProfileData {
+    firstname:string,
+    lastname:string,
+    username:string,
+    email:string,
+}
+
+const ProfileContext = createContext<Dispatch<SetStateAction<ProfileData>> | null>(null);
+
+export const EditProfile = ({closeEditProfile}:{closeEditProfile:()=>void}) => {
+
+    const [profileData, setProfileData] = useState({firstname:"malena", lastname:"haddaou", username:"mhaddaou", email:"mhaddaou@gmail.com"});
+
+    console.log(profileData);
+
     return (
-        <div className="fixed inset-0 w-full h-full flex flex-col justify-center items-center z-10 font-lemonada ">
-            <div className="absolute inset-0 bg-black opacity-80 backdrop-blur-sm"></div>
-            <div className="bg-color-white p-12 rounded-xl z-10" >
+            <PopUpModal closeFunction={closeEditProfile}>
+
                 <ProfileCardInfo />
                 <form action="" className=" opacity-100 bg-transparent relative w-larg ">
-                    <ProfileFormInput name="Firstname" d="Malena" />
-                    <ProfileFormInput name="Lastname" d="haddaou"/>
-                    <ProfileFormInput name="Email" d="malena@gmail.com" />
-                    <ProfileFormInput name="Username" d="mhaddaou" />
+                    <ProfileContext.Provider value={setProfileData}>
+                        <ProfileFormInput name="firstname" d="Malena" />
+                        <ProfileFormInput name="lastname" d="haddaou"/>
+                        <ProfileFormInput name="email" d="malena@gmail.com" />
+                        <ProfileFormInput name="username" d="mhaddaou" />
+                    </ProfileContext.Provider>
                 </form>
                 <button className="h-12 min-w-40 bg-color-primary text-color-white px-8 rounded-xl"> Save Changes </button>
-            </div>
-
-        </div>
+            </PopUpModal>
     );
 }
 
