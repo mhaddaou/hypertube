@@ -5,12 +5,20 @@ import { OauthLinks, OtherLink } from "../components/OauthUtils";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 
 interface RegesterFromData {
-  firstname:string,
-  lastname:string,
+  first_name:string,
+  last_name:string,
   username:string,
   email:string,
   password:string,
   confirmPassword:string,
+}
+
+interface RegesterData {
+  first_name:string,
+  last_name:string,
+  username:string,
+  email:string,
+  password:string,
 }
 
 export const RegesterFormContext = createContext<Dispatch<SetStateAction<RegesterFromData>> | null>(null);
@@ -18,8 +26,8 @@ export const RegesterFormContext = createContext<Dispatch<SetStateAction<Regeste
 export default function Register () {
 
   const [regesterFromData, setRegesterFromData] = useState<RegesterFromData>({
-    firstname:"",
-    lastname:"",
+    first_name:"",
+    last_name:"",
     username:"",
     email:"",
     password:"",
@@ -28,9 +36,31 @@ export default function Register () {
 
   console.log("Regester form data: ", regesterFromData);
 
-    const onFinish = (value: object) => {
-        console.log(value);
-      };
+  const onFinish = (value: object) => {
+    const formData = value as RegesterFromData;
+    if (formData['password'] != formData["confirmPassword"]){
+      alert("Password doesn't match");
+      return;
+    }
+
+    fetch('http://127.0.0.1:8000/users/sign-up', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Response data: ", data);
+    })
+    .catch(error => {
+      console.error("Error: ", error);
+    });
+
+    console.log("Regester Data Value: ", value);
+    console.log("Regester Data: ", formData);
+  };
     
     return(
         <>
@@ -39,8 +69,8 @@ export default function Register () {
             <RegesterFormContext.Provider value={setRegesterFromData} >
 
               <div className="flex gap-x-0.5">
-                <InputSection name="firstname" type="text" />
-                <InputSection name="lastname" type="text" />
+                <InputSection name="first_name" type="text" />
+                <InputSection name="last_name" type="text" />
               </div>
 
               <InputSection name="username" type="text" />
