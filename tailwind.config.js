@@ -43,6 +43,10 @@ module.exports = {
         "color-dark-gray":"#4B5563",
         "color-white": "#fff",
         background: "#0D0C0F",
+        "seal-brown": "#131313",
+        "suva-grey": "#898989",
+        "pink-swan": "#B7AEAE",
+        "night-rider": "#353535",
       },
       container: {
         center: true,
@@ -54,6 +58,7 @@ module.exports = {
       fontFamily: {
         "marck-script": ["Marck Script", "sans-serif"],
         lemonada: ["Lemonada", "sans-serif"],
+        albayan: ["Al Bayan", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
         praise: ["Praise", "sans-serif"],
         inter: ["Roboto", "sans-serif"],
@@ -111,7 +116,7 @@ module.exports = {
 function addVariablesForColors({ addBase, theme }) {
   let allColors = flattenColorPalette(theme("colors"));
   let newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
   );
 
   addBase({

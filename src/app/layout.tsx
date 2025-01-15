@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "./components/main/Header";
 import StoreProvider from "./StoreProvider";
 import Footer from "./components/main/Footer";
+import LoggedInHeader from "./components/main/LoggedInHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,15 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden" >
       <StoreProvider>
-      <body className="">
-        {/* <div className="h-5/6"> */}
-      <Header/>
-        <>
+        <body className="">
+          {/*<Header />*/}
+          <LoggedInHeader />
           {children}
-        </>
-        {/* </div> */}
-      <Footer/>
-      </body>
+          <Footer />
+        </body>
       </StoreProvider>
     </html>
   );
