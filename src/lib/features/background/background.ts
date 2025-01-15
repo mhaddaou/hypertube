@@ -1,16 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { StaticImageData } from "next/image";
-import Image from "../../../../public/images/images/1.jpg";
 interface BackgroundState {
-  image: StaticImageData;
+  image: string;
   animation : boolean;
-  oldImage : StaticImageData;
+  oldImage : string;
 }
 
 const initialState: BackgroundState = {
-  image: Image,
+  image : 'https://yts.mx/assets/images/movies/den_of_thieves_2018/large-cover.jpg',
   animation : true,
-  oldImage : Image,
+  oldImage : 'https://yts.mx/assets/images/movies/den_of_thieves_2018/large-cover.jpg',
 };
 
 export const BackgroundSlice = createSlice({
