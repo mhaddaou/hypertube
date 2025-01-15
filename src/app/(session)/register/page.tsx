@@ -2,7 +2,8 @@
 import Image from "next/image";
 import { FormTitle, InputSection, PasswordInputSection, InputCheckBox, FormContainer } from "../components/InputUtils";
 import { OauthLinks, OtherLink } from "../components/OauthUtils";
-import { Dispatch, SetStateAction, createContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useState, useEffect } from "react";
+import { useRouter } from "next/navigation"
 
 interface RegesterFromData {
   first_name:string,
@@ -34,6 +35,26 @@ export default function Register () {
     confirmPassword:"",
   });
 
+  const router = useRouter()
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/users/check_session', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.authenticated) {
+          console.log("USER IS AUTHENTICATED");
+          // redirect('/')
+          router.push('/');
+        }
+      })
+      .catch(error => {
+        console.error("Error checking session: ", error);
+      });
+  }, []);
+
   console.log("Regester form data: ", regesterFromData);
 
   const onFinish = (value: object) => {
@@ -49,10 +70,12 @@ export default function Register () {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
+      credentials: 'include',
     })
     .then(response => response.json())
     .then(data => {
       console.log("Response data: ", data);
+      router.push('/');
     })
     .catch(error => {
       console.error("Error: ", error);
@@ -86,3 +109,4 @@ export default function Register () {
         </>
     )
 }
+

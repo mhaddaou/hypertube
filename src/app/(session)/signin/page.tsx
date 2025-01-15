@@ -2,19 +2,45 @@
 
 import { FormTitle, InputSection, PasswordInputSection, InputCheckBox, FormContainer } from "../components/InputUtils";
 import { OauthLinks, OtherLink } from "../components/OauthUtils";
-export default function Register () {
+
+interface SingInData {
+    email:string,
+    password:string,
+}
+
+export default function SingIn () {
 
     const onFinish = (value: object) => {
-        console.log(value);
-    };
+
+        const formData = value as SingInData;
+
+        fetch('http://127.0.0.1:8000/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+          credentials: 'include',
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log("Response data: ", data);
+        })
+        .catch(error => {
+          console.error("Error: ", error);
+        });
+    
+        console.log("Regester Data Value: ", value);
+        console.log("Regester Data: ", formData);
+      };
 
     return(
         <>
         <FormTitle title="Login To Your Account" />
         <FormContainer action="Sign In" onFinish={onFinish}>
           {/* <form className='flex flex-col max-w-md w-full' onSubmit={onFinish}> */}
-            <InputSection name="Username Or Email" type="text" />
-            <PasswordInputSection name="Password" />
+            <InputSection name="email" type="text" />
+            <PasswordInputSection name="password" />
             {/* <button className="w-full bg-color-primary h-12 rounded-xl" type="submit"> Sign In </button> */}
         </FormContainer>
         <h6 className="mb-10 mt-4 text-color-primary font-bold" >OR</h6>
