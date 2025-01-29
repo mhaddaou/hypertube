@@ -10,6 +10,7 @@ import SearchedMoviesSlice from "./features/Search/Search";
 import UserSlice from "./features/User/User";
 import MovieSlice from "./features/Movie/Movie";
 import commentSlice from "./features/Comments/Comments";
+import movieReducer from './features/Movie/Movie';
 
 export const makeStore = () => {
   return configureStore({
@@ -25,6 +26,7 @@ export const makeStore = () => {
       userData: UserSlice,
       movieData: MovieSlice,
       comments: commentSlice,
+      movie: movieReducer,
     },
   });
 };

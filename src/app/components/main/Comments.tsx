@@ -47,7 +47,7 @@ function Comments({ movieId }: { movieId: number; }) {
         <button className="text-white font-lemonada text-xs bg-color-primary px-5 py-3 w-fit rounded-lg self-end"
           onClick={() => {
             if (comment.trim()) {
-              dispatch(addComment({ movie_id: 2422, comment, source: "YTS" }));
+              dispatch(addComment({ movie_id: movieId, comment, source: "YTS" }));
               setComment("");
             }
           }}
@@ -59,14 +59,18 @@ function Comments({ movieId }: { movieId: number; }) {
         Array.from({ length: 4 }).map((_, index) => <CommentSkeleton key={index} page={page} />) :
         <div className={`flex flex-col gap-8 bg-black py-5 px-10`}>
           {comments && comments.length > 0 && comments.map((comment, index) => (
-            <div className="flex flex-col gap-3">
+            <div key={index} className="flex flex-col gap-3">
               <div className="flex items-center gap-3">
                 <Image
-                  src={comment.user_info.profile_picture}
+                  src={comment.user_info.profile_picture || '/images/images/defaultprofile.jpg'}
                   alt="user profile picture"
                   width={50}
                   height={50}
-                  key={index} />
+                  className="rounded-full"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/defaultprofile.jpg';
+                  }} />
                 <p className="text-white font-lemonada text-sm">{comment.user_info.username}</p>
               </div>
               <p className="text-white font-albayan text-xs">{comment.comment_info.comment}</p>
