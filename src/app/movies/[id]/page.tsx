@@ -18,6 +18,7 @@ const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
   const movieData = useAppSelector((state) => state.movieData.movieData);
   const loading = useAppSelector((state) => state.movieData.status);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const handleFavorite = () => {
     setIsFavorite((prev) => !prev);
   }
@@ -69,58 +70,73 @@ const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
   }
 
   const description = movieData?.description_intro || '';
-  const isDescriptionShort = description.length < 400;
+  const isDescriptionLong = description.length > 400;
+  const displayedDescription = !isExpanded && isDescriptionLong
+    ? `${description.substring(0, 397)}...` 
+    : description;
 
   return (
     <>
-      <div className="w-full h-auto sm:relative mt-[60px]">
+      <div className="w-full h-auto relative mt-[60px]">
         {movieData && movieData?.large_screenshot_image1 && <Image
           src={movieData?.large_screenshot_image1}
           alt="movie screenshot"
-          width={1000}
-          height={1000}
-          className="w-full h-auto"
+          width={1920}
+          height={1080}
+          className="w-full h-[400px] object-cover object-center"
         />
         }
-        <div className={`bg-black sm:bg-transparent flex flex-col justify-between sm:absolute bottom-0 left-0 w-full ${isDescriptionShort ? 'h-1/2' : 'h-2/3'} overflow-y-auto custom-scrollbar`}>
-          <h1 className="text-3xl font-bold text-white px-10 mt-5 font-lemonada text-shadow">
-            {movieData?.title}
-          </h1>
-          <div className="flex items-center flex-wrap px-10 pt-2 text-xs font-medium sm:text-white text-gray-400 font-lemonada text-shadow font-thin">
-            <span>{movieData?.runtime}m&nbsp;</span>
-            <span>&nbsp;-&nbsp;</span>
-            <span>{movieData?.year}&nbsp;</span>
-            {
-              movieData?.genres && movieData?.genres.length > 0 && movieData?.genres.map((genre) => (
-                <div key={genre}>
-                  <span>&nbsp;-&nbsp;</span>
-                  <span>{genre}</span>
-                </div>
-              ))
-            }
-          </div>
-          <p className="text-white px-10 py-5 font-lemonada text-xs text-shadow font-thin">
-            {movieData?.description_intro || "No summary available"}
-          </p>
-          <div className="flex gap-8 px-10 pt-5 pb-5 text-xs font-bold font-lemonada">
-            <button className="flex gap-3 bg-color-primary text-black rounded-lg px-4 py-3">
-              <Image
-                src="/images/icons/play.svg"
-                alt="play"
-                width={20}
-                height={20}
-              />
-              <p className="mt-0.5"> Play now </p>
-            </button>
-            <button className="flex gap-4 border border-white text-white rounded-lg px-4 py-3 bg-black">
-              <Image
-                src="/images/icons/bookmark.svg"
-                alt="add to watchlist"
-                width={20}
-                height={20}
-              />
-              <p onClick={handleFavorite} className="mt-0.5 hidden sm:block"> {isFavorite ? "Remove from watchlist" : "add to watchlist"} </p>
-            </button>
+        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black via-black/70 to-transparent">
+          <div className="flex flex-col gap-5 px-10 py-5">
+            <h1 className="text-3xl font-bold text-white font-lemonada text-shadow">
+              {movieData?.title}
+            </h1>
+            <div className="flex items-center flex-wrap text-xs font-medium sm:text-white text-gray-400 font-lemonada text-shadow font-thin">
+              <span>{movieData?.runtime}m&nbsp;</span>
+              <span>&nbsp;-&nbsp;</span>
+              <span>{movieData?.year}&nbsp;</span>
+              {
+                movieData?.genres && movieData?.genres.length > 0 && movieData?.genres.map((genre) => (
+                  <div key={genre}>
+                    <span>&nbsp;-&nbsp;</span>
+                    <span>{genre}</span>
+                  </div>
+                ))
+              }
+            </div>
+            <div className="flex flex-col">
+              <p className="text-white font-lemonada text-xs text-shadow font-thin">
+                {displayedDescription || "No summary available"}
+                {isDescriptionLong && (
+                  <button 
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-color-primary hover:underline ml-1 inline"
+                  >
+                    {isExpanded ? ' Show less' : ' Read more'}
+                  </button>
+                )}
+              </p>
+            </div>
+            <div className="flex gap-8 text-xs font-bold font-lemonada">
+              <button className="flex gap-3 bg-color-primary text-black rounded-lg px-4 py-3">
+                <Image
+                  src="/images/icons/play.svg"
+                  alt="play"
+                  width={20}
+                  height={20}
+                />
+                <p className="mt-0.5"> Play now </p>
+              </button>
+              <button className="flex gap-4 border border-white text-white rounded-lg px-4 py-3 bg-black">
+                <Image
+                  src="/images/icons/bookmark.svg"
+                  alt="add to watchlist"
+                  width={20}
+                  height={20}
+                />
+                <p onClick={handleFavorite} className="mt-0.5 hidden sm:block"> {isFavorite ? "Remove from watchlist" : "add to watchlist"} </p>
+              </button>
+            </div>
           </div>
         </div>
       </div>
