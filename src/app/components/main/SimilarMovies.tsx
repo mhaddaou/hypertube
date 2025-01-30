@@ -12,30 +12,27 @@ const SimilarMovies = () => {
   };
 
   return (
-    <div className="px-4 md:pl-10 pb-8 bg-background">
-      <div className="relative inline-block mb-6">
-        <h2 className="text-2xl font-semibold text-color-white font-lemonada">
-          Similar Movies for you
-        </h2>
-        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-color-primary mt-1"></div>
-      </div>
-      <div className="flex flex-wrap md:flex-nowrap gap-2 md:space-x-5">
+    <div className="w-full h-auto pb-5 sm:px-10 px-5 bg-background">
+      <h2 className="text-2xl font-bold text-color-white font-lemonada mb-4 underline decoration-red-600">
+        Similar Movies for you
+      </h2>
+      <div className="flex flex-wrap gap-[15px]">
         {suggestions.slice(0, 4).map((movie: MovieSuggestions) => (
           <div 
             key={movie.id} 
-            className="cursor-pointer w-[calc(50%-4px)] md:w-[180px] pt-2"
+            className="cursor-pointer group w-[200px]"
             onClick={() => handleMovieClick(movie.id)}
           >
-            <div className="aspect-[2/3] w-full">
+            <div className="relative w-full aspect-[2/3]">
               <img
                 src={movie.medium_cover_image}
                 alt={movie.title}
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
               />
             </div>
-            <div className="mt-0.5">
-              <h3 className="text-color-white font-medium text-sm truncate">{movie.title}</h3>
-              <div className="flex items-center text-xs">
+            <div className="mt-2">
+              <h3 className="text-color-white text-base font-lemonada truncate">{movie.title}</h3>
+              <div className="flex items-center text-sm">
                 <span className="text-color-primary">★ {movie.rating}</span>
                 <span className="text-color-gray mx-1">|</span>
                 <span className="text-color-gray truncate">{movie.genres.slice(0, 2).join(' • ')}</span>

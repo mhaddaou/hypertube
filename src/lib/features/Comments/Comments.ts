@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
 interface commentData {
   comment_info: {
@@ -17,8 +17,8 @@ interface commentData {
 export const fetchComments = createAsyncThunk(
   "comment/fetchComments",
   async ({ id, page }: { id: number; page: number }) => {
-    const response = await axios.get(
-      `http://localhost:8000/comments/${id}/YTS?page_size=2&page=${page}`,
+    const response = await axiosInstance.get(
+      `/comments/${id}/YTS?page_size=2&page=${page}`,
     );
     return {
       comments: response.data.data.comments,
@@ -38,7 +38,7 @@ export const addComment = createAsyncThunk(
     comment: string;
     source: string;
   }) => {
-    const response = await axios.post(`http://localhost:8000/comments`, {
+    const response = await axiosInstance.post(`/comments`, {
       movie_id,
       comment,
       source,

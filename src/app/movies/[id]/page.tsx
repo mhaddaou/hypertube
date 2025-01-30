@@ -4,7 +4,9 @@ import { fetchMovieData } from '@/lib/features/Movie/Movie';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import Image from 'next/image';
 import Comments from '@/app/components/main/Comments';
-// import SimilarMovies from '@/app/components/main/SimilarMovies';
+import SimilarMovies from '@/app/components/main/SimilarMovies';
+import axiosInstance from '@/lib/axios';
+import FavoriteMovies from '@/app/components/main/FavoriteMovies';
 
 interface MovieDetailProps {
   params: {
@@ -19,9 +21,44 @@ const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
   const loading = useAppSelector((state) => state.movieData.status);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const handleFavorite = () => {
-    setIsFavorite((prev) => !prev);
-  }
+  const handleFavorite = async () => {
+    try {
+      if (!isFavorite) {
+        await axiosInstance.post('/movies/favorite', {
+          movie_id: movieData?.id.toString(),
+          title: movieData?.title,
+          movie_imdb_code: '',
+          movie_source: 'YTS',
+          poster_src: movieData?.large_cover_image || ''
+        });
+      } else {
+        await axiosInstance.delete(`/movies/favorite/`, {
+          data: {
+            movie_id: movieData?.id.toString(),
+          }
+        });
+      }
+      setIsFavorite(prev => !prev);
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+    }
+  };
+
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        const response = await axiosInstance.get('/movies/favorite');
+        const favorites = response.data;
+        setIsFavorite(favorites.some((fav: any) => fav.movie_id === id.toString()));
+      } catch (error) {
+        console.error('Error checking favorite status:', error);
+      }
+    };
+
+    if (id) {
+      checkFavoriteStatus();
+    }
+  }, [id]);
 
   useEffect(() => {
     dispatch(fetchMovieData(id));
@@ -141,7 +178,8 @@ const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
         </div>
       </div>
       <Comments movieId={id} />
-      {/* <SimilarMovies /> */}
+      <SimilarMovies />
+      <FavoriteMovies />
     </>
   );
 };

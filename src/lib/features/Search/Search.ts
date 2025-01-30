@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
 interface SearchParams {
   query_term: string;
@@ -23,8 +23,8 @@ export interface Movie {
 export const fetchSearchedMovies = createAsyncThunk(
   "search/fetchSearchedMovies",
   async (searchParams: SearchParams) => {
-    const response = await axios.post(
-      `http://127.0.0.1:8000/movies/search?page_size=10&page=${searchParams.page}`,
+    const response = await axiosInstance.post(
+      `/movies/search?page_size=10&page=${searchParams.page}`,
       searchParams,
     );
     return response.data;

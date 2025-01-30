@@ -32,7 +32,7 @@ function Comments({ movieId }: { movieId: number; }) {
 
   return (
     <div className="bg-black">
-      <p className="text-white font-lemonada font-bold text-sm bg-black px-10 py-5 underline underline-offset-4 decoration-color-primary">discussion</p>
+      <p className="text-white font-lemonada font-bold text-2xl bg-black px-10 py-5 underline underline-offset-4 decoration-color-primary">Discussion</p>
       <div className="flex flex-col gap-4 bg-black px-10 py-5 border border-white rounded-lg w-[90%] mx-auto">
         <div className="bg-black flex justify-center">
           <textarea
