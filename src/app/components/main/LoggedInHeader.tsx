@@ -5,12 +5,53 @@ import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 import { useAppSelector } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../sub/AuthContext";
+import { useUserInfo } from "../sub/UserInfoContext";
+
+function Logout(){
+
+  const {setAuthenticated} = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    console.log("Logging out ...")
+    fetch('http://127.0.0.1:8000/users/sign-out', {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+    .then(response => {
+      if (response.ok) {
+        // Handle successful logout
+        setAuthenticated(false);
+        router.push('/register');
+      } else {
+        throw new Error('Logout failed');
+      }
+    })
+    .catch(error => {
+      console.error("Error: ", error);
+    });
+  };
+
+  return(
+    <div className="flex gap-2 px-2 sm:px-4 items-center w-fill h-10 border border-color-primary rounded-lg text-color-primary cursor-pointer" onClick={handleLogout}>
+      <Image
+        src="/images/icons/logout.svg"
+        alt="logout"
+        width={20}
+        height={20}
+      />
+      <p className="hidden sm:block">Logout</p>
+    </div>
+  )
+}
 
 function LoggedInHeader() {
   const userImageUrl = useAppSelector((state) => state.userData.userData?.image_url);
   const [isSearchVisible, setSearchVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const {userInfo} = useUserInfo();
 
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -88,14 +129,18 @@ function LoggedInHeader() {
           height={30}
           className="cursor-pointer"
         />
-        <Image
-          src={userImageUrl || "/images/images/defaultprofile.jpg"}
-          alt="user"
-          width={30}
-          height={30}
-          className="w-10 h-10 border border-color-primary rounded-full cursor-pointer"
-        />
-        <div className="flex gap-2 px-2 sm:px-4 items-center w-fill h-10 border border-color-primary rounded-lg text-color-primary cursor-pointer">
+        <Link href="/profile">
+          <Image
+            // src={userImageUrl || "/images/images/defaultprofile.jpg"}
+            src={userInfo.profile_picture_url || "/images/images/defaultprofile.jpg"}
+            alt="user"
+            width={30}
+            height={30}
+            className="w-10 h-10 border border-color-primary rounded-full cursor-pointer"
+          />
+        </Link>
+        <Logout/>
+        {/* <div className="flex gap-2 px-2 sm:px-4 items-center w-fill h-10 border border-color-primary rounded-lg text-color-primary cursor-pointer">
           <Image
             src="/images/icons/logout.svg"
             alt="logout"
@@ -103,7 +148,7 @@ function LoggedInHeader() {
             height={20}
           />
           <p className="hidden sm:block">Logout</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

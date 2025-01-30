@@ -19,11 +19,28 @@ module.exports = {
     ],
   },
   theme: {
+
+    backgroundImage: {
+      'profile-bg': "url('https://s3-alpha-sig.figma.com/img/86f6/5550/6002f38b868fe510e6b42849dd283513?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Y4ife4o2Sawdsi~kYS4wxeKK4iorNPw8O5doMQJHH9fV6aj34HyId6ak1RezaFw5SU5xUNLM02C4Qy3nLrr8jJtzzEbRVOrOdXKmcnr5JCLW-j5E4y6JfO2wkrBN5BhgghSWE~A~V17hQO5KsvHRagtn9J0~t8AbtGf5-S1AHx9E9flv-Gz0FDZBI74wmiC0CvWHIF9nvJBpT613KJ4Xg9lPPitaRDIiMa14dbr12SwoqzpUn-E8vP-py3YcddQi4II7Ct78ZtXVUyetfmm~VM53x8XDao5CdpZtJPX894jo9rsvjWtLWMlCelXvePqAN90uNJ7AOVm0UFOcYMVsSQ__')",
+    },
     extend: {
+      borderWidth:{
+        "1":"1px",
+      },
+      width:{
+        "larg": '35rem'
+      },
+      borderRadius: {
+        '4xl': '2rem',
+        '5xl': '2.5rem',
+        '6xl': '6rem',
+      },
       colors: {
-        "color-primary": "#FB9722",
+        // "color-primary": "#FB9722",
+        "color-primary": "#CF0026",
         "color-secondary": "#1B0303",
         "color-gray": "#A7B5BE",
+        "color-dark-gray":"#4B5563",
         "color-white": "#fff",
         background: "#0D0C0F",
         "seal-brown": "#131313",

@@ -4,7 +4,7 @@ import { fetchMovieData } from '@/lib/features/Movie/Movie';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import Image from 'next/image';
 import Comments from '@/app/components/main/Comments';
-import SimilarMovies from '@/app/components/main/SimilarMovies';
+// import SimilarMovies from '@/app/components/main/SimilarMovies';
 
 interface MovieDetailProps {
   params: {
@@ -141,7 +141,7 @@ const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
         </div>
       </div>
       <Comments movieId={id} />
-      <SimilarMovies />
+      {/* <SimilarMovies /> */}
     </>
   );
 };

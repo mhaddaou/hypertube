@@ -21,6 +21,18 @@
   background-color: "#131313";
 }
 
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+ 
+input:focus {
+    outline: none;
+}
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: gray;
   border-radius: 10px;
