@@ -86,7 +86,8 @@
 import { MdModeEditOutline } from "react-icons/md"
 import { PopUpModal } from "./Modale"
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react"
-import { UserInfo, useUserInfo } from "./ProfileInfo"
+import { UserInfo} from "./ProfileInfo"
+import { useUserInfo } from "@/app/components/sub/UserInfoContext"
 
 interface ProfileData {
     firstname: string,
@@ -141,8 +142,12 @@ const ProfileCardInfo = () => {
 const ProfileContext = createContext<Dispatch<SetStateAction<UserInfo>> | null>(null);
 
 export const EditProfile = ({ closeEditProfile }: { closeEditProfile: () => void }) => {
-    const userInfo = useUserInfo() as UserInfo;
+
+    // const userInfo = useUserInfo() as UserInfo;
+    const {userInfo, setUserInfo} = useUserInfo()
     const [profileData, setProfileData] = useState<UserInfo>(userInfo);
+
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -155,7 +160,11 @@ export const EditProfile = ({ closeEditProfile }: { closeEditProfile: () => void
                 body: JSON.stringify(profileData),
                 credentials: 'include',
             });
+        
+            const data = await response.json();
+        
             if (response.ok) {
+                setUserInfo(data.data);
                 console.log('Profile updated successfully');
                 closeEditProfile();
             } else {

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export const OauthLinks = () => {
   const SuportedOAuths = [
@@ -9,18 +10,35 @@ export const OauthLinks = () => {
     "http://youtube.com",
   ];
 
+  // const [authUrl, setAuthUrl] = useState('');
+
+  // useEffect(() => {
+  //   const fetchAuthUrl = async () => {
+  //     try {
+  //       const response = await fetch('http://127.0.0.1:8000/oauth/google');
+  //       const data = await response.json();
+  //       setAuthUrl(data.url);
+  //     } catch (error) {
+  //       console.error('Error fetching auth URL:', error);
+  //     }
+  //   };
+
+  //   fetchAuthUrl();
+  // }, []);
+
+
   return (
     <div className="flex justify-between items-center w-full">
-      <Link href="http://google.com">
+      <Link href='http://127.0.0.1:8000/oauth/google'>
         <Image src="/images/icons/google.svg" width={48} height={48} alt=""/>
       </Link>
-      <Link href="http://google.com">
+      <Link href='http://127.0.0.1:8000/oauth/discord'>
         <Image src="/images/icons/discord.svg" width={48} height={48} alt=""/>
       </Link>
-      <Link href="http://google.com">
+      <Link href='http://127.0.0.1:8000/oauth/github'>
         <Image src="/images/icons/github.svg" width={48} height={48} alt=""/>
       </Link>
-      <Link href="http://google.com">
+      <Link href="http://127.0.0.1:8000/oauth/42">
         <Image src="/images/icons/42.svg" width={48} height={48} alt=""/>
       </Link>
     </div>

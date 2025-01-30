@@ -1,7 +1,9 @@
 "use client"
 
+import { useRouter } from "next/navigation";
 import { FormTitle, InputSection, PasswordInputSection, InputCheckBox, FormContainer } from "../components/InputUtils";
 import { OauthLinks, OtherLink } from "../components/OauthUtils";
+import { useAuth } from "@/app/components/sub/AuthContext";
 
 interface SingInData {
     email:string,
@@ -9,6 +11,15 @@ interface SingInData {
 }
 
 export default function SingIn () {
+
+    const router = useRouter()
+
+    
+    const {authenticated, setAuthenticated} = useAuth();
+
+    if (authenticated){
+      router.push('/');
+    }
 
     const onFinish = (value: object) => {
 
@@ -22,7 +33,16 @@ export default function SingIn () {
           body: JSON.stringify(formData),
           credentials: 'include',
         })
-        .then(response => response.json())
+        .then(response => {
+          if (response.ok){
+            setAuthenticated(true);
+            return response.json
+          }
+          else{
+            throw new Error("sing-up failed");
+          }
+        }
+        )
         .then(data => {
           console.log("Response data: ", data);
         })

@@ -2,12 +2,77 @@
 import { MdEmail } from "react-icons/md";
 import { FormContainer, FormTitle, InputSection, InputWithIcons, PasswordInputSection } from "../components/InputUtils";
 import { OtherLink, OtherLinkDicorated } from "../components/OauthUtils";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/components/sub/AuthContext";
+import { useState } from "react";
+
+
+interface ResetPasswordProps {
+    email:string,
+  }
 
 export default function ResetPassword() {
 
+    const [ResetPasswordData, setResetPasswordData] = useState<ResetPasswordProps>({email:""});
+
+    const router = useRouter();
+
+    const {authenticated} = useAuth();
+
+    if (authenticated){
+      router.push('/');
+    }
+
     const onFinish = (value: object) => {
-        console.log(value);
-    };
+        const formData = value as ResetPasswordProps;
+    
+        fetch('http://127.0.0.1:8000/password/email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+          credentials: 'include',
+        })
+        .then(response => {
+          if (response.ok){
+            return response.json
+          }
+          else{
+            throw new Error("reset password failed");
+          }
+        }
+        )
+        .then(data => {
+          console.log("Response data: ", data);
+          router.push('/verifyemail');
+        })
+        .catch(error => {
+          console.error("Error: ", error);
+        });
+
+      };
+
+      // const handleSubmit = async (event: React.FormEvent) => {
+      //   event.preventDefault();
+    
+      //   const response = await fetch('http://127.0.0.1:8000/password/email', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({ email }),
+      //   });
+    
+      //   if (response.ok) {
+      //     // Handle successful response
+      //     console.log('Email sent successfully');
+      //   } else {
+      //     // Handle error response
+      //     console.error('Error sending email');
+      //   }
+      // };
+
 
     return(
         <>

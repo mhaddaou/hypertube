@@ -4,6 +4,10 @@ import { FormTitle, InputSection, PasswordInputSection, InputCheckBox, FormConta
 import { OauthLinks, OtherLink } from "../components/OauthUtils";
 import { Dispatch, SetStateAction, createContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/app/components/sub/AuthContext";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 interface RegesterFromData {
   first_name:string,
@@ -37,23 +41,12 @@ export default function Register () {
 
   const router = useRouter()
 
-  useEffect(() => {
-    fetch('http://127.0.0.1:8000/users/check_session', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.authenticated) {
-          console.log("USER IS AUTHENTICATED");
-          // redirect('/')
-          router.push('/');
-        }
-      })
-      .catch(error => {
-        console.error("Error checking session: ", error);
-      });
-  }, []);
+  
+  const {authenticated, setAuthenticated} = useAuth();
+
+  if (authenticated){
+    router.push('/');
+  }
 
   console.log("Regester form data: ", regesterFromData);
 
@@ -64,7 +57,7 @@ export default function Register () {
       return;
     }
 
-    fetch('http://127.0.0.1:8000/users/sign-up', {
+    fetch(`http://127.0.0.1:8000/users/sign-up`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,9 +65,18 @@ export default function Register () {
       body: JSON.stringify(formData),
       credentials: 'include',
     })
-    .then(response => response.json())
+    .then(response => {
+      if (response.ok){
+        return response.json
+      }
+      else{
+        throw new Error("sing-up failed");
+      }
+    }
+    )
     .then(data => {
       console.log("Response data: ", data);
+      setAuthenticated(true);
       router.push('/');
     })
     .catch(error => {
