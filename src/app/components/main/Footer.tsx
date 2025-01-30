@@ -4,7 +4,7 @@ import React from "react";
 
 function Footer() {
   return (
-    <section className="w-full  bg-background text-white">
+    <footer className="w-full  bg-background text-white">
       <div className="w-full bg-[#22242A] pt-14">
         <div className="container w-full">
           <div className="w-fit">
@@ -105,7 +105,7 @@ function Footer() {
           </div>
         </div>
       </div>
-    </section>
+    </footer>
   );
 }
 
