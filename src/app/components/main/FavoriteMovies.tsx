@@ -11,6 +11,8 @@ interface FavoriteMovie {
   movie_source: string;
   poster_src: string;
   title: string;
+  rating: number;
+  genres: string[];
 }
 
 const FavoriteMovies: FC = () => {
@@ -62,7 +64,14 @@ const FavoriteMovies: FC = () => {
                   className="rounded-lg object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <p className="text-white text-base font-lemonada mt-2 truncate">{movie.title}</p>
+              <div className="mt-2">
+                <p className="text-white text-base font-lemonada truncate">{movie.title}</p>
+                <div className="flex items-center text-sm">
+                  <span className="text-color-primary">★ {Number(movie.rating).toFixed(1)}</span>
+                  <span className="text-color-gray mx-1">|</span>
+                  <span className="text-color-gray truncate">{movie.genres.slice(0, 2).join(' • ')}</span>
+                </div>
+              </div>
             </div>
           </Link>
         ))}

@@ -33,10 +33,12 @@ const MovieDetail: FC<MovieDetailProps> = ({ params, searchParams }) => {
           title: movieData?.title,
           movie_imdb_code: '',
           movie_source: movieData?.source || 'YTS',
-          poster_src: movieData?.large_cover_image || ''
+          poster_src: movieData?.large_cover_image || '',
+          rating: (movieData?.rating || 0).toString(),
+          genres: movieData?.genres || []
         });
       } else {
-        await axiosInstance.delete(`/movies/favorite/`, {
+        await axiosInstance.delete(`/movies/favorite`, {
           data: {
             movie_id: movieData?.id.toString(),
           }

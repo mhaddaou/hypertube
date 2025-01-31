@@ -10,6 +10,7 @@ export interface MovieDetails {
   genres: string[];
   large_screenshot_image1: string;
   large_cover_image: string;
+  rating: number;
 }
 
 export interface MovieSuggestions {
