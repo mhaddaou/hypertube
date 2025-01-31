@@ -32,7 +32,7 @@ export default function ResetPassword() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
-          credentials: 'include',
+          // credentials: 'include',
         })
         .then(response => {
           if (response.ok){

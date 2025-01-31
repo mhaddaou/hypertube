@@ -132,7 +132,7 @@ function LoggedInHeader() {
         <Link href="/profile">
           <Image
             // src={userImageUrl || "/images/images/defaultprofile.jpg"}
-            src={userInfo.profile_picture_url || "/images/images/defaultprofile.jpg"}
+            src={userInfo?.profile_picture_url || "/images/images/defaultprofile.jpg"}
             alt="user"
             width={30}
             height={30}

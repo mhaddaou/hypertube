@@ -5,22 +5,31 @@ import { BiSolidHide } from "react-icons/bi";
 import { PrimaryActionButton } from "./Buttons";
 import { RegesterFormContext } from "../register/page";
 
-export const InputSection = ({ name, type }: { name: string; type: string }) => {
+interface InputSectionProps {
+  name: string;
+  label: string;
+  type: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+}
 
-  const setRegesterForm = useContext(RegesterFormContext)
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (setRegesterForm) {
-          setRegesterForm(prev => ({ ...prev, [name]: e.target.value }));
-      }
-  }
-
-    return (
-      <div className="flex flex-col mb-5 w-full">
-        <label htmlFor={name} className="text-white font-medium mb-2	">{name}</label>
-        <input className="h-12 pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray" type={type} id={name} name={name} onChange={handleChange}/>
-      </div>
-    );
-  };
+export const InputSection = ({ name, label,type, value, onChange, required }: InputSectionProps) => {
+  return (
+    <div className="flex flex-col mb-5 w-full">
+      <label htmlFor={name} className="text-white font-medium mb-2">{label}</label>
+      <input
+        className="h-12 pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray"
+        type={type}
+        id={name}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+      />
+    </div>
+  );
+};
   
 export const InputCheckBox = ({ label }: { label: string }) => {
     return (
@@ -57,42 +66,44 @@ export const InputWithIcons = ({children, type, name}:{children:React.ReactNode,
   );
 }
 
-export const PasswordInputSection = ({ name }: { name: string }) => {
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+interface PasswordInputSectionProps {
+  name: string;
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+}
 
-    const setRegesterForm = useContext(RegesterFormContext)
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (setRegesterForm) {
-            setRegesterForm(prev => ({ ...prev, [name]: e.target.value }));
-        }
-    }
+export const PasswordInputSection = ({ name, value, label, onChange, required }: PasswordInputSectionProps) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const togglePasswordVisibility = () => {
-      setIsPasswordVisible(!isPasswordVisible);
-    };
-  
-    return (
-      <div className="flex flex-col w-full">
-        <label htmlFor={name} className="text-white font-medium mb-2">{name}</label>
-        {/* <label htmlFor={name} className="text-white mb-2 font-medium w-full">{name}</label> */}
-        <div className="relative mb-5 ">
-          <input
-            onChange={handleChange}
-            className="h-12 pr-10 w-full pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray"
-            type={isPasswordVisible ? 'text' : 'password'}
-            id={name}
-            name={name}
-          />
-          <button
-            type="button"
-            onClick={togglePasswordVisibility}
-            className="absolute right-0 top-0 bottom-0 px-3 py-1 rounded"
-          >
-            {isPasswordVisible? <BiSolidShow className="text-gray-400" size="24px"/> : <BiSolidHide className="text-gray-400" size="24px"/> }
-          </button>
-        </div>
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  return (
+    <div className="flex flex-col w-full">
+      <label htmlFor={name} className="text-white font-medium mb-2">{label}</label>
+      <div className="relative mb-5 ">
+        <input
+          className="h-12 pr-10 w-full pl-3 bg-transparent border-2 rounded-xl border-color-gray focus:border-color-primary input-cursor-primar caret-color-primary text-color-gray"
+          type={isPasswordVisible ? 'text' : 'password'}
+          id={name}
+          name={name}
+          value={value}
+          onChange={onChange}
+          required={required}
+        />
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className="absolute right-0 top-0 bottom-0 px-3 py-1 rounded"
+        >
+          {isPasswordVisible ? <BiSolidShow className="text-gray-400" size="24px"/> : <BiSolidHide className="text-gray-400" size="24px"/> }
+        </button>
       </div>
-    );
+    </div>
+  );
 };
   
 export const FormTitle = ({title}:{title:string})=>{

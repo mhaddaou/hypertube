@@ -85,7 +85,7 @@
 
 import { MdModeEditOutline } from "react-icons/md"
 import { PopUpModal } from "./Modale"
-import { Dispatch, SetStateAction, createContext, useContext, useState } from "react"
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react"
 import { UserInfo} from "./ProfileInfo"
 import { useUserInfo } from "@/app/components/sub/UserInfoContext"
 
@@ -96,6 +96,30 @@ interface ProfileData {
     email: string,
 }
 
+interface ProfileFormInputProps {
+    name: string;
+    d: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+// const ProfileFormInput: React.FC<ProfileFormInputProps> = ({ name, d, onChange }) => {
+//     return (
+//         <div className="mb-4">
+//             <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+//                 {name.charAt(0).toUpperCase() + name.slice(1)}
+//             </label>
+//             <input
+//                 type="text"
+//                 id={name}
+//                 name={name}
+//                 value={d}
+//                 onChange={onChange}
+//                 className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+//                 required
+//             />
+//         </div>
+//     );
+// };
 const ProfileFormInput = ({ name, d }: { name: string, d: string }) => {
     const setProfileData = useContext(ProfileContext)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +135,7 @@ const ProfileFormInput = ({ name, d }: { name: string, d: string }) => {
                 <label className="text-color-dark-gray mx-2" htmlFor="">{name}</label>
                 <span className="border-1 border-color-dark-gray w-full"></span>
             </div>
-            <input className="h-12 w-full ml-2" type="text" defaultValue={d} onChange={handleChange} />
+            <input className="h-12 w-full ml-2" type="text" value={d} onChange={handleChange} />
         </div>
     )
 }
@@ -190,3 +214,111 @@ export const EditProfile = ({ closeEditProfile }: { closeEditProfile: () => void
         </PopUpModal>
     );
 }
+
+export const FinishProfileInfo = () => {
+
+    // const userInfo = useUserInfo() as UserInfo;
+    const {userInfo, setUserInfo} = useUserInfo()
+    const [profileData, setProfileData] = useState<UserInfo>(userInfo);
+
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://127.0.0.1:8000/users/update', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(profileData),
+                credentials: 'include',
+            });
+        
+            const data = await response.json();
+        
+            if (response.ok) {
+                setUserInfo(data.data);
+                console.log('Profile updated successfully');
+                // closeEditProfile();
+            } else {
+                console.error('Failed to update profile');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    return (
+        <div className="bg-color-white p-5">
+            <ProfileCardInfo />
+            <form action="" className="opacity-100 bg-transparent relative w-larg" onSubmit={handleSubmit}>
+                <ProfileContext.Provider value={setProfileData}>
+                    <ProfileFormInput name="first_name" d={userInfo.first_name} />
+                    <ProfileFormInput name="last_name" d={userInfo.last_name} />
+                    <ProfileFormInput name="email" d={userInfo.email} />
+                    <ProfileFormInput name="username" d={userInfo.username} />
+                </ProfileContext.Provider>
+                <button type="submit" className="h-12 min-w-40 bg-color-primary text-color-white px-8 rounded-xl"> Save </button>
+            </form>
+        </div>
+    );
+}
+
+// export const FinishProfileInfo = () => {
+//     const { userInfo, setUserInfo } = useUserInfo();
+//     const [profileData, setProfileData] = useState<UserInfo>(userInfo);
+
+//     useEffect(() => {
+//         setProfileData(userInfo);
+//     }, [userInfo]);
+
+//     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         const { name, value } = e.target;
+//         setProfileData(prevState => ({
+//             ...prevState,
+//             [name]: value
+//         }));
+//     };
+
+//     const handleSubmit = async (e: React.FormEvent) => {
+//         e.preventDefault();
+//         try {
+//             const response = await fetch('http://127.0.0.1:8000/users/update', {
+//                 method: 'PATCH',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify(profileData),
+//                 credentials: 'include',
+//             });
+
+//             const data = await response.json();
+
+//             if (response.ok) {
+//                 setUserInfo(data.data);
+//                 console.log('Profile updated successfully');
+//                 // closeEditProfile();
+//             } else {
+//                 console.error('Failed to update profile');
+//             }
+//         } catch (error) {
+//             console.error('Error:', error);
+//         }
+//     };
+
+//     return (
+//         <div className="bg-color-white p-5">
+//             <ProfileCardInfo />
+//             <form action="" className="opacity-100 bg-transparent relative w-larg" onSubmit={handleSubmit}>
+//                 <ProfileContext.Provider value={setProfileData}>
+//                     <ProfileFormInput name="first_name" d={profileData.first_name} onChange={handleChange} />
+//                     <ProfileFormInput name="last_name" d={profileData.last_name} onChange={handleChange} />
+//                     <ProfileFormInput name="email" d={profileData.email} onChange={handleChange} />
+//                     <ProfileFormInput name="username" d={profileData.username} onChange={handleChange} />
+//                 </ProfileContext.Provider>
+//                 <button type="submit" className="h-12 min-w-40 bg-color-primary text-color-white px-8 rounded-xl"> Save </button>
+//             </form>
+//         </div>
+//     );
+// };
