@@ -1,6 +1,7 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import axiosInstance from '@/lib/axios';
 
 interface MovieCardProps {
   id: number;
@@ -29,8 +30,43 @@ const MovieCard: FC<MovieCardProps> = ({
   const [isFavorite, setIsFavorite] = useState(favorite);
   const router = useRouter();
 
-  const handleFavorite = () => {
-    setIsFavorite((prev) => !prev);
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        const response = await axiosInstance.get('/movies/favorite');
+        const favorites = response.data;
+        setIsFavorite(favorites.some((fav: any) => fav.movie_id === id.toString()));
+      } catch (error) {
+        console.error('Error checking favorite status:', error);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [id]);
+
+  const handleFavorite = async () => {
+    try {
+      if (!isFavorite) {
+        await axiosInstance.post('/movies/favorite', {
+          movie_id: id.toString(),
+          title: title,
+          movie_imdb_code: '',
+          movie_source: 'YTS',
+          poster_src: imageUrl || '',
+          rating: rating.toString(),
+          genres: genres || []
+        });
+      } else {
+        await axiosInstance.delete(`/movies/favorite`, {
+          data: {
+            movie_id: id.toString(),
+          }
+        });
+      }
+      setIsFavorite(prev => !prev);
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+    }
   };
 
   const handleWatchNow = () => {
