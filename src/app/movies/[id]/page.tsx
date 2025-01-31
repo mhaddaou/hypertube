@@ -12,10 +12,14 @@ interface MovieDetailProps {
   params: {
     id: number;
   };
+  searchParams?: {
+    source?: string;
+  };
 }
 
-const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
+const MovieDetail: FC<MovieDetailProps> = ({ params, searchParams }) => {
   const { id } = params;
+  const source = searchParams?.source;
   const dispatch = useAppDispatch();
   const movieData = useAppSelector((state) => state.movieData.movieData);
   const loading = useAppSelector((state) => state.movieData.status);
@@ -28,7 +32,7 @@ const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
           movie_id: movieData?.id.toString(),
           title: movieData?.title,
           movie_imdb_code: '',
-          movie_source: 'YTS',
+          movie_source: movieData?.source || 'YTS',
           poster_src: movieData?.large_cover_image || ''
         });
       } else {
@@ -61,8 +65,8 @@ const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
   }, [id]);
 
   useEffect(() => {
-    dispatch(fetchMovieData(id));
-  }, [dispatch, id]);
+    dispatch(fetchMovieData({ id, source }));
+  }, [dispatch, id, source]);
 
   if (loading === "loading") {
     return (
@@ -177,7 +181,7 @@ const MovieDetail: FC<MovieDetailProps> = ({ params }) => {
           </div>
         </div>
       </div>
-      <Comments movieId={id} />
+      <Comments movieId={id} source={movieData?.source || 'YTS'} />
       <SimilarMovies />
       <FavoriteMovies />
     </>

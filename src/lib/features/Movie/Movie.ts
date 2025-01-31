@@ -22,16 +22,17 @@ export interface MovieSuggestions {
 
 export const fetchMovieData = createAsyncThunk(
   "movie/fetchMovieData",
-  async (id: number) => {
-    const response = await axiosInstance.get(`/movies/${id}/YTS`);
-    return response.data;
+  async ({ id, source }: { id: number; source?: string }) => {
+    const movieSource = source || 'YTS';
+    const response = await axiosInstance.get(`/movies/${id}/${movieSource}`);
+    return { ...response.data, source: movieSource };
   },
 );
 
 const initialState = {
   status: "idle" as "idle" | "loading" | "succeeded" | "failed",
   error: null as string | null,
-  movieData: null as MovieDetails | null,
+  movieData: null as (MovieDetails & { source: string }) | null,
   movieSuggestions: [] as MovieSuggestions[],
 };
 

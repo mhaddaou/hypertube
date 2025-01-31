@@ -18,7 +18,7 @@ const CommentSkeleton = ({ page }: { page: number }) => {
   )
 }
 
-function Comments({ movieId }: { movieId: number; }) {
+function Comments({ movieId, source }: { movieId: number; source: string }) {
   const dispatch = useAppDispatch();
   const [page, setPage] = useState(0);
   const [comment, setComment] = useState("");
@@ -27,8 +27,8 @@ function Comments({ movieId }: { movieId: number; }) {
   const status = useAppSelector((state) => state.comments.status);
 
   useEffect(() => {
-    dispatch(fetchComments({ id: movieId, page: page }));
-  }, [dispatch, page]);
+    dispatch(fetchComments({ id: movieId, page: page, source }));
+  }, [dispatch, page, source]);
 
   return (
     <div className="bg-black">
@@ -47,7 +47,7 @@ function Comments({ movieId }: { movieId: number; }) {
         <button className="text-white font-lemonada text-xs bg-color-primary px-5 py-3 w-fit rounded-lg self-end"
           onClick={() => {
             if (comment.trim()) {
-              dispatch(addComment({ movie_id: movieId, comment, source: "YTS" }));
+              dispatch(addComment({ movie_id: movieId, comment, source }));
               setComment("");
             }
           }}

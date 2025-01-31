@@ -16,9 +16,9 @@ interface commentData {
 
 export const fetchComments = createAsyncThunk(
   "comment/fetchComments",
-  async ({ id, page }: { id: number; page: number }) => {
+  async ({ id, page, source }: { id: number; page: number; source: string }) => {
     const response = await axiosInstance.get(
-      `/comments/${id}/YTS?page_size=2&page=${page}`,
+      `/comments/${id}/${source}?page_size=2&page=${page}`,
     );
     return {
       comments: response.data.data.comments,
