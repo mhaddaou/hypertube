@@ -81,9 +81,9 @@ const MovieCard: FC<MovieCardProps> = ({
         <Image
           src={imageUrl}
           width={200}
-          height={200}
+          height={300}
           alt="movie thumbnail"
-          className="aspect-auto sm:max-h-[200px] rounded-lg"
+          className="aspect-auto sm:max-h-[200px] rounded-lg object-cover"
         />
         <div className="flex flex-col justify-center sm:justify-between w-full mt-6 sm:m-0">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
@@ -138,6 +138,7 @@ const MovieCard: FC<MovieCardProps> = ({
                 width={20}
                 height={20}
                 alt="bookmark"
+                className="w-5 h-5"
               />
             </div>
             <button

@@ -52,6 +52,7 @@ const SearchedMoviesSlice = createSlice({
         const newMovies = action.payload.data.movies;
         if (!newMovies || newMovies.length === 0) {
           state.hasMore = false;
+          state.items = [];
           return;
         }
         if (action.meta.arg.page === 1) {

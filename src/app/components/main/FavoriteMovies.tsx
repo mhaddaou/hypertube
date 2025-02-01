@@ -51,7 +51,9 @@ const FavoriteMovies: FC = () => {
 
   return (
     <div className="w-full h-auto pb-5 sm:px-10 px-5 bg-black">
-      <h2 className="text-2xl font-bold text-white font-lemonada mb-4 underline decoration-red-600">Favorite Movies</h2>
+      {favorites.length > 0 && (
+        <h2 className="text-2xl font-bold text-white font-lemonada mb-4 underline decoration-red-600">Favorite Movies</h2>
+      )}
       <div className="flex flex-wrap gap-[15px]">
         {favorites.slice(0, 4).map((movie) => (
           <Link href={`/movies/${movie.movie_id}`} key={movie.movie_id}>
