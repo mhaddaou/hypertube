@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { InputSection } from '@/app/(session)/components/InputUtils';
 import { PrimaryActionButton } from '@/app/(session)/components/Buttons';
 
@@ -10,7 +10,7 @@ export default function SetNewPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -31,6 +31,7 @@ export default function SetNewPassword() {
 
     if (response.ok) {
       console.log('Password updated successfully');
+      router.push('/profile');
     } else {
       console.error('Error updating password');
     }

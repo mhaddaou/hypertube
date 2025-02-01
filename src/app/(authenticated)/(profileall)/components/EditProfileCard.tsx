@@ -88,6 +88,7 @@ import { PopUpModal } from "./Modale"
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react"
 import { UserInfo} from "./ProfileInfo"
 import { useUserInfo } from "@/app/components/sub/UserInfoContext"
+import { useRouter } from "next/navigation"
 
 interface ProfileData {
     firstname: string,
@@ -139,6 +140,24 @@ const ProfileFormInput = ({ name, d }: { name: string, d: string }) => {
         </div>
     )
 }
+
+const ProfileFormInputReadOnly: React.FC<ProfileFormInputReadOnlyProps> = ({ name, d }) => {
+    return (
+        <div className="flex flex-col my-6">
+            <div className="flex items-center">
+                <span className="border-1 border-color-dark-gray w-4"></span>
+                <label className="text-color-dark-gray mx-2" htmlFor={name}>{name}</label>
+                <span className="border-1 border-color-dark-gray w-full"></span>
+            </div>
+            <input
+                className="h-12 w-full ml-2 cursor-not-allowed"
+                type="text"
+                value={d}
+                readOnly
+            />
+        </div>
+    );
+};
 
 const EditProfilePic = () => {
     return (
@@ -220,13 +239,16 @@ export const FinishProfileInfo = () => {
     // const userInfo = useUserInfo() as UserInfo;
     const {userInfo, setUserInfo} = useUserInfo()
     const [profileData, setProfileData] = useState<UserInfo>(userInfo);
+    const router = useRouter();
+    console.log("entered data: ", userInfo);
 
 
 
     const handleSubmit = async (e: React.FormEvent) => {
+        console.log("Submiting the following data: ", profileData);
         e.preventDefault();
         try {
-            const response = await fetch('http://127.0.0.1:8000/users/update', {
+            const response = await fetch('http://127.0.0.1:8000/users/finish', {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -238,8 +260,10 @@ export const FinishProfileInfo = () => {
             const data = await response.json();
         
             if (response.ok) {
+                
                 setUserInfo(data.data);
                 console.log('Profile updated successfully');
+                router.push('/profile');
                 // closeEditProfile();
             } else {
                 console.error('Failed to update profile');
@@ -250,14 +274,14 @@ export const FinishProfileInfo = () => {
     };
 
     return (
-        <div className="bg-color-white p-5">
+        <div className="bg-color-white p-12 rounded-xl">
             <ProfileCardInfo />
             <form action="" className="opacity-100 bg-transparent relative w-larg" onSubmit={handleSubmit}>
                 <ProfileContext.Provider value={setProfileData}>
-                    <ProfileFormInput name="first_name" d={userInfo.first_name} />
-                    <ProfileFormInput name="last_name" d={userInfo.last_name} />
-                    <ProfileFormInput name="email" d={userInfo.email} />
-                    <ProfileFormInput name="username" d={userInfo.username} />
+                    <ProfileFormInput name="first_name" d={profileData.first_name} />
+                    <ProfileFormInput name="last_name" d={profileData.last_name} />
+                    <ProfileFormInputReadOnly name="email" d={profileData.email} />
+                    <ProfileFormInput name="username" d={profileData.username} />
                 </ProfileContext.Provider>
                 <button type="submit" className="h-12 min-w-40 bg-color-primary text-color-white px-8 rounded-xl"> Save </button>
             </form>

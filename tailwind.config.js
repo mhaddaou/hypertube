@@ -21,7 +21,7 @@ module.exports = {
   theme: {
 
     backgroundImage: {
-      'profile-bg': "url('https://s3-alpha-sig.figma.com/img/86f6/5550/6002f38b868fe510e6b42849dd283513?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Y4ife4o2Sawdsi~kYS4wxeKK4iorNPw8O5doMQJHH9fV6aj34HyId6ak1RezaFw5SU5xUNLM02C4Qy3nLrr8jJtzzEbRVOrOdXKmcnr5JCLW-j5E4y6JfO2wkrBN5BhgghSWE~A~V17hQO5KsvHRagtn9J0~t8AbtGf5-S1AHx9E9flv-Gz0FDZBI74wmiC0CvWHIF9nvJBpT613KJ4Xg9lPPitaRDIiMa14dbr12SwoqzpUn-E8vP-py3YcddQi4II7Ct78ZtXVUyetfmm~VM53x8XDao5CdpZtJPX894jo9rsvjWtLWMlCelXvePqAN90uNJ7AOVm0UFOcYMVsSQ__')",
+      'profile-bg': "url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwallpapers.com%2Fcrazy&psig=AOvVaw3E-7mPM0LmNqVDZKJfAIEY&ust=1738441737692000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMiOiqfmoIsDFQAAAAAdAAAAABAE')",
     },
     extend: {
       borderWidth:{

@@ -40,7 +40,7 @@ import { useEffect, useState } from "react";
 import ListMovies from "../components/MoviesList";
 import ProfileInfo from "../components/ProfileInfo";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../components/sub/AuthContext";
+import { useAuth } from "../../../components/sub/AuthContext";
 
 export default function Profile() {
   // const [loading, setLoading] = useState(true);
