@@ -73,7 +73,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import Image from "next/image";
-import { EditProfile } from "./EditProfileCard";
+import { EditProfile, EditProfilePic } from "./EditProfileCard";
 import DeleteProfileCard from "./DeleteProfileCard";
 import { useUserInfo } from "@/app/components/sub/UserInfoContext";
 
@@ -93,7 +93,7 @@ export interface UserInfo {
     email: string;
     first_name: string;
     id: string;
-    profile_picture_url: string | null;
+    image_url: string | null;
     last_name: string;
     updated_at: string;
     username: string;
@@ -163,15 +163,16 @@ export default function ProfileInfo(props: ProfileInfoProps) {
                     <div className="bg-color-secondary h-40 w-full"></div>
                     <div className="absolute w-full h-full top-0 flex items-end">
                         <div className="h-full w-1/5 flex justify-end items-center">
-                        <Image
-                            src={userInfo.profile_picture_url || "/images/images/defaultprofile.jpg"}
+                        <EditProfilePic/>
+                        {/* <Image
+                            src={userInfo.image_url || "/images/images/defaultprofile.jpg"}
                             alt="search"
                             width={128}
                             height={128}
                             // className="cursor-pointer"
                             className="w-32 h-32 mr-4 rounded-full border-8 border-color-secondary"
-                            />
-                            {/* <img  src={userInfo.profile_picture_url || "https://st2.depositphotos.com/1023162/8272/i/450/depositphotos_82720548-Beautiful-mystic-woman-profile-with-long-hair-looking.-Black-and.jpg"} alt="" /> */}
+                            /> */}
+                            {/* <img  src={userInfo.image_url || "https://st2.depositphotos.com/1023162/8272/i/450/depositphotos_82720548-Beautiful-mystic-woman-profile-with-long-hair-looking.-Black-and.jpg"} alt="" /> */}
                         </div>
                         <div className="h-40 w-4/5 flex justify-between items-center px-12">
                             <div className="font-medium text-lg">

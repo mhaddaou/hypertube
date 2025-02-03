@@ -6,7 +6,7 @@ export interface UserInfo {
     email: string;
     first_name: string;
     id: string;
-    profile_picture_url: string | null;
+    image_url: string | null;
     last_name: string;
     updated_at: string;
     username: string;
@@ -32,7 +32,7 @@ export const UserInfoProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         email: "",
         first_name: "",
         id: "",
-        profile_picture_url: null,
+        image_url: null,
         last_name: "",
         updated_at: "",
         username: "",

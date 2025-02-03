@@ -83,8 +83,8 @@ export default function ResetPassword() {
                     <MdEmail className="text-color-gray" size={24}/>
                 </InputWithIcons>
             </FormContainer>
-            <OtherLinkDicorated link_title="Back to Sign In" href="http://google.com"/>
-            <OtherLink text="Don't have an account?" link_title="Register" href="http://google.com" />
+            <OtherLinkDicorated link_title="Back to Sign In" href="/signin"/>
+            <OtherLink text="Don't have an account?" link_title="Register" href="/register" />
         </>
     )
 }

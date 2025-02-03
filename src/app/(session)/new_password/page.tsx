@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { InputSection } from '../components/InputUtils';
 import { PrimaryActionButton } from '../components/Buttons';
 
@@ -11,6 +11,7 @@ export default function NewPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [verificationId, setVerificationId] = useState('');
+  const router = useRouter();
 
   const verification_code = searchParams.get("verification_code") as string;
   const username = searchParams.get("username") as string;
@@ -59,6 +60,7 @@ export default function NewPassword() {
 
     if (response.ok) {
       console.log('Password updated successfully');
+      router.push("/congratulation");
     } else {
       console.error('Error updating password');
     }

@@ -159,25 +159,81 @@ const ProfileFormInputReadOnly: React.FC<ProfileFormInputReadOnlyProps> = ({ nam
     );
 };
 
-const EditProfilePic = () => {
+export const EditProfilePic = () => {
+    const { userInfo, setUserInfo } = useUserInfo();
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    console.log("profile in edit profile: ", userInfo);
+
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+            console.log("SELECTED FILES: ", file);
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/users/upload', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include',
+                });
+
+                const data = await response.json();
+                console.log("upload data: ", data);
+                setUserInfo((prevUserInfo) => ({
+                    ...prevUserInfo,
+                    image_url: data.image_url,
+                }));
+            } catch (error) {
+                console.error('Error uploading profile picture:', error);
+            }
+        }
+    };
+
     return (
-        <div className="relative w-20 h-20">
-            <img src="https://s3-alpha-sig.figma.com/img/86f6/5550/6002f38b868fe510e6b42849dd283513?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Y4ife4o2Sawdsi~kYS4wxeKK4iorNPw8O5doMQJHH9fV6aj34HyId6ak1RezaFw5SU5xUNLM02C4Qy3nLrr8jJtzzEbRVOrOdXKmcnr5JCLW-j5E4y6JfO2wkrBN5BhgghSWE~A~V17hQO5KsvHRagtn9J0~t8AbtGf5-S1AHx9E9flv-Gz0FDZBI74wmiC0CvWHIF9nvJBpT613KJ4Xg9lPPitaRDIiMa14dbr12SwoqzpUn-E8vP-py3YcddQi4II7Ct78ZtXVUyetfmm~VM53x8XDao5CdpZtJPX894jo9rsvjWtLWMlCelXvePqAN90uNJ7AOVm0UFOcYMVsSQ__" alt="" className="rounded-full" />
-            <div className="bg-color-white absolute rounded-full right-0 bottom-0 cursor-pointer p-1 shadow-md" >
-                <MdModeEditOutline />
+        <div className="relative w-32 h-32">
+            <img src={userInfo.image_url || "/images/defaultprofile.jpg"} alt="" className="rounded-full w-full h-full" />
+            <div className="bg-color-white absolute rounded-full right-0 bottom-0 cursor-pointer p-1 shadow-md">
+                <label htmlFor="file-upload" className="cursor-pointer">
+                    <MdModeEditOutline />
+                </label>
+                <input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                />
             </div>
         </div>
-    )
-}
+    );
+};
+
+// const EditProfilePic = () => {
+//     const { userInfo, setUserInfo } = useUserInfo();
+    
+
+//     return (
+//         <div className="relative w-20 h-20">
+//             <img src={userInfo?.profile_picture_url || "/images/images/defaultprofile.jpg"} alt="" className="rounded-full" />
+//             <div className="bg-color-white absolute rounded-full right-0 bottom-0 cursor-pointer p-1 shadow-md" >
+//                 <MdModeEditOutline />
+//             </div>
+//         </div>
+//     )
+// }
 
 const ProfileCardInfo = () => {
+    const { userInfo } = useUserInfo();
     return (
-        <div className="flex gap-4 items-center mb-5">
-            <EditProfilePic />
-            <div>
-                <h2 className="">malena Haddaoui</h2>
-                <h3 className="text-color-dark-gray font-light">mhaddaou@gmail.com</h3>
-            </div>
+        <div className="flex flex-col gap-4 items-start mb-10">
+            {/* <EditProfilePic /> */}
+            {/* <div> */}
+                <h2 className="font-bold text-2xl">{userInfo.first_name + " " + userInfo.last_name}</h2>
+                <h3 className="text-color-dark-gray font-light text-xl">{userInfo.email}</h3>
+            {/* </div> */}
         </div>
     )
 }
@@ -223,10 +279,10 @@ export const EditProfile = ({ closeEditProfile }: { closeEditProfile: () => void
             <ProfileCardInfo />
             <form action="" className="opacity-100 bg-transparent relative w-larg" onSubmit={handleSubmit}>
                 <ProfileContext.Provider value={setProfileData}>
-                    <ProfileFormInput name="first_name" d={userInfo.first_name} />
-                    <ProfileFormInput name="last_name" d={userInfo.last_name} />
-                    <ProfileFormInput name="email" d={userInfo.email} />
-                    <ProfileFormInput name="username" d={userInfo.username} />
+                    <ProfileFormInput name="first_name" d={profileData.first_name} />
+                    <ProfileFormInput name="last_name" d={profileData.last_name} />
+                    <ProfileFormInput name="email" d={profileData.email} />
+                    <ProfileFormInput name="username" d={profileData.username} />
                 </ProfileContext.Provider>
                 <button type="submit" className="h-12 min-w-40 bg-color-primary text-color-white px-8 rounded-xl"> Save Changes </button>
             </form>

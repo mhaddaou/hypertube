@@ -145,7 +145,7 @@ export default function Register() {
       </FormContainer>
       <h6 className="mb-10 mt-4 text-color-primary font-bold">OR</h6>
       <OauthLinks />
-      <OtherLink text="Already have an account ?" link_title="Sign In" href="http://google.com" />
+      <OtherLink text="Already have an account ?" link_title="Sign In" href="/signin" />
     </>
   );
 }

@@ -21,7 +21,7 @@ module.exports = {
   theme: {
 
     backgroundImage: {
-      'profile-bg': "url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwallpapers.com%2Fcrazy&psig=AOvVaw3E-7mPM0LmNqVDZKJfAIEY&ust=1738441737692000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMiOiqfmoIsDFQAAAAAdAAAAABAE')",
+      'profile-bg': "url('/images/images/headerimage.jpg')",
     },
     extend: {
       borderWidth:{

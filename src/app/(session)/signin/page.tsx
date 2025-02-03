@@ -83,7 +83,7 @@ export default function SignIn() {
             </FormContainer>
             <h6 className="mb-10 mt-4 text-color-primary font-bold">OR</h6>
             <OauthLinks />
-            <OtherLink text="You don't have an account?" link_title="Register" href="http://google.com" />
+            <OtherLink text="You don't have an account?" link_title="Register" href="/register" />
         </>
     );
 }

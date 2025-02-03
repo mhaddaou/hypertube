@@ -89,7 +89,7 @@ export default function Profile() {
 
   // if(authenticated){
     return (
-      <div className="w-full flex flex-col items-center bg-color-secondary">
+      <div className="w-full flex flex-col items-center bg-color-secondary h-screen">
         <ProfileInfo name="malena Haddaoui" username="@mhaddaou" />
         <ListMovies />
       </div>
