@@ -78,8 +78,7 @@ import DeleteProfileCard from "./DeleteProfileCard";
 import { useUserInfo } from "@/app/components/sub/UserInfoContext";
 
 interface ProfileInfoProps {
-    name: string;
-    username: string;
+    id:string;
 }
 
 interface ButtonProps {
@@ -113,29 +112,12 @@ const ProfileActionButton: React.FC<ButtonProps> = (props) => {
 
 // export const useUserInfo = () => useContext(UserInfoContext);
 
-export default function ProfileInfo(props: ProfileInfoProps) {
+export function ProfileInfo() {
     const [isEditProfile, setIsEditProfile] = useState(false);
     const [isDeleteProfile, setIsDeleteProfile] = useState(false);
 
 
     const {userInfo} = useUserInfo();
-
-
-    // const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-
-    // useEffect(() => {
-    //     fetch('http://127.0.0.1:8000/users/get_info', {
-    //         method: 'GET',
-    //         credentials: 'include',
-    //     })
-    //         .then(response => response.json())
-    //         .then((data: UserInfoResponse) => {
-    //             setUserInfo(data.data);
-    //         })
-    //         .catch(error => {
-    //             console.error("Error fetching user info: ", error);
-    //         });
-    // }, []);
 
     const onClickPrimary = () => {
         setIsDeleteProfile(true);
@@ -189,6 +171,63 @@ export default function ProfileInfo(props: ProfileInfoProps) {
             </div>
             {isEditProfile ? <EditProfile closeEditProfile={closeEditProfile} /> : <></>}
             {isDeleteProfile ? <DeleteProfileCard closeDeleteProfile={closeDeleteProfile} /> : <></>}
+        {/* </UserInfoContext.Provider> */}
+        </>
+    )
+}
+export function GetProfileInfo(props: ProfileInfoProps) {
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+    console.log("inner userInfo:: ", userInfo);
+    useEffect(() => {
+      async function fetchUserInfo() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/users/get_profile/' + props.id, {
+                credentials: 'include'
+              });
+          const data = await response.json();
+          setUserInfo(data.data);
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      }
+  
+      fetchUserInfo();
+    }, [props.id]);
+
+    if (!userInfo) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <>
+        {/* <UserInfoContext.Provider value={userInfo}> */}
+            <div className="bg-profile-bg bg-cover bg-center w-full h-1/3 flex items-end font-lemonada">
+                <div className="w-full relative">
+                    <div className="h-40 w-full"></div>
+                    <div className="bg-color-secondary h-40 w-full"></div>
+                    <div className="absolute w-full h-full top-0 flex items-end">
+                        <div className="h-full w-1/5 flex justify-end items-center">
+                        <EditProfilePic/>
+                        {/* <Image
+                            src={userInfo.image_url || "/images/images/defaultprofile.jpg"}
+                            alt="search"
+                            width={128}
+                            height={128}
+                            // className="cursor-pointer"
+                            className="w-32 h-32 mr-4 rounded-full border-8 border-color-secondary"
+                            /> */}
+                            {/* <img  src={userInfo.image_url || "https://st2.depositphotos.com/1023162/8272/i/450/depositphotos_82720548-Beautiful-mystic-woman-profile-with-long-hair-looking.-Black-and.jpg"} alt="" /> */}
+                        </div>
+                        <div className="h-40 w-4/5 flex justify-between items-center px-12">
+                            <div className="font-medium text-lg">
+                                <h2 className="text-color-white">{userInfo.first_name} {userInfo.last_name}</h2>
+                                <p className="text-color-white">@{userInfo.username}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {/* </UserInfoContext.Provider> */}
         </>
     )

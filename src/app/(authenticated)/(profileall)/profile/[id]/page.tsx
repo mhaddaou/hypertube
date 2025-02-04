@@ -36,17 +36,17 @@
 // }
 
 "use client"
-import { useEffect, useState } from "react";
-import ListMovies from "../components/MoviesList";
-// import ProfileInfo from "../components/ProfileInfo";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../../components/sub/AuthContext";
-import { ProfileInfo } from "../components/ProfileInfo";
+import ListMovies from "../../components/MoviesList";
+import { GetProfileInfo } from "../../components/ProfileInfo";
+import { useAuth } from "@/app/components/sub/AuthContext";
 
-export default function Profile() {
+export default function ProfileId({params:{id}}:{params:{id:string}}) {
   // const [loading, setLoading] = useState(true);
   // const [authenticated, setAuthenticated] = useState(false);
   const router = useRouter();
+
+  console.log("ID::> ", id);
 
   // useEffect(() => {
 
@@ -91,7 +91,7 @@ export default function Profile() {
   // if(authenticated){
     return (
       <div className="w-full flex flex-col items-center bg-color-secondary h-screen">
-        <ProfileInfo name="malena Haddaoui" username="@mhaddaou" />
+        <GetProfileInfo id={id} />
         <ListMovies />
       </div>
     );
