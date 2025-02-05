@@ -1,5 +1,6 @@
 "use client";
 import { FC, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { fetchMovieData } from '@/lib/features/Movie/Movie';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import Image from 'next/image';
@@ -18,6 +19,7 @@ interface MovieDetailProps {
 }
 
 const MovieDetail: FC<MovieDetailProps> = ({ params, searchParams }) => {
+  const router = useRouter();
   const { id } = params;
   const source = searchParams?.source;
   const dispatch = useAppDispatch();
@@ -47,6 +49,13 @@ const MovieDetail: FC<MovieDetailProps> = ({ params, searchParams }) => {
       setIsFavorite(prev => !prev);
     } catch (error) {
       console.error('Error updating favorites:', error);
+    }
+  };
+
+  const handlePlayNow = () => {
+    if (movieData) {
+      const defaultQuality = 'Q720p';
+      router.push(`/player/${movieData.source}/${movieData.id}/${defaultQuality}`);
     }
   };
 
@@ -161,7 +170,10 @@ const MovieDetail: FC<MovieDetailProps> = ({ params, searchParams }) => {
               </p>
             </div>
             <div className="flex gap-8 text-xs font-bold font-lemonada">
-              <button className="flex gap-3 bg-color-primary text-black rounded-lg px-4 py-3">
+              <button 
+                onClick={handlePlayNow}
+                className="flex gap-3 bg-color-primary text-black rounded-lg px-4 py-3"
+              >
                 <Image
                   src="/images/icons/play.svg"
                   alt="play"
