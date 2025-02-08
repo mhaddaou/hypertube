@@ -3,6 +3,8 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import axiosInstance from '@/lib/axios';
 import { useRouter } from 'next/navigation';
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { fetchMovieData } from '@/lib/features/Movie/Movie';
 
 interface PlayerProps {
   params: {
@@ -18,15 +20,53 @@ const Player: FC<PlayerProps> = ({ params }) => {
   const { provider, id, quality } = params;
   const videoRef = useRef<HTMLVideoElement>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
+  const movieData = useAppSelector((state) => state.movieData.movieData);
+  const [loadingStatus, setLoadingStatus] = useState<string>('Initializing...');
+  
   useEffect(() => {
-    const streamUrl = `/movies/stream/${provider}/${id}/${quality}`;
-    
-    if (videoRef.current) {
-      videoRef.current.src = `${axiosInstance.defaults.baseURL}${streamUrl}`;
-    }
-  }, [provider, id, quality]);
+    const initializeStream = async () => {
+      try {
+        setIsLoading(true);
+        setLoadingStatus('Fetching movie information...');
+        
+        if (!movieData) {
+          await dispatch(fetchMovieData({ id: parseInt(id), source: provider })).unwrap();
+          return;
+        }
+        
+        setLoadingStatus('Preparing video stream...');
+        const selectedTorrent = movieData.torrents?.find(
+          t => `Q${t.quality}` === quality
+        );
+
+        if (!selectedTorrent) {
+          throw new Error('No torrent found for selected quality');
+        }
+
+        setLoadingStatus('Starting download...');
+        await axiosInstance.post('/movies/torrent', {
+          movie_id: id.toString(),
+          source: provider,
+          magnet_url: selectedTorrent.url
+        });
+
+        setLoadingStatus('Loading video player...');
+        const streamUrl = `/movies/stream/${provider}/${id}/${quality}`;
+        if (videoRef.current) {
+          videoRef.current.src = `${axiosInstance.defaults.baseURL}${streamUrl}`;
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to initialize stream');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeStream();
+  }, [provider, id, quality, movieData]);
 
   const handleQualityChange = (newQuality: string) => {
     const currentTime = videoRef.current?.currentTime || 0;
@@ -38,6 +78,12 @@ const Player: FC<PlayerProps> = ({ params }) => {
       {error ? (
         <div className="text-white text-center">
           <p className="text-xl">{error}</p>
+        </div>
+      ) : isLoading ? (
+        <div className="text-white text-center space-y-4">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-xl">{loadingStatus}</p>
+          <p className="text-sm text-gray-400">This might take a few moments...</p>
         </div>
       ) : (
         <>

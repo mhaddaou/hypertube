@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axios";
 
+export interface MovieTorrent {
+  quality: string;
+  url: string;
+}
+
 export interface MovieDetails {
   id: number;
   title: string;
@@ -11,6 +16,8 @@ export interface MovieDetails {
   large_screenshot_image1: string;
   large_cover_image: string;
   rating: number;
+  source: string;
+  torrents: MovieTorrent[];
 }
 
 export interface MovieSuggestions {
@@ -26,14 +33,22 @@ export const fetchMovieData = createAsyncThunk(
   async ({ id, source }: { id: number; source?: string }) => {
     const movieSource = source || 'YTS';
     const response = await axiosInstance.get(`/movies/${id}/${movieSource}`);
-    return { ...response.data, source: movieSource };
+    return {
+      data: {
+        movie: {
+          ...response.data.data.movie,
+          source: movieSource
+        }
+      },
+      movie_suggestions: response.data.movie_suggestions
+    };
   },
 );
 
 const initialState = {
   status: "idle" as "idle" | "loading" | "succeeded" | "failed",
   error: null as string | null,
-  movieData: null as (MovieDetails & { source: string }) | null,
+  movieData: null as MovieDetails | null,
   movieSuggestions: [] as MovieSuggestions[],
 };
 
