@@ -25,7 +25,67 @@ const Player: FC<PlayerProps> = ({ params }) => {
   const dispatch = useAppDispatch();
   const movieData = useAppSelector((state) => state.movieData.movieData);
   const [loadingStatus, setLoadingStatus] = useState<string>('Initializing...');
-  
+  const [downloadStarted, setDownloadStarted] = useState(false);
+  const retryTimeoutRef = useRef<NodeJS.Timeout>();
+  const checkIntervalRef = useRef<NodeJS.Timeout>();
+  const attemptCountRef = useRef(0);
+  const maxAttempts = 30;
+
+  const tryPlayVideo = () => {
+    if (videoRef.current && downloadStarted) {
+      attemptCountRef.current += 1;
+      const streamUrl = `/movies/stream/${provider}/${id}/${quality}`;
+      videoRef.current.src = `${axiosInstance.defaults.baseURL}${streamUrl}`;
+      videoRef.current.load();
+      
+      if (attemptCountRef.current >= maxAttempts) {
+        clearInterval(checkIntervalRef.current);
+        setError('Failed to load video after multiple attempts');
+        return;
+      }
+      
+      setLoadingStatus(`Checking if video is ready... (Attempt ${attemptCountRef.current}/${maxAttempts})`);
+    }
+  };
+
+  useEffect(() => {
+    if (downloadStarted && !checkIntervalRef.current) {
+      tryPlayVideo();
+      checkIntervalRef.current = setInterval(tryPlayVideo, 10000);
+    }
+
+    return () => {
+      if (checkIntervalRef.current) {
+        clearInterval(checkIntervalRef.current);
+      }
+    };
+  }, [downloadStarted]);
+
+  const handleVideoPlay = () => {
+    if (checkIntervalRef.current) {
+      clearInterval(checkIntervalRef.current);
+      setError(null);
+      setIsLoading(false);
+    }
+  };
+
+  const handleVideoError = () => {
+    if (downloadStarted) {
+      setError('Retrying stream...');
+      retryTimeoutRef.current = setTimeout(tryPlayVideo, 5000);
+    } else {
+      setError('Error loading video');
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const initializeStream = async () => {
       try {
@@ -52,12 +112,10 @@ const Player: FC<PlayerProps> = ({ params }) => {
           source: provider,
           magnet_url: selectedTorrent.url
         });
+        setDownloadStarted(true);
 
         setLoadingStatus('Loading video player...');
-        const streamUrl = `/movies/stream/${provider}/${id}/${quality}`;
-        if (videoRef.current) {
-          videoRef.current.src = `${axiosInstance.defaults.baseURL}${streamUrl}`;
-        }
+        tryPlayVideo();
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to initialize stream');
       } finally {
@@ -75,7 +133,7 @@ const Player: FC<PlayerProps> = ({ params }) => {
 
   return (
     <div className="w-full h-screen bg-black flex flex-col items-center justify-center relative">
-      {error ? (
+      {error && !downloadStarted ? (
         <div className="text-white text-center">
           <p className="text-xl">{error}</p>
         </div>
@@ -91,7 +149,8 @@ const Player: FC<PlayerProps> = ({ params }) => {
             ref={videoRef}
             controls
             className="w-full h-full max-h-[80vh]"
-            onError={() => setError('Error loading video')}
+            onError={handleVideoError}
+            onPlay={handleVideoPlay}
           >
             Your browser does not support the video tag.
           </video>
