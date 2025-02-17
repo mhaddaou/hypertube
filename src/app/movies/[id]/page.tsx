@@ -122,10 +122,12 @@ const MovieDetail: FC<MovieDetailProps> = ({ params, searchParams }) => {
   }
 
   const description = movieData?.description_intro || '';
-  const isDescriptionLong = description.length > 400;
-  const displayedDescription = !isExpanded && isDescriptionLong
-    ? `${description.substring(0, 397)}...` 
-    : description;
+  const isDescriptionLong = window.innerWidth < 640 
+      ? description.length > 300 
+      : description.length > 400;
+    const displayedDescription = !isExpanded && isDescriptionLong
+      ? `${description.substring(0, window.innerWidth < 640 ? 287 : 500)}...` 
+      : description;
 
   return (
     <>
@@ -157,7 +159,11 @@ const MovieDetail: FC<MovieDetailProps> = ({ params, searchParams }) => {
               }
             </div>
             <div className="flex flex-col">
-              <p className="text-white font-lemonada text-xs text-shadow font-thin">
+              <p className={`text-white font-lemonada text-xs text-shadow font-thin custom-scrollbar ${
+                isExpanded && (
+                  description.length > (window.innerWidth < 640 ? 600 : 1000)
+                ) ? 'max-h-[100px] overflow-y-auto' : ''
+              }`}>
                 {displayedDescription || "No summary available"}
                 {isDescriptionLong && (
                   <button 
@@ -182,14 +188,17 @@ const MovieDetail: FC<MovieDetailProps> = ({ params, searchParams }) => {
                 />
                 <p className="mt-0.5"> Play now </p>
               </button>
-              <button className="flex gap-4 border border-white text-white rounded-lg px-4 py-3 bg-black">
+              <button className="flex gap-4 border border-white text-white rounded-lg px-4 py-3 bg-black" onClick={handleFavorite}>
                 <Image
                   src="/images/icons/bookmark.svg"
                   alt="add to watchlist"
                   width={20}
                   height={20}
                 />
-                <p onClick={handleFavorite} className="mt-0.5 hidden sm:block"> {isFavorite ? "Remove from watchlist" : "add to watchlist"} </p>
+                <p className="mt-0.5">
+                  <span className="sm:hidden">{isFavorite ? "Remove" : "Add"}</span>
+                  <span className="hidden sm:inline">{isFavorite ? "Remove from watchlist" : "Add to watchlist"}</span>
+                </p>
               </button>
             </div>
           </div>
