@@ -17,9 +17,8 @@ function Footer() {
             <div className=" w-[90%] md:w-[48%] lg:w-[355px] h-[310px] bg-black rounded-2xl flex flex-col items-center justify-around">
               <Image
                 draggable="false"
-                src="images/icons/tv.svg"
+                src="/images/icons/tv.svg"
                 className="w-32 lg:w-48"
-
                 alt=""
                 width={200}
                 height={10}
@@ -29,7 +28,7 @@ function Footer() {
             <div className=" w-[90%] md:w-[48%] lg:w-[355px] h-[310px] bg-black rounded-2xl flex flex-col items-center justify-around">
               <Image
                 draggable="false"
-                src="images/icons/macbook.svg"
+                src="/images/icons/macbook.svg"
                 alt=""
                 className="w-32 lg:w-48"
                 width={200}
@@ -43,7 +42,7 @@ function Footer() {
             <div className="w-[90%] md:w-[48%] lg:w-[355px] h-[310px] bg-black rounded-2xl flex flex-col items-center justify-around">
               <Image
                 draggable="false"
-                src="images/icons/phone.svg"
+                src="/images/icons/phone.svg"
                 className="w-16 lg:w-20"
                 alt=""
                 width={90}
