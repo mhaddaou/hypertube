@@ -47,8 +47,12 @@ function Comments({ movieId, source }: { movieId: number; source: string }) {
         <button className="text-white font-lemonada text-xs bg-color-primary px-5 py-3 w-fit rounded-lg self-end"
           onClick={() => {
             if (comment.trim()) {
-              dispatch(addComment({ movie_id: movieId, comment, source }));
-              setComment("");
+              dispatch(addComment({ movie_id: Number(movieId), comment, source }))
+                .then(() => {
+                  setComment("");
+                  setPage(0);
+                  dispatch(fetchComments({ id: movieId, page: 0, source }));
+                });
             }
           }}
         >
@@ -73,7 +77,7 @@ function Comments({ movieId, source }: { movieId: number; source: string }) {
                   }} />
                 <p className="text-white font-lemonada text-sm">{comment.user_info.username}</p>
               </div>
-              <p className="text-white font-albayan text-xs">{comment.comment_info.comment}</p>
+              <p className="text-white font-albayan text-xs whitespace-pre-wrap break-words">{comment.comment_info.comment}</p>
             </div>
           ))}
           {status === "loading" && hasMore && Array.from({ length: 4 }).map((_, index) => <CommentSkeleton key={index} page={page} />)}

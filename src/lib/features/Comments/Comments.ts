@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axios";
 
+const COMMENTS_PAGE_SIZE = 2;
+
 interface commentData {
   comment_info: {
     comment_id: string;
@@ -18,11 +20,11 @@ export const fetchComments = createAsyncThunk(
   "comment/fetchComments",
   async ({ id, page, source }: { id: number; page: number; source: string }) => {
     const response = await axiosInstance.get(
-      `/comments/${id}/${source}?page_size=2&page=${page}`,
+      `/comments/${id}/${source}?page_size=${COMMENTS_PAGE_SIZE}&page=${page}`,
     );
     return {
       comments: response.data.data.comments,
-      page_count: response.data.data.page_count,
+      max_comments: response.data.data.max_comments,
     };
   },
 );
@@ -71,15 +73,9 @@ const commentSlice = createSlice({
         } else {
           state.comments = [...state.comments, ...newComments];
         }
-        if (!newComments || newComments.length === 0) {
-          state.hasMore = false;
-          return;
-        }
-        if (action.meta.arg.page === action.payload.page_count - 1) {
-          state.hasMore = false;
-        } else {
-          state.hasMore = true;
-        }
+        
+        const currentTotalComments = (action.meta.arg.page + 1) * COMMENTS_PAGE_SIZE;
+        state.hasMore = currentTotalComments < action.payload.max_comments;
       })
       .addCase(fetchComments.rejected, (state, action) => {
         state.status = "failed";
