@@ -13,7 +13,7 @@ interface EditorPicksProps {
 }
 
 const contentMapping: { [key: string]: string[] } = {
-  Source: ["YTS"],
+  Source: ["YTS", "MovieDb"],
   Quality: ["720p", "1080p", "2160p", "3D"],
   "Sort By": ["Title", "Year", "Rating", "Peers", "Seeds", "DownloadCount", "LikeCount", "DateAdded"],
   "Order By": ["Asc", "Desc"],

@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
+
+export interface MovieTorrent {
+  quality: string;
+  url: string;
+}
 
 export interface MovieDetails {
   id: number;
@@ -9,6 +14,10 @@ export interface MovieDetails {
   description_intro: string;
   genres: string[];
   large_screenshot_image1: string;
+  large_cover_image: string;
+  rating: number;
+  source: string;
+  torrents: MovieTorrent[];
 }
 
 export interface MovieSuggestions {
@@ -21,9 +30,18 @@ export interface MovieSuggestions {
 
 export const fetchMovieData = createAsyncThunk(
   "movie/fetchMovieData",
-  async (id: number) => {
-    const response = await axios.get(`http://localhost:8000/movies/${id}/YTS`);
-    return response.data;
+  async ({ id, source }: { id: number; source?: string }) => {
+    const movieSource = source || 'YTS';
+    const response = await axiosInstance.get(`/movies/${id}/${movieSource}`);
+    return {
+      data: {
+        movie: {
+          ...response.data.data.movie,
+          source: movieSource
+        }
+      },
+      movie_suggestions: response.data.movie_suggestions
+    };
   },
 );
 

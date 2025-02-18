@@ -1,6 +1,7 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import axiosInstance from '@/lib/axios';
 
 interface MovieCardProps {
   id: number;
@@ -29,8 +30,43 @@ const MovieCard: FC<MovieCardProps> = ({
   const [isFavorite, setIsFavorite] = useState(favorite);
   const router = useRouter();
 
-  const handleFavorite = () => {
-    setIsFavorite((prev) => !prev);
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        const response = await axiosInstance.get('/movies/favorite');
+        const favorites = response.data;
+        setIsFavorite(favorites.some((fav: any) => fav.movie_id === id.toString()));
+      } catch (error) {
+        console.error('Error checking favorite status:', error);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [id]);
+
+  const handleFavorite = async () => {
+    try {
+      if (!isFavorite) {
+        await axiosInstance.post('/movies/favorite', {
+          movie_id: id.toString(),
+          title: title,
+          movie_imdb_code: '',
+          movie_source: 'YTS',
+          poster_src: imageUrl || '',
+          rating: rating.toString(),
+          genres: genres || []
+        });
+      } else {
+        await axiosInstance.delete(`/movies/favorite`, {
+          data: {
+            movie_id: id.toString(),
+          }
+        });
+      }
+      setIsFavorite(prev => !prev);
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+    }
   };
 
   const handleWatchNow = () => {
@@ -45,9 +81,9 @@ const MovieCard: FC<MovieCardProps> = ({
         <Image
           src={imageUrl}
           width={200}
-          height={200}
+          height={300}
           alt="movie thumbnail"
-          className="aspect-auto sm:max-h-[200px] rounded-lg"
+          className="aspect-auto sm:max-h-[200px] rounded-lg object-cover"
         />
         <div className="flex flex-col justify-center sm:justify-between w-full mt-6 sm:m-0">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-[97%]">
@@ -102,6 +138,7 @@ const MovieCard: FC<MovieCardProps> = ({
                 width={20}
                 height={20}
                 alt="bookmark"
+                className="w-5 h-5"
               />
             </div>
             <button
