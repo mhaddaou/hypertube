@@ -37,7 +37,7 @@
 
 "use client"
 import { useEffect, useState } from "react";
-import ListMovies from "../components/MoviesList";
+import {ListMovies} from "../components/MoviesList";
 // import ProfileInfo from "../components/ProfileInfo";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../components/sub/AuthContext";
@@ -91,7 +91,7 @@ export default function Profile() {
   // if(authenticated){
     return (
       <div className="w-full flex flex-col items-center bg-color-secondary h-screen">
-        <ProfileInfo name="malena Haddaoui" username="@mhaddaou" />
+        <ProfileInfo />
         <ListMovies />
       </div>
     );

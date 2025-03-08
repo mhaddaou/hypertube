@@ -37,7 +37,7 @@
 
 "use client"
 import { useRouter } from "next/navigation";
-import ListMovies from "../../components/MoviesList";
+import {ListUserMovies} from "../../components/MoviesList";
 import { GetProfileInfo } from "../../components/ProfileInfo";
 import { useAuth } from "@/app/components/sub/AuthContext";
 
@@ -92,7 +92,7 @@ export default function ProfileId({params:{id}}:{params:{id:string}}) {
     return (
       <div className="w-full flex flex-col items-center bg-color-secondary h-screen">
         <GetProfileInfo id={id} />
-        <ListMovies />
+        <ListUserMovies id={id} />
       </div>
     );
   // }

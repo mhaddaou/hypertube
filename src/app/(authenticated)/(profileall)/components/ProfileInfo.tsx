@@ -208,15 +208,15 @@ export function GetProfileInfo(props: ProfileInfoProps) {
                     <div className="bg-color-secondary h-40 w-full"></div>
                     <div className="absolute w-full h-full top-0 flex items-end">
                         <div className="h-full w-1/5 flex justify-end items-center">
-                        <EditProfilePic/>
-                        {/* <Image
+                        {/* <EditProfilePic/> */}
+                        <Image
                             src={userInfo.image_url || "/images/images/defaultprofile.jpg"}
                             alt="search"
                             width={128}
                             height={128}
                             // className="cursor-pointer"
                             className="w-32 h-32 mr-4 rounded-full border-8 border-color-secondary"
-                            /> */}
+                            />
                             {/* <img  src={userInfo.image_url || "https://st2.depositphotos.com/1023162/8272/i/450/depositphotos_82720548-Beautiful-mystic-woman-profile-with-long-hair-looking.-Black-and.jpg"} alt="" /> */}
                         </div>
                         <div className="h-40 w-4/5 flex justify-between items-center px-12">

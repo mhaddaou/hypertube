@@ -195,7 +195,7 @@ export const EditProfilePic = () => {
 
     return (
         <div className="relative w-32 h-32">
-            <img src={userInfo.image_url || "/images/defaultprofile.jpg"} alt="" className="rounded-full w-full h-full" />
+            <img src={userInfo.image_url || "/images/images/defaultprofile.jpg"} alt="" className="rounded-full w-full h-full" />
             <div className="bg-color-white absolute rounded-full right-0 bottom-0 cursor-pointer p-1 shadow-md">
                 <label htmlFor="file-upload" className="cursor-pointer">
                     <MdModeEditOutline />

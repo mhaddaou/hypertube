@@ -31,7 +31,7 @@ export default function SetNewPassword() {
 
     if (response.ok) {
       console.log('Password updated successfully');
-      router.push('/profile');
+      router.push('/finishprofile/info');
     } else {
       console.error('Error updating password');
     }
